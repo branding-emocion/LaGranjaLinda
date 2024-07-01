@@ -17,7 +17,7 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const db = getFirestore();
 const auth = getAuth(app);
 
-const storage = getStorage(app, "gs://getraining-a2a30.appspot.com");
+const storage = getStorage(app, "gs://lagranjapollo-7e542.appspot.com");
 
 //google provider
 export { db, auth, app, storage };

@@ -146,16 +146,12 @@ const Usuarios = () => {
           </Button>
         );
       },
-      cell: ({ row }) => (
-        <div className="lowercase">{row.getValue("email")}</div>
-      ),
+      cell: ({ row }) => <div className="">{row.getValue("email")}</div>,
     },
     {
-      accessorKey: "password",
-      header: "Contraseña",
-      cell: ({ row }) => (
-        <div className="lowercase">{row.getValue("password")}</div>
-      ),
+      accessorKey: "Rol",
+      header: "Rol",
+      cell: ({ row }) => <div className="">{row.getValue("Rol")}</div>,
     },
 
     {

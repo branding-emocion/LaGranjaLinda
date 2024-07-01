@@ -9,7 +9,7 @@ const mohave = Mohave({ subsets: ["latin"] });
 export const metadata = {
   title: "La Granja Linda",
   description:
-    "Global Executive Training (GET) ofrece programas y entrenamientos diseñados para potenciar habilidades de gestión, liderazgo y emprendimiento. Únete a GET para acceder a oportunidades únicas de desarrollo profesional y personal hoy mismo.",
+    "Disfruta del mejor pollo a la brasa en Perú en nuestra pollería. Ofrecemos un sabor auténtico y jugoso con una receta tradicional. ¡Ven y prueba nuestro delicioso menú hoy mismo!",
 };
 
 export default function RootLayout({ children }) {

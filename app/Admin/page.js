@@ -15,8 +15,8 @@ const Home = () => {
         <CardDescription>Administración del Sitio</CardDescription>
       </CardHeader>
       <CardContent>
-        Utiliza el menú de abajo para navegar y editar las diferentes secciones
-        de tu sitio.
+        Utiliza el menú para navegar y editar las diferentes secciones de tu
+        sitio.
       </CardContent>
     </Card>
   );

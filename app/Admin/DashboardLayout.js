@@ -5,13 +5,18 @@ import useAuthState from "@/lib/useAuthState";
 import { auth, db } from "@/firebase/firebaseClient";
 import Link from "next/link";
 import {
+  Beef,
   BookOpenText,
+  BrickWall,
   CalendarCheck,
   CalendarPlus,
+  GalleryHorizontal,
+  GalleryThumbnails,
   MessageSquareDot,
   MonitorXIcon,
   PartyPopper,
   Users,
+  Utensils,
   YoutubeIcon,
 } from "lucide-react";
 import { signOut } from "firebase/auth";
@@ -25,22 +30,46 @@ const DashboardLayout = ({ children }) => {
   const pathname = usePathname();
   const router = useRouter();
 
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>error</p>;
+
+  if (!user) return <Login />;
+
   const menu = [
     {
       name: "Usuarios",
-      link: "/Usuarios",
+      link: "/Admin/Usuarios",
       icon: <Users className="w-6 h-6 text-white" />,
-      hidden: claims?.Admin ? false : true,
+      hidden: claims?.Rol?.includes("Admin") ? false : true,
     },
     {
-      name: "Asignar Tareas",
-      link: "/AsignarTareas",
-      icon: <CalendarPlus className="w-6 h-6 text-white" />,
-      hidden: claims?.Admin ? false : true,
+      name: "Carrousel",
+      link: "/Admin/Carrousel",
+      icon: <GalleryHorizontal className="w-6 h-6 text-white" />,
+      hidden: claims?.Rol?.includes("Admin") ? false : true,
+    },
+
+    {
+      name: "Restaurantes",
+      link: "/Admin/Restaurantes",
+      icon: <Utensils className="w-6 h-6 text-white" />,
+      hidden: claims?.Rol?.includes("Admin") ? false : true,
     },
     {
-      name: "Tareas",
-      link: "/Tareas",
+      name: "Categorias",
+      link: "/Admin/Categorias",
+      icon: <BrickWall className="w-6 h-6 text-white" />,
+      hidden: claims?.Rol?.includes("Admin") ? false : true,
+    },
+    {
+      name: "Productos",
+      link: "/Admin/Productos",
+      icon: <Beef className="w-6 h-6 text-white" />,
+      hidden: claims?.Rol?.includes("Admin") ? false : true,
+    },
+    {
+      name: "Reservas",
+      link: "/Admin/Reservas",
       icon: <CalendarCheck className="w-6 h-6 text-white" />,
       Tareas: true,
     },
@@ -48,33 +77,29 @@ const DashboardLayout = ({ children }) => {
 
   menu.find((men) => {
     if (men?.hidden && pathname == men.link) {
-      router.replace("/");
+      router.replace("/Admin");
     }
   });
-  useEffect(() => {
-    const qComentarios = query(
-      collection(db, "Notificaciones"),
-      where("Show", "==", true) // Asegúrate de usar el valor booleano false
-    );
+  // useEffect(() => {
+  //   const qComentarios = query(
+  //     collection(db, "Notificaciones"),
+  //     where("Show", "==", true)
+  //   );
 
-    const commentarios = onSnapshot(qComentarios, (snapshot) => {
-      setTareas(
-        snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }))
-      );
-    });
+  //   const commentarios = onSnapshot(qComentarios, (snapshot) => {
+  //     setTareas(
+  //       snapshot.docs.map((doc) => ({
+  //         id: doc.id,
+  //         ...doc.data(),
+  //       }))
+  //     );
+  //   });
 
-    return () => {
-      commentarios(); // Esta función cancela la suscripción al snapshot
-    };
-  }, []);
+  //   return () => {
+  //     commentarios();
+  //   };
+  // }, []);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>error</p>;
-
-  if (!user) return <Login />;
   return (
     <div>
       <div className="min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-gray-50  text-black ">
@@ -90,9 +115,10 @@ const DashboardLayout = ({ children }) => {
                       <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
                   </div>
-                  <span className="ml-2 text-sm tracking-wide truncate uppercase">
-                    {user.displayName || "Miryam Roncal"}
-                  </span>
+
+                  <p className="ml-2 text-sm text-wrap tracking-wide truncate uppercase">
+                    {claims?.Rol} - {user?.displayName || "No Disponible"}
+                  </p>
                 </div>
               </li>
 
@@ -109,9 +135,9 @@ const DashboardLayout = ({ children }) => {
                     <>
                       <Link
                         href={men.link}
-                        className={` flex flex-row items-center h-11 focus:outline-none hover:bg-blue-800  text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-blue-500  pr-6 ${
+                        className={` flex flex-row items-center h-11 focus:outline-none hover:bg-yellow-800  text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-yellow-600  pr-6 ${
                           pathname.includes(men.link) &&
-                          "bg-blue-800 border-blue-500 "
+                          "bg-yellow-800 border-yellow-600 "
                         }`}
                       >
                         <span className="inline-flex justify-center items-center ml-4">

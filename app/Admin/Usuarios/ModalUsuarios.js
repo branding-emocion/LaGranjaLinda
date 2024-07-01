@@ -8,6 +8,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import React, { useState } from "react";
 
@@ -15,6 +22,27 @@ const ModalUsuarios = ({ OpenModal, setOpenModal }) => {
   const [InputValues, setInputValues] = useState({});
   const [Loading, setLoading] = useState(false);
   const { toast } = useToast();
+
+  const Roles = [
+    {
+      value: "Admin",
+      label: "Admin",
+    },
+    {
+      value: "Mostrador",
+      label: "Mostrador",
+    },
+    {
+      value: "Repartidor",
+      label: "Repartidor",
+    },
+
+    {
+      value: "Cliente",
+      label: "Cliente",
+    },
+  ];
+
   const closeModal = () => {
     setOpenModal({
       Visible: false,
@@ -120,6 +148,33 @@ const ModalUsuarios = ({ OpenModal, setOpenModal }) => {
                     autoComplete="off"
                     autoFocus
                   />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="Rol" className="">
+                    Rol
+                  </Label>
+                  <Select
+                    value={OpenModal?.InfoEditar?.Rol}
+                    required
+                    onValueChange={(e) => {
+                      setInputValues({
+                        ...InputValues,
+                        Rol: e,
+                      });
+                    }}
+                  >
+                    <SelectTrigger className="">
+                      <SelectValue placeholder="Define Rol del Usuario" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Roles.map((rol) => (
+                        <SelectItem key={rol.value} value={rol.value}>
+                          {rol.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="Correo" className="">

@@ -97,7 +97,13 @@ const MenuPrincipal = () => {
             }`}
           >
             {/*  */}
-
+            <ItemMenu
+              ruta="/Inicio"
+              setIsOpen={setIsOpen}
+              border={pathname == "/" ? true : false}
+            >
+              Inicio
+            </ItemMenu>
             <ItemMenu
               ruta="/Carta"
               setIsOpen={setIsOpen}
@@ -121,9 +127,9 @@ const MenuPrincipal = () => {
             </ItemMenu>
           </div>
         </div>
-        <div className="flex justify-center items-center gap-x-4">
+        <div className="hidden lg:flex justify-center items-center gap-x-4">
           <Button className="bg-red-700 uppercase">Ordena Aquí</Button>
-          <div className="hidden uppercase lg:flex text-white">
+          <div className=" uppercase lg:flex text-white">
             <p className=" w-20 text-right  h-full tracking-tight leading-4">
               Te lo LLevamos donde estes
             </p>
