@@ -98,7 +98,7 @@ const MenuPrincipal = () => {
           >
             {/*  */}
             <ItemMenu
-              ruta="/Inicio"
+              ruta="/"
               setIsOpen={setIsOpen}
               border={pathname == "/" ? true : false}
             >

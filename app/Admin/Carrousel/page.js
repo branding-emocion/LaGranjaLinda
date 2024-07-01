@@ -38,25 +38,23 @@ const Carousel = () => {
     return urlLinks;
   };
 
-  useEffect(
-    () =>
-      onSnapshot(
-        doc(db, `Carrousel`, "Inicio"),
-        // orderBy("email", "asc"),
-        (snapshot) => {
-          console.log(snapshot.data());
-          setBannerInicio(snapshot?.data()?.Imagenes || []);
-          // if (snapshot.empty) {
-          //   console.log("No matching documents.");
-          //   return;
-          //
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      doc(db, "Carrousel", "Inicio"),
+      (snapshot) => {
+        const data = snapshot.data();
+        if (data) {
+          setBannerInicio(data.Imagenes || []);
         }
+      },
+      (error) => {
+        console.error("Error fetching Carrousel data: ", error);
+      }
+    );
 
-        //setHabits(snapshot.docs.map((doc) => doc.data())); // make sure that setHabits works and sets snapshot to habits
-        //console.log(habits); // habits should have the habits from firebase, not the initial habits we hardcoded
-      ),
-    []
-  );
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, []);
 
   return (
     <>
