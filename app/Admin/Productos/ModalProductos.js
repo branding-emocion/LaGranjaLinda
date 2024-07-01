@@ -27,11 +27,21 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db, storage } from "@/firebase/firebaseClient";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import Image from "next/image";
 
 const ModalProductos = ({ OpenModal, setOpenModal, Categorias }) => {
   const [InputValues, setInputValues] = useState({});
   const [files, setFiles] = useState([]);
 
+  console.log(Categorias, "Categorias");
   const [Loading, setLoading] = useState(false);
   const { toast } = useToast();
 
@@ -82,7 +92,7 @@ const ModalProductos = ({ OpenModal, setOpenModal, Categorias }) => {
           // Borrar las imágenes antiguas
           const ImgRef = ref(
             storage,
-            `Productos/${OpenModal?.InfoEditar?.NombreLocal?.replace(
+            `Productos/${OpenModal?.InfoEditar?.NombreProducto?.replace(
               /\s+/g,
               "_"
             )}/`
@@ -104,8 +114,8 @@ const ModalProductos = ({ OpenModal, setOpenModal, Categorias }) => {
             });
 
           const NombreCarpeta =
-            InputValues?.NombreLocal?.replace(/\s+/g, "_") ||
-            OpenModal?.InfoEditar?.NombreLocal?.replace(/\s+/g, "_");
+            InputValues?.NombreProducto?.replace(/\s+/g, "_") ||
+            OpenModal?.InfoEditar?.NombreProducto?.replace(/\s+/g, "_");
 
           // toca modificar la funcion y enviarle el values para que funcione mejor
           const ImagesUrl = await uploadImages(files, NombreCarpeta);
@@ -130,7 +140,7 @@ const ModalProductos = ({ OpenModal, setOpenModal, Categorias }) => {
           return;
         }
 
-        const NombreCarpeta = InputValues?.NombreLocal?.replace(/\s+/g, "_");
+        const NombreCarpeta = InputValues?.NombreProducto?.replace(/\s+/g, "_");
 
         const ImagesUrl = await uploadImages(files, NombreCarpeta); // Asegúrate de que la promesa se haya resuelto
 
@@ -183,7 +193,48 @@ const ModalProductos = ({ OpenModal, setOpenModal, Categorias }) => {
                     type="text"
                   />
                 </div>
-
+                <div className="space-y-2">
+                  <Label htmlFor="Precio" className="">
+                    Precio S/ <span className="text-red-600">(*)</span>
+                  </Label>
+                  <Input
+                    id="Precio"
+                    name="Precio"
+                    className="w-full text-gray-900"
+                    onChange={HandlerChange}
+                    defaultValue={OpenModal?.InfoEditar?.Precio}
+                    required
+                    autoComplete="off"
+                    type="number"
+                    step="0.01"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="Categoria" className="">
+                    Categoria
+                  </Label>
+                  <Select
+                    value={OpenModal?.InfoEditar?.Categoria}
+                    required
+                    onValueChange={(e) => {
+                      setInputValues({
+                        ...InputValues,
+                        Categoria: e,
+                      });
+                    }}
+                  >
+                    <SelectTrigger className="">
+                      <SelectValue placeholder="Define categoría del producto" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Categorias.map((categoria) => (
+                        <SelectItem key={categoria.id} value={categoria.id}>
+                          {categoria.NombreCategoria}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
                 <div>
                   <Label htmlFor="Imagenes">
                     Imagen Principal <span className="text-red-600"> (*)</span>
@@ -192,6 +243,20 @@ const ModalProductos = ({ OpenModal, setOpenModal, Categorias }) => {
                     setFiles={setFiles}
                     files={files}
                     Modal={OpenModal}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="Descripcion" className="">
+                    Descripción del producto
+                  </Label>
+                  <Textarea
+                    id="Descripcion"
+                    name="Descripcion"
+                    className="w-full text-gray-900"
+                    onChange={HandlerChange}
+                    defaultValue={OpenModal?.InfoEditar?.Descripcion}
+                    required
+                    autoComplete="off"
                   />
                 </div>
               </div>

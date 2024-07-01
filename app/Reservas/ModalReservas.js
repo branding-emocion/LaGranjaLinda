@@ -182,7 +182,6 @@ const ModalReservas = ({ OpenModal, setOpenModal }) => {
                     defaultValue={OpenModal?.InfoEditar?.Comentario}
                     required
                     autoComplete="off"
-                    type="number"
                   />
                 </div>
               </div>

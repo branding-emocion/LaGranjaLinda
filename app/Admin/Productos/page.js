@@ -94,6 +94,7 @@ const Productos = () => {
                   {Categoria.NombreCategoria}
                 </Button>
               ))}
+              <Button className="capitalize">Adicionales</Button>
             </div>
           </CardContent>
         </Card>
@@ -105,23 +106,24 @@ const Productos = () => {
           <CardContent>
             <div>
               <div className="mx-auto grid max-w-6xl  grid-cols-1 gap-6 p-6 sm:grid-cols-2 md:grid-cols-3  ">
-                {Productos?.map((Restaurante) => (
+                {Productos?.map((producto) => (
                   <div
-                    key={Restaurante.id}
+                    key={producto.id}
                     className="max-w-lg mx-auto cursor-pointer"
                   >
                     <div className="bg-white shadow-md border border-gray-200 rounded-lg max-w-sm mb-5">
                       <img
                         className="rounded-t-lg"
-                        src={Restaurante?.Imagenes[0] || ""}
-                        alt="imageRestaurante"
+                        src={producto?.Imagenes[0] || ""}
+                        alt="imageproducto"
                       />
 
                       <div className="p-5">
                         <div>
                           <h1 className="text-gray-900 font-bold uppercase text-center text-2xl tracking-tight ">
-                            {Restaurante?.NombreCategoria}
+                            {producto?.NombreProducto}
                           </h1>
+                          <p className="line-clamp-3">{producto.Descripcion}</p>
                         </div>
                       </div>
 
@@ -131,7 +133,7 @@ const Productos = () => {
                             e.preventDefault();
                             setOpenModal({
                               Visible: true,
-                              InfoEditar: Restaurante,
+                              InfoEditar: producto,
                             });
                           }}
                           className="bg-blue-500 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-blue-600"
@@ -143,19 +145,19 @@ const Productos = () => {
                             e.preventDefault();
 
                             const Confirm = confirm(
-                              `Esta Seguro de eliminar el Restaurante: ${Restaurante.NombreLocal}`
+                              `Esta Seguro de eliminar el producto: ${producto.NombreProducto}`
                             );
                             if (Confirm) {
                               const ImgRef = ref(
                                 storage,
-                                `Productos/${Restaurante?.NombreLocal?.replace(
+                                `Productos/${producto?.NombreProducto?.replace(
                                   /\s+/g,
                                   "_"
                                 )}/`
                               );
 
                               await deleteDoc(
-                                doc(db, "Productos", `${Restaurante.id}`)
+                                doc(db, "Productos", `${producto.id}`)
                               );
 
                               // Lista todos los objetos (archivos) en el directorio
