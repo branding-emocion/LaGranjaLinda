@@ -13,6 +13,7 @@ import { useToast } from "@/components/ui/use-toast";
 import React, { useState } from "react";
 
 import {
+  Timestamp,
   addDoc,
   collection,
   doc,
@@ -26,7 +27,6 @@ import PhoneInput from "react-phone-number-input";
 
 const ModalReservas = ({ OpenModal, setOpenModal }) => {
   const [InputValues, setInputValues] = useState({});
-  const [files, setFiles] = useState([]);
 
   const [Loading, setLoading] = useState(false);
   const { toast } = useToast();
@@ -50,10 +50,15 @@ const ModalReservas = ({ OpenModal, setOpenModal }) => {
     setLoading(true);
 
     try {
+      // Convertir a objeto Date fecha y hora
+      const fechaReservaDate = new Date(InputValues?.FechaReserva);
+
       const docRef = await addDoc(collection(db, "Reservas"), {
         ...InputValues,
         Restaurante: OpenModal?.InfoRestaurante?.id,
         createdAt: serverTimestamp(),
+        Estado: "Pendiente",
+        FechaReserva: Timestamp.fromDate(fechaReservaDate), // Almacenar como Timestamp
       });
       toast({
         title: "Reserva solicitada",
@@ -121,17 +126,18 @@ const ModalReservas = ({ OpenModal, setOpenModal }) => {
 
                 <div className="space-y-2">
                   <Label htmlFor="FechaReserva" className="">
-                    Fecha <span className="text-red-600">(*)</span>
+                    Fecha y hora<span className="text-red-600">(*)</span>
                   </Label>
                   <div>
                     <input
                       className="w-full flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm"
                       type="datetime-local"
-                      name="Fecha Reserva"
+                      name="FechaReserva"
                       id="FechaReserva"
                       //min date hoy
                       min={new Date().toISOString().split("T")[0]}
                       required
+                      onChange={HandlerChange}
                     />
                   </div>
                 </div>

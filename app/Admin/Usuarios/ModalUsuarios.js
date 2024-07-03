@@ -16,12 +16,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
-import React, { useState } from "react";
+import { db } from "@/firebase/firebaseClient";
+import { collection, onSnapshot } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
 
 const ModalUsuarios = ({ OpenModal, setOpenModal }) => {
   const [InputValues, setInputValues] = useState({});
   const [Loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const [Restaurantes, setRestaurantes] = useState([]);
+
+  console.log(Restaurantes);
 
   const Roles = [
     {
@@ -120,7 +125,22 @@ const ModalUsuarios = ({ OpenModal, setOpenModal }) => {
     }
   };
 
-  console.log("OpenModal", OpenModal);
+  useEffect(() => {
+    onSnapshot(
+      collection(db, `Restaurantes`),
+      // orderBy("email", "asc"),
+      (snapshot) =>
+        setRestaurantes(
+          snapshot?.docs?.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
+        )
+    );
+  }, []);
+
+  console.log(OpenModal);
+
   return (
     <Dialog open={OpenModal?.Visible} onOpenChange={closeModal}>
       <DialogContent className="h-auto  w-[90%] md:w-full max-h-[95vh] overflow-auto   sm:max-w-4xl">
@@ -136,7 +156,7 @@ const ModalUsuarios = ({ OpenModal, setOpenModal }) => {
               <div className="grid grid-cols-1 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="NombreCompleto" className="">
-                    Nombre Completo
+                    Nombre Completo <span className="text-red-600"> (*)</span>
                   </Label>
                   <Input
                     id="NombreCompleto"
@@ -152,7 +172,7 @@ const ModalUsuarios = ({ OpenModal, setOpenModal }) => {
 
                 <div className="space-y-2">
                   <Label htmlFor="Rol" className="">
-                    Rol
+                    Rol <span className="text-red-600"> (*)</span>
                   </Label>
                   <Select
                     value={OpenModal?.InfoEditar?.Rol}
@@ -176,9 +196,41 @@ const ModalUsuarios = ({ OpenModal, setOpenModal }) => {
                     </SelectContent>
                   </Select>
                 </div>
+                {(InputValues?.Rol == "Mostrador" ||
+                  OpenModal?.InfoEditar?.Rol == "Mostrador") && (
+                  <div className="space-y-2">
+                    <Label htmlFor="Restaurante" className="">
+                      Restaurante <span className="text-red-600"> (*)</span>
+                    </Label>
+                    <Select
+                      value={OpenModal?.InfoEditar?.Restaurante}
+                      required
+                      onValueChange={(e) => {
+                        setInputValues({
+                          ...InputValues,
+                          IdRestaurante: e,
+                        });
+                      }}
+                    >
+                      <SelectTrigger className="">
+                        <SelectValue placeholder="Define restaurante del Usuario" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Restaurantes?.map((restaurante) => (
+                          <SelectItem
+                            key={restaurante.id}
+                            value={restaurante.id}
+                          >
+                            {restaurante.NombreLocal}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
                 <div className="space-y-2">
                   <Label htmlFor="Correo" className="">
-                    Correo
+                    Correo <span className="text-red-600"> (*)</span>
                   </Label>
                   <Input
                     id="Correo"
@@ -193,7 +245,7 @@ const ModalUsuarios = ({ OpenModal, setOpenModal }) => {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="Pass" className="">
-                    Pass
+                    Pass <span className="text-red-600"> (*)</span>
                   </Label>
                   <Input
                     id="Pass"

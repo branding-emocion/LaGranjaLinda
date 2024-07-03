@@ -3,24 +3,36 @@ import { AuthAdmin, dbAdmin, timeAdmin } from "@/firebase/firebaseAdmin.js";
 
 export async function POST(req) {
   try {
-    const { NombreCompleto, Correo, Pass, Rol } = await req?.json();
+    const { NombreCompleto, Correo, Pass, Rol, IdRestaurante } =
+      await req?.json();
 
     let InfoAdd = {
       email: Correo,
       emailVerified: false,
-      password: Pass,
       displayName: NombreCompleto?.toUpperCase() || "",
       disabled: false,
       Rol: Rol,
     };
 
+    let ListClaim = {
+      Rol: Rol,
+    };
+    if (IdRestaurante) {
+      InfoAdd.IdRestaurante = IdRestaurante;
+    }
+
+    if (IdRestaurante) {
+      InfoAdd.IdRestaurante = IdRestaurante;
+    }
+
     const CreateUser = await AuthAdmin.createUser({
       ...InfoAdd,
       password: Pass,
     });
-    const AddClaim = await AuthAdmin.setCustomUserClaims(CreateUser.uid, {
-      Rol: Rol,
-    });
+    const AddClaim = await AuthAdmin.setCustomUserClaims(
+      CreateUser.uid,
+      ListClaim
+    );
 
     await dbAdmin
       .collection("Usuarios")

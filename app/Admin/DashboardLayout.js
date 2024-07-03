@@ -9,6 +9,7 @@ import {
   BookOpenText,
   BrickWall,
   CalendarCheck,
+  CalendarClock,
   CalendarPlus,
   GalleryHorizontal,
   GalleryThumbnails,
@@ -27,8 +28,40 @@ import { collection, onSnapshot, query, where } from "firebase/firestore";
 const DashboardLayout = ({ children }) => {
   const [{ user, claims }, loading, error] = useAuthState(auth);
   const [Tareas, setTareas] = useState([]);
+  const [CantReservas, setCantReservas] = useState(null);
   const pathname = usePathname();
   const router = useRouter();
+  const [Reservas, setReservas] = useState([]);
+
+  console.log(claims);
+  useEffect(() => {
+    let qTotalReservas;
+
+    if (claims?.IdRestaurante) {
+      // Consulta para obtener todas las reservas del restaurante especificado en los claims
+      qTotalReservas = query(
+        collection(db, "Reservas"),
+        where("Restaurante", "==", claims.IdRestaurante),
+        where("Estado", "==", "Pendiente")
+      );
+    } else {
+      // Consulta para obtener todas las reservas pendientes sin filtrar por restaurante
+      qTotalReservas = query(
+        collection(db, "Reservas"),
+        where("Estado", "==", "Pendiente")
+      );
+    }
+
+    // Suscripción para las reservas pendientes
+    const unsubscribeTotal = onSnapshot(qTotalReservas, (snapshot) => {
+      setCantReservas(snapshot.size); // Actualizar la cantidad de reservas pendientes
+    });
+
+    // Limpiar las suscripciones al desmontar el componente
+    return () => {
+      unsubscribeTotal();
+    };
+  }, [claims?.IdRestaurante]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>error</p>;
@@ -68,10 +101,23 @@ const DashboardLayout = ({ children }) => {
       hidden: claims?.Rol?.includes("Admin") ? false : true,
     },
     {
-      name: "Reservas",
-      link: "/Admin/Reservas",
+      name: "Reservas Pendientes",
+      link: `${
+        claims?.Rol?.includes("Mostrador") && claims?.IdRestaurante?.length > 0
+          ? `/Admin/Reservas/${claims?.IdRestaurante}`
+          : "/Admin/Reservas"
+      }`,
+      icon: <CalendarClock className="w-6 h-6 text-white" />,
+      Cant: true,
+    },
+    {
+      name: "Reservas para Hoy",
+      link: `${
+        claims?.Rol?.includes("Mostrador") && claims?.IdRestaurante?.length > 0
+          ? `/Admin/MesasHoy/${claims?.IdRestaurante}`
+          : "/Admin/MesasHoy"
+      }`,
       icon: <CalendarCheck className="w-6 h-6 text-white" />,
-      Tareas: true,
     },
   ];
 
@@ -80,25 +126,6 @@ const DashboardLayout = ({ children }) => {
       router.replace("/Admin");
     }
   });
-  // useEffect(() => {
-  //   const qComentarios = query(
-  //     collection(db, "Notificaciones"),
-  //     where("Show", "==", true)
-  //   );
-
-  //   const commentarios = onSnapshot(qComentarios, (snapshot) => {
-  //     setTareas(
-  //       snapshot.docs.map((doc) => ({
-  //         id: doc.id,
-  //         ...doc.data(),
-  //       }))
-  //     );
-  //   });
-
-  //   return () => {
-  //     commentarios();
-  //   };
-  // }, []);
 
   return (
     <div>
@@ -147,9 +174,9 @@ const DashboardLayout = ({ children }) => {
                           {men.name}
                         </span>
 
-                        {men?.Tareas && (
+                        {men?.Cant && (
                           <span className="ml-2 text-sm tracking-wide truncate bg-orange-700 px-2  rounded-full">
-                            {Tareas?.length || 0}
+                            {CantReservas || 0}
                           </span>
                         )}
                       </Link>
