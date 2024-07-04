@@ -19,11 +19,16 @@ export async function POST(req) {
     };
     if (IdRestaurante) {
       InfoAdd.IdRestaurante = IdRestaurante;
+      ListClaim.IdRestaurante = IdRestaurante;
     }
 
-    if (IdRestaurante) {
-      InfoAdd.IdRestaurante = IdRestaurante;
-    }
+    await dbAdmin
+      .collection("Usuarios")
+      .doc(`${CreateUser.uid}`)
+      .set({
+        ...InfoAdd,
+        createdAt: timeAdmin,
+      });
 
     const CreateUser = await AuthAdmin.createUser({
       ...InfoAdd,
@@ -33,14 +38,7 @@ export async function POST(req) {
       CreateUser.uid,
       ListClaim
     );
-
-    await dbAdmin
-      .collection("Usuarios")
-      .doc(`${CreateUser.uid}`)
-      .set({
-        ...InfoAdd,
-        createdAt: timeAdmin,
-      });
+    console.log("AddClaim", AddClaim);
 
     return NextResponse.json(
       {
@@ -189,8 +187,15 @@ export async function DELETE(req) {
 }
 export async function PUT(req) {
   try {
-    const { NombreCompleto, Correo, Pass, uid, Habilitar, Inhabilitar } =
-      await req?.json();
+    const {
+      NombreCompleto,
+      Correo,
+      Pass,
+      uid,
+      Habilitar,
+      Inhabilitar,
+      IdRestaurante,
+    } = await req?.json();
 
     let InfoEditar = {};
 
@@ -198,6 +203,10 @@ export async function PUT(req) {
       InfoEditar.disabled = false;
     } else if (Inhabilitar) {
       InfoEditar.disabled = true;
+    }
+
+    if (IdRestaurante) {
+      InfoEditar.IdRestaurante = IdRestaurante;
     }
 
     if (NombreCompleto) {

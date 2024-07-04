@@ -26,8 +26,6 @@ const ModalUsuarios = ({ OpenModal, setOpenModal }) => {
   const { toast } = useToast();
   const [Restaurantes, setRestaurantes] = useState([]);
 
-  console.log(Restaurantes);
-
   const Roles = [
     {
       value: "Admin",
@@ -64,7 +62,7 @@ const ModalUsuarios = ({ OpenModal, setOpenModal }) => {
   const HandlerSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+    console.log("InputValues", InputValues);
     try {
       if (!Object.keys(InputValues).length) {
         toast({
@@ -204,7 +202,10 @@ const ModalUsuarios = ({ OpenModal, setOpenModal }) => {
                   Restaurante <span className="text-red-600"> (*)</span>
                 </Label>
                 <Select
-                  value={OpenModal?.InfoEditar?.Restaurante}
+                  value={
+                    InputValues?.IdRestaurante ||
+                    OpenModal?.InfoEditar?.IdRestaurante
+                  }
                   required
                   onValueChange={(e) => {
                     setInputValues({
