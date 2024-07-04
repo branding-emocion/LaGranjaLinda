@@ -6,6 +6,14 @@ import ItemMenu from "./ItemMenu";
 import { usePathname } from "next/navigation";
 import { PhoneCall, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const MenuPrincipal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -128,7 +136,25 @@ const MenuPrincipal = () => {
           </div>
         </div>
         <div className="hidden lg:flex justify-center items-center gap-x-4">
-          <Button className="bg-red-700 uppercase">Ordena Aquí</Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button className="bg-red-700 uppercase">Ordena Aquí</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem className=" w-full h-full">
+                <Link className="w-full h-full" href="/Delivery">
+                  Delivery
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem className="hover:cursor-pointer w-full h-full">
+                <Link className="w-full h-full" href={`/Delivery?LLevar=true`}>
+                  Llevar
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <div className=" uppercase lg:flex text-white">
             <p className=" w-20 text-right  h-full tracking-tight leading-4">
               Te lo LLevamos donde estes

@@ -167,85 +167,83 @@ const ModalRestaurantes = ({ OpenModal, setOpenModal }) => {
               : "Agregar"}{" "}
             un restaurante
           </DialogTitle>
-          <DialogDescription>
-            <form onSubmit={HandlerSubmit} className="space-y-4 w-full h-full">
-              <div className="grid grid-cols-1 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="NombreLocal" className="">
-                    Nombre del local <span className="text-red-600">(*)</span>
-                  </Label>
-                  <Input
-                    id="NombreLocal"
-                    name="NombreLocal"
-                    className="w-full text-gray-900"
-                    onChange={HandlerChange}
-                    defaultValue={OpenModal?.InfoEditar?.NombreLocal}
-                    required
-                    autoComplete="off"
-                    autoFocus
-                    type="text"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="RazonSocial" className="">
-                    Razón Social <span className="text-red-600">(*)</span>
-                  </Label>
-                  <Input
-                    id="RazonSocial"
-                    name="RazonSocial"
-                    className="w-full text-gray-900"
-                    onChange={HandlerChange}
-                    defaultValue={OpenModal?.InfoEditar?.RazonSocial}
-                    required
-                    autoComplete="off"
-                    type="text"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="Ruc" className="">
-                    Ruc <span className="text-red-600">(*)</span>
-                  </Label>
-                  <Input
-                    id="Ruc"
-                    name="Ruc"
-                    className="w-full text-gray-900"
-                    onChange={HandlerChange}
-                    defaultValue={OpenModal?.InfoEditar?.Ruc}
-                    required
-                    autoComplete="off"
-                    type="text"
-                    pattern=".{6,}"
-                    title="6 caracteres mínimo"
-                  />
-                </div>
-
-                <div>
-                  <div>
-                    <Label htmlFor="Imagenes">
-                      Imagen Principal{" "}
-                      <span className="text-red-600"> (*)</span>
-                    </Label>
-                    <FileUploader
-                      setFiles={setFiles}
-                      files={files}
-                      Modal={OpenModal}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <Button
-                disabled={Loading}
-                className="   disabled:cursor-not-allowed disabled:opacity-50"
-                type="submit"
-              >
-                Guardar{" "}
-              </Button>
-            </form>
-          </DialogDescription>
+          <DialogDescription></DialogDescription>
         </DialogHeader>
+        <form onSubmit={HandlerSubmit} className="space-y-4 w-full h-full">
+          <div className="grid grid-cols-1 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="NombreLocal" className="">
+                Nombre del local <span className="text-red-600">(*)</span>
+              </Label>
+              <Input
+                id="NombreLocal"
+                name="NombreLocal"
+                className="w-full text-gray-900"
+                onChange={HandlerChange}
+                defaultValue={OpenModal?.InfoEditar?.NombreLocal}
+                required
+                autoComplete="off"
+                autoFocus
+                type="text"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="RazonSocial" className="">
+                Razón Social <span className="text-red-600">(*)</span>
+              </Label>
+              <Input
+                id="RazonSocial"
+                name="RazonSocial"
+                className="w-full text-gray-900"
+                onChange={HandlerChange}
+                defaultValue={OpenModal?.InfoEditar?.RazonSocial}
+                required
+                autoComplete="off"
+                type="text"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="Ruc" className="">
+                Ruc <span className="text-red-600">(*)</span>
+              </Label>
+              <Input
+                id="Ruc"
+                name="Ruc"
+                className="w-full text-gray-900"
+                onChange={HandlerChange}
+                defaultValue={OpenModal?.InfoEditar?.Ruc}
+                required
+                autoComplete="off"
+                type="text"
+                pattern=".{6,}"
+                title="6 caracteres mínimo"
+              />
+            </div>
+
+            <div>
+              <div>
+                <Label htmlFor="Imagenes">
+                  Imagen Principal <span className="text-red-600"> (*)</span>
+                </Label>
+                <FileUploader
+                  setFiles={setFiles}
+                  files={files}
+                  Modal={OpenModal}
+                />
+              </div>
+            </div>
+          </div>
+
+          <Button
+            disabled={Loading}
+            className="   disabled:cursor-not-allowed disabled:opacity-50"
+            type="submit"
+          >
+            Guardar{" "}
+          </Button>
+        </form>
       </DialogContent>
     </Dialog>
   );

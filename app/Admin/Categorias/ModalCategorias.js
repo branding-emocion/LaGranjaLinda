@@ -163,49 +163,48 @@ const ModalCategorias = ({ OpenModal, setOpenModal }) => {
               : "Agregar"}{" "}
             una categoria
           </DialogTitle>
-          <DialogDescription>
-            <form onSubmit={HandlerSubmit} className="space-y-4 w-full h-full">
-              <div className="grid grid-cols-1 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="NombreCategoria" className="">
-                    Nombre del la categoria{" "}
-                    <span className="text-red-600">(*)</span>
-                  </Label>
-                  <Input
-                    id="NombreCategoria"
-                    name="NombreCategoria"
-                    className="w-full text-gray-900"
-                    onChange={HandlerChange}
-                    defaultValue={OpenModal?.InfoEditar?.NombreCategoria}
-                    required
-                    autoComplete="off"
-                    autoFocus
-                    type="text"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="Imagenes">
-                    Imagen Principal <span className="text-red-600"> (*)</span>
-                  </Label>
-                  <FileUploader
-                    setFiles={setFiles}
-                    files={files}
-                    Modal={OpenModal}
-                  />
-                </div>
-              </div>
-
-              <Button
-                disabled={Loading}
-                className="   disabled:cursor-not-allowed disabled:opacity-50"
-                type="submit"
-              >
-                Guardar{" "}
-              </Button>
-            </form>
-          </DialogDescription>
+          <DialogDescription></DialogDescription>
         </DialogHeader>
+        <form onSubmit={HandlerSubmit} className="space-y-4 w-full h-full">
+          <div className="grid grid-cols-1 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="NombreCategoria" className="">
+                Nombre del la categoria{" "}
+                <span className="text-red-600">(*)</span>
+              </Label>
+              <Input
+                id="NombreCategoria"
+                name="NombreCategoria"
+                className="w-full text-gray-900"
+                onChange={HandlerChange}
+                defaultValue={OpenModal?.InfoEditar?.NombreCategoria}
+                required
+                autoComplete="off"
+                autoFocus
+                type="text"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="Imagenes">
+                Imagen Principal <span className="text-red-600"> (*)</span>
+              </Label>
+              <FileUploader
+                setFiles={setFiles}
+                files={files}
+                Modal={OpenModal}
+              />
+            </div>
+          </div>
+
+          <Button
+            disabled={Loading}
+            className="   disabled:cursor-not-allowed disabled:opacity-50"
+            type="submit"
+          >
+            Guardar{" "}
+          </Button>
+        </form>
       </DialogContent>
     </Dialog>
   );
