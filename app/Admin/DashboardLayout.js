@@ -31,7 +31,6 @@ const DashboardLayout = ({ children }) => {
   const [CantReservas, setCantReservas] = useState(null);
   const pathname = usePathname();
   const router = useRouter();
-  const [Reservas, setReservas] = useState([]);
 
   console.log(claims);
   useEffect(() => {
