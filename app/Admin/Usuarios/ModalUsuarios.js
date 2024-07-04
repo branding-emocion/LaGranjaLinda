@@ -151,127 +151,123 @@ const ModalUsuarios = ({ OpenModal, setOpenModal }) => {
               : "Agregar"}{" "}
             un usuario
           </DialogTitle>
-          <DialogDescription>
-            <form onSubmit={HandlerSubmit} className="space-y-4 w-full h-full">
-              <div className="grid grid-cols-1 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="NombreCompleto" className="">
-                    Nombre Completo <span className="text-red-600"> (*)</span>
-                  </Label>
-                  <Input
-                    id="NombreCompleto"
-                    name="NombreCompleto"
-                    className="w-full text-gray-900"
-                    onChange={HandlerChange}
-                    defaultValue={OpenModal?.InfoEditar?.displayName}
-                    required
-                    autoComplete="off"
-                    autoFocus
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="Rol" className="">
-                    Rol <span className="text-red-600"> (*)</span>
-                  </Label>
-                  <Select
-                    value={OpenModal?.InfoEditar?.Rol}
-                    required
-                    onValueChange={(e) => {
-                      setInputValues({
-                        ...InputValues,
-                        Rol: e,
-                      });
-                    }}
-                  >
-                    <SelectTrigger className="">
-                      <SelectValue placeholder="Define Rol del Usuario" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Roles.map((rol) => (
-                        <SelectItem key={rol.value} value={rol.value}>
-                          {rol.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                {(InputValues?.Rol == "Mostrador" ||
-                  OpenModal?.InfoEditar?.Rol == "Mostrador") && (
-                  <div className="space-y-2">
-                    <Label htmlFor="Restaurante" className="">
-                      Restaurante <span className="text-red-600"> (*)</span>
-                    </Label>
-                    <Select
-                      value={OpenModal?.InfoEditar?.Restaurante}
-                      required
-                      onValueChange={(e) => {
-                        setInputValues({
-                          ...InputValues,
-                          IdRestaurante: e,
-                        });
-                      }}
-                    >
-                      <SelectTrigger className="">
-                        <SelectValue placeholder="Define restaurante del Usuario" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {Restaurantes?.map((restaurante) => (
-                          <SelectItem
-                            key={restaurante.id}
-                            value={restaurante.id}
-                          >
-                            {restaurante.NombreLocal}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )}
-                <div className="space-y-2">
-                  <Label htmlFor="Correo" className="">
-                    Correo <span className="text-red-600"> (*)</span>
-                  </Label>
-                  <Input
-                    id="Correo"
-                    name="Correo"
-                    className="w-full text-gray-900"
-                    onChange={HandlerChange}
-                    defaultValue={OpenModal?.InfoEditar?.email}
-                    required
-                    autoComplete="off"
-                    type="email"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="Pass" className="">
-                    Pass <span className="text-red-600"> (*)</span>
-                  </Label>
-                  <Input
-                    id="Pass"
-                    name="Pass"
-                    className="w-full text-gray-900"
-                    onChange={HandlerChange}
-                    defaultValue={OpenModal?.InfoEditar?.password}
-                    required
-                    autoComplete="off"
-                    type="text"
-                    pattern=".{6,}"
-                    title="6 caracteres mínimo"
-                  />
-                </div>
-              </div>
-
-              <Button
-                disabled={Loading}
-                className="   disabled:cursor-not-allowed disabled:opacity-50"
-                type="submit"
-              >
-                Guardar{" "}
-              </Button>
-            </form>
-          </DialogDescription>
+          <DialogDescription></DialogDescription>
         </DialogHeader>
+        <form onSubmit={HandlerSubmit} className="space-y-4 w-full h-full">
+          <div className="grid grid-cols-1 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="NombreCompleto" className="">
+                Nombre Completo <span className="text-red-600"> (*)</span>
+              </Label>
+              <Input
+                id="NombreCompleto"
+                name="NombreCompleto"
+                className="w-full text-gray-900"
+                onChange={HandlerChange}
+                defaultValue={OpenModal?.InfoEditar?.displayName}
+                required
+                autoComplete="off"
+                autoFocus
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="Rol" className="">
+                Rol <span className="text-red-600"> (*)</span>
+              </Label>
+              <Select
+                value={OpenModal?.InfoEditar?.Rol}
+                required
+                onValueChange={(e) => {
+                  setInputValues({
+                    ...InputValues,
+                    Rol: e,
+                  });
+                }}
+              >
+                <SelectTrigger className="">
+                  <SelectValue placeholder="Define Rol del Usuario" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Roles.map((rol) => (
+                    <SelectItem key={rol.value} value={rol.value}>
+                      {rol.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            {(InputValues?.Rol == "Mostrador" ||
+              OpenModal?.InfoEditar?.Rol == "Mostrador") && (
+              <div className="space-y-2">
+                <Label htmlFor="Restaurante" className="">
+                  Restaurante <span className="text-red-600"> (*)</span>
+                </Label>
+                <Select
+                  value={OpenModal?.InfoEditar?.Restaurante}
+                  required
+                  onValueChange={(e) => {
+                    setInputValues({
+                      ...InputValues,
+                      IdRestaurante: e,
+                    });
+                  }}
+                >
+                  <SelectTrigger className="">
+                    <SelectValue placeholder="Define restaurante del Usuario" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Restaurantes?.map((restaurante) => (
+                      <SelectItem key={restaurante.id} value={restaurante.id}>
+                        {restaurante.NombreLocal}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+            <div className="space-y-2">
+              <Label htmlFor="Correo" className="">
+                Correo <span className="text-red-600"> (*)</span>
+              </Label>
+              <Input
+                id="Correo"
+                name="Correo"
+                className="w-full text-gray-900"
+                onChange={HandlerChange}
+                defaultValue={OpenModal?.InfoEditar?.email}
+                required
+                autoComplete="off"
+                type="email"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="Pass" className="">
+                Pass <span className="text-red-600"> (*)</span>
+              </Label>
+              <Input
+                id="Pass"
+                name="Pass"
+                className="w-full text-gray-900"
+                onChange={HandlerChange}
+                defaultValue={OpenModal?.InfoEditar?.password}
+                required
+                autoComplete="off"
+                type="text"
+                pattern=".{6,}"
+                title="6 caracteres mínimo"
+              />
+            </div>
+          </div>
+
+          <Button
+            disabled={Loading}
+            className="   disabled:cursor-not-allowed disabled:opacity-50"
+            type="submit"
+          >
+            Guardar{" "}
+          </Button>
+        </form>
       </DialogContent>
     </Dialog>
   );

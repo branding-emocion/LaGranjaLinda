@@ -22,18 +22,22 @@ const Productos = () => {
 
   const [Productos, setProductos] = useState([]);
   const [Categorias, setCategorias] = useState([]);
+  const [FilterByCategoria, setFilterByCategoria] = useState("");
+  const [filteredItems, setFilteredItems] = useState([]);
 
+  console.log("setFilterByCategoria", FilterByCategoria);
   useEffect(() => {
     onSnapshot(
       collection(db, `Productos`),
       // orderBy("email", "asc"),
-      (snapshot) =>
-        setProductos(
-          snapshot?.docs?.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }))
-        )
+      (snapshot) => {
+        const data = snapshot?.docs?.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setProductos(data);
+        setFilteredItems(data);
+      }
     );
     onSnapshot(
       collection(db, `Categorias`),
@@ -47,6 +51,31 @@ const Productos = () => {
         )
     );
   }, []);
+
+  useEffect(() => {
+    if (FilterByCategoria == "Todos") {
+      setFilteredItems(Productos);
+    } else {
+      const filteredItems = Productos.reduce((acc, item) => {
+        if (FilterByCategoria == "Adicionales") {
+          if (item.esAdicional == "Si") {
+            acc.push(item);
+          }
+        } else {
+          const Categoria =
+            !FilterByCategoria || item.Categoria == FilterByCategoria;
+
+          if (Categoria) {
+            acc.push(item);
+          }
+        }
+        return acc;
+      }, []);
+
+      setFilteredItems(filteredItems);
+    }
+  }, [FilterByCategoria, Productos]);
+
   return (
     <>
       {OpenModal.Visible && (
@@ -89,12 +118,36 @@ const Productos = () => {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-4 gap-2">
+              <Button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setFilterByCategoria("Todos");
+                }}
+                className="capitalize"
+              >
+                Todos
+              </Button>
               {Categorias?.map((Categoria) => (
-                <Button key={Categoria.id} className="capitalize">
+                <Button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setFilterByCategoria(Categoria.id);
+                  }}
+                  key={Categoria.id}
+                  className="capitalize"
+                >
                   {Categoria.NombreCategoria}
                 </Button>
               ))}
-              <Button className="capitalize">Adicionales</Button>
+              <Button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setFilterByCategoria("Adicionales");
+                }}
+                className="capitalize"
+              >
+                Adicionales
+              </Button>
             </div>
           </CardContent>
         </Card>
@@ -105,25 +158,37 @@ const Productos = () => {
           </CardHeader>
           <CardContent>
             <div>
-              <div className="mx-auto grid max-w-6xl  grid-cols-1 gap-6 p-6 sm:grid-cols-2 md:grid-cols-3  ">
-                {Productos?.map((producto) => (
+              <div className="mx-auto grid  container  grid-cols-1 gap-5  md:grid-cols-2 lg:grid-cols-3  ">
+                {filteredItems?.map((producto) => (
                   <div
                     key={producto.id}
-                    className="max-w-lg mx-auto cursor-pointer"
+                    className="w-full h-full mx-auto bg-white shadow-md border border-gray-200 rounded-lg"
                   >
-                    <div className="bg-white shadow-md border border-gray-200 rounded-lg max-w-sm mb-5">
+                    <div className="">
                       <img
                         className="rounded-t-lg"
                         src={producto?.Imagenes[0] || ""}
                         alt="imageproducto"
                       />
 
-                      <div className="p-5">
-                        <div>
+                      <div className="py-2  px-5">
+                        <div className="space-y-1">
                           <h1 className="text-gray-900 font-bold uppercase text-center text-2xl tracking-tight ">
                             {producto?.NombreProducto}
                           </h1>
+                          <h1 className="capitalize">
+                            <span className="font-semibold">Categoria: </span>
+                            {Categorias.find(
+                              (categoria) => producto.Categoria == categoria.id
+                            )?.NombreCategoria || "Sin Categoria"}
+                          </h1>
                           <p className="line-clamp-3">{producto.Descripcion}</p>
+
+                          {/* Precio */}
+
+                          <p className="text-3xl m-0 font-normal text-end ">
+                            S/ {producto?.Precio || 0}
+                          </p>
                         </div>
                       </div>
 

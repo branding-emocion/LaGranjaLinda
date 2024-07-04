@@ -173,104 +173,134 @@ const ModalProductos = ({ OpenModal, setOpenModal, Categorias }) => {
               : "Agregar"}{" "}
             un producto
           </DialogTitle>
-          <DialogDescription>
-            <form onSubmit={HandlerSubmit} className="space-y-4 w-full h-full">
-              <div className="grid grid-cols-1 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="NombreProducto" className="">
-                    Nombre del producto{" "}
-                    <span className="text-red-600">(*)</span>
-                  </Label>
-                  <Input
-                    id="NombreProducto"
-                    name="NombreProducto"
-                    className="w-full text-gray-900"
-                    onChange={HandlerChange}
-                    defaultValue={OpenModal?.InfoEditar?.NombreProducto}
-                    required
-                    autoComplete="off"
-                    autoFocus
-                    type="text"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="Precio" className="">
-                    Precio S/ <span className="text-red-600">(*)</span>
-                  </Label>
-                  <Input
-                    id="Precio"
-                    name="Precio"
-                    className="w-full text-gray-900"
-                    onChange={HandlerChange}
-                    defaultValue={OpenModal?.InfoEditar?.Precio}
-                    required
-                    autoComplete="off"
-                    type="number"
-                    step="0.01"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="Categoria" className="">
-                    Categoria
-                  </Label>
-                  <Select
-                    value={OpenModal?.InfoEditar?.Categoria}
-                    required
-                    onValueChange={(e) => {
-                      setInputValues({
-                        ...InputValues,
-                        Categoria: e,
-                      });
-                    }}
-                  >
-                    <SelectTrigger className="">
-                      <SelectValue placeholder="Define categoría del producto" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Categorias.map((categoria) => (
-                        <SelectItem key={categoria.id} value={categoria.id}>
-                          {categoria.NombreCategoria}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="Imagenes">
-                    Imagen Principal <span className="text-red-600"> (*)</span>
-                  </Label>
-                  <FileUploader
-                    setFiles={setFiles}
-                    files={files}
-                    Modal={OpenModal}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="Descripcion" className="">
-                    Descripción del producto
-                  </Label>
-                  <Textarea
-                    id="Descripcion"
-                    name="Descripcion"
-                    className="w-full text-gray-900"
-                    onChange={HandlerChange}
-                    defaultValue={OpenModal?.InfoEditar?.Descripcion}
-                    required
-                    autoComplete="off"
-                  />
-                </div>
-              </div>
-
-              <Button
-                disabled={Loading}
-                className="   disabled:cursor-not-allowed disabled:opacity-50"
-                type="submit"
-              >
-                Guardar{" "}
-              </Button>
-            </form>
-          </DialogDescription>
+          <DialogDescription></DialogDescription>
         </DialogHeader>
+        <form onSubmit={HandlerSubmit} className="space-y-4 w-full h-full">
+          <div className="grid grid-cols-1 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="NombreProducto" className="">
+                Nombre del producto <span className="text-red-600">(*)</span>
+              </Label>
+              <Input
+                id="NombreProducto"
+                name="NombreProducto"
+                className="w-full text-gray-900"
+                onChange={HandlerChange}
+                defaultValue={OpenModal?.InfoEditar?.NombreProducto}
+                required
+                autoComplete="off"
+                autoFocus
+                type="text"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="Precio" className="">
+                Precio S/ <span className="text-red-600">(*)</span>
+              </Label>
+              <Input
+                id="Precio"
+                name="Precio"
+                className="w-full text-gray-900"
+                onChange={HandlerChange}
+                defaultValue={OpenModal?.InfoEditar?.Precio}
+                required
+                autoComplete="off"
+                type="number"
+                step="0.01"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="Categoria" className="">
+                Categoria
+              </Label>
+              <Select
+                value={OpenModal?.InfoEditar?.Categoria}
+                required
+                onValueChange={(e) => {
+                  setInputValues({
+                    ...InputValues,
+                    Categoria: e,
+                  });
+                }}
+                id="Categoria"
+              >
+                <SelectTrigger className="">
+                  <SelectValue placeholder="Define categoría del producto" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Categorias.map((categoria) => (
+                    <SelectItem key={categoria.id} value={categoria.id}>
+                      {categoria.NombreCategoria}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="Adicional" className="">
+                Adicional?
+              </Label>
+              <Select
+                value={OpenModal?.InfoEditar?.esAdicional}
+                required
+                onValueChange={(e) => {
+                  setInputValues({
+                    ...InputValues,
+                    esAdicional: e,
+                  });
+                }}
+              >
+                <SelectTrigger className="">
+                  <SelectValue placeholder="Es adicional ?" />
+                </SelectTrigger>
+                <SelectContent>
+                  {[
+                    // esAdicional
+                    { id: "Si", label: "Si" },
+                    { id: "No", label: "No" },
+                  ].map((adi, key) => (
+                    <SelectItem key={adi.id} value={adi.id}>
+                      {adi.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="Imagenes">
+                Imagen Principal <span className="text-red-600"> (*)</span>
+              </Label>
+              <FileUploader
+                setFiles={setFiles}
+                files={files}
+                Modal={OpenModal}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="Descripcion" className="">
+                Descripción del producto
+              </Label>
+              <Textarea
+                id="Descripcion"
+                name="Descripcion"
+                className="w-full text-gray-900"
+                onChange={HandlerChange}
+                defaultValue={OpenModal?.InfoEditar?.Descripcion}
+                required
+                autoComplete="off"
+              />
+            </div>
+          </div>
+
+          <Button
+            disabled={Loading}
+            className="   disabled:cursor-not-allowed disabled:opacity-50"
+            type="submit"
+          >
+            Guardar{" "}
+          </Button>
+        </form>
       </DialogContent>
     </Dialog>
   );
