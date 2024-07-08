@@ -18,6 +18,8 @@ module.exports = {
     },
     extend: {
       colors: {
+        granjaPrimary: "#ece4d9",
+        granjaSecondary: "#758063",
         lagranja: "#25593c",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
