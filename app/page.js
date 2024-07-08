@@ -34,7 +34,7 @@ const HomePage = () => {
   return (
     <div className="">
       {IsLoading && !BannerInicio.length >= 0 ? (
-        <Skeleton className="flex items-center justify-center h-[84vh] mb-10" />
+        <Skeleton className="flex items-center justify-center h-[100vh] md:h-[84vh] mb-10" />
       ) : (
         <Carousel
           infiniteLoop

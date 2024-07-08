@@ -35,10 +35,6 @@ const ModalUsuarios = ({ OpenModal, setOpenModal }) => {
       value: "Mostrador",
       label: "Mostrador",
     },
-    {
-      value: "Repartidor",
-      label: "Repartidor",
-    },
 
     {
       value: "Cliente",

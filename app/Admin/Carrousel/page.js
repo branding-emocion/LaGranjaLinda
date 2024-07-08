@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { BadgePlus, PlusIcon } from "lucide-react";
 import { db, storage } from "@/firebase/firebaseClient";
-import { doc, onSnapshot, setDoc } from "firebase/firestore";
+import { doc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
 import FileUploader from "../FileUploader";
 import {
   deleteObject,
@@ -20,11 +20,16 @@ import {
   uploadBytes,
 } from "firebase/storage";
 import { useToast } from "@/components/ui/use-toast";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const Carousel = () => {
   const [BannerInicio, setBannerInicio] = useState([]);
+  const [LinksBanner, setLinksBanner] = useState([]);
   const [IsLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+
+  console.log("LinksBanner", LinksBanner);
 
   const uploadImages = async (images, name) => {
     const urlLinks = await Promise.all(
@@ -45,6 +50,7 @@ const Carousel = () => {
         const data = snapshot.data();
         if (data) {
           setBannerInicio(data.Imagenes || []);
+          setLinksBanner(data.LinksBanner || []);
         }
       },
       (error) => {
@@ -154,6 +160,74 @@ const Carousel = () => {
                       });
                     }
                   } catch (error) {
+                    console.log(error);
+                    alert("intente de nuevo");
+                  } finally {
+                    setIsLoading(false);
+                  }
+                }}
+                disabled={IsLoading}
+              >
+                <PlusIcon /> Guardar{" "}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="shadow-md">
+          <CardHeader>
+            <CardTitle>Link Imagenes </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              <label
+                htmlFor="Imagenes"
+                className="block text-sm font-medium text-gray-900"
+              >
+                Link Imagenes
+              </label>
+
+              {BannerInicio?.map((imagen, index) => (
+                <div key={index}>
+                  <Label>Imagen {index + 1}</Label>{" "}
+                  <Input
+                    // defaultValue={
+                    //   LinksBanner?.find((e) => e?.index === index)?.link || ""
+                    // }
+                    onChange={(e) => {
+                      const { value } = e.target;
+
+                      setLinksBanner((prev) => ({
+                        ...prev,
+                        [index]: { link: value, index },
+                      }));
+                    }}
+                    type="text"
+                  />
+                </div>
+              ))}
+              <Button
+                className="bg-lagranja"
+                onClick={async (e) => {
+                  e.preventDefault();
+
+                  try {
+                    setIsLoading(true);
+
+                    await updateDoc(doc(db, "Carrousel", "Inicio"), {
+                      LinksBanner: Object.values(LinksBanner),
+                    });
+                    toast({
+                      title: "Notificación",
+                      description: "Se agrego con correctamente ",
+                    });
+                  } catch (error) {
+                    toast({
+                      title: "Alerta",
+                      description:
+                        "Ha ocurrido un error intente otra vez o contacte con soporte",
+                    });
+
                     console.log(error);
                     alert("intente de nuevo");
                   } finally {

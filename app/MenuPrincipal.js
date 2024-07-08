@@ -56,9 +56,9 @@ const MenuPrincipal = () => {
       </div> */}
       <nav
         style={{ filter: "drop-shadow(0px 0px 3px black)" }}
-        className={`sticky h-28 z-50 top-0 p-2 md:px-11 shadow-sm md:flex md:items-center md:justify-around 2xl:justify-around bg-lagranja `}
+        className={`sticky h-28 z-50 top-0 p-2 md:px-11 shadow-sm md:flex md:items-center md:justify-around 2xl:justify-around bg-granjaPrimary `}
       >
-        <div className="  flex justify-between items-  ">
+        <div className="  flex justify-between items-center  ">
           {/* Escudo Logo "inicio" */}
           <Link href="/">
             <div
@@ -80,7 +80,7 @@ const MenuPrincipal = () => {
           <span className="text-3xl cursor-pointer mx-2 md:hidden block text-white">
             <button name="Menu" onClick={() => setIsOpen(!isOpen)}>
               <svg
-                className="h-10 w-10 text-white"
+                className="h-10 w-10 text-[#7d2d04]"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -96,11 +96,11 @@ const MenuPrincipal = () => {
           </span>
         </div>
         <div className="flex flex-col   ">
-          <h1 className="hidden   lg:block lg:text-yellow-500 text-2xl ">
+          <h1 className="hidden   lg:block lg:text-[#7d2d04] text-2xl ">
             Elige tu pedido, elige tu experiencia 
           </h1>
           <div
-            className={` text-center  flex flex-col h-screen md:h-auto  md:flex md:flex-row  md:items-center  z-[-1] md:z-auto md:static gap-2 absolute text-white md:text-white bg-lagranja    md:bg-transparent  w-full left-0 top-full md:w-auto md:py-0  md:pl-0 pl-7 md:opacity-100 opacity-0 right-[-400px] transition-all ease-in  ${
+            className={` text-center  flex flex-col h-screen md:h-auto  md:flex md:flex-row  md:items-center  z-[-1] md:z-auto md:static gap-2 absolute text-[#7d2d04] bg-lagranja    md:bg-transparent  w-full left-0 top-full md:w-auto md:py-0  md:pl-0 pl-7 md:opacity-100 opacity-0 right-[-400px] transition-all ease-in  ${
               isOpen ? ` right-0 py-11 opacity-100` : `hidden`
             }`}
           >
@@ -155,7 +155,7 @@ const MenuPrincipal = () => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <div className=" uppercase lg:flex text-white">
+          <div className=" uppercase lg:flex text-[#7d2d04]">
             <p className=" w-20 text-right  h-full tracking-tight leading-4">
               Te lo LLevamos donde estes
             </p>
@@ -164,7 +164,7 @@ const MenuPrincipal = () => {
             </div>
             <div className="">
               <h1>LLamanos</h1>
-              <a className="text-yellow-300 text-2xl" href="tel:+310403">
+              <a className="text-[#7d2d04] text-2xl" href="tel:+310403">
                 310403
               </a>
             </div>

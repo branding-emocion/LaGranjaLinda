@@ -7,9 +7,9 @@ import React from "react";
 const Footer = () => {
   return (
     <>
-      <footer className="border-t -mt-[41px]  py-6 px-4 lg:px-0 bg-lagranja text-white">
+      <footer className="border-t -mt-[41px]  py-6 px-4 lg:px-0 bg-granjaSecondary text-white">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 justify-center gap-4 items-center sm:items-start">
-          <div className=" mx-auto  ">
+          <div className=" lg:mx-auto  ">
             <h1 className="font-semibold mb-2 text-xl">Granja Linda</h1>
             <hr className="mb-2" />
             <div className="space-y-2">
@@ -25,7 +25,7 @@ const Footer = () => {
               </div>
             </div>
           </div>
-          <div className=" mx-auto  ">
+          <div className=" lg:mx-auto  ">
             <h1 className="font-semibold mb-2 text-xl uppercase">Servicios</h1>
             <hr className="mb-2" />
             <div className="space-y-2">
@@ -42,7 +42,7 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className=" mx-auto  ">
+          <div className=" lg:mx-auto  ">
             <h1 className="font-semibold mb-2 text-xl uppercase">
               POLÍTICAS Y TÉRMINOS
             </h1>
@@ -72,7 +72,7 @@ const Footer = () => {
               </div>
             </div>
           </div>
-          <div className=" mx-auto  ">
+          <div className=" lg:mx-auto  ">
             <h1 className="font-semibold mb-2 text-xl uppercase">
               CONTÁCTANOS
             </h1>
