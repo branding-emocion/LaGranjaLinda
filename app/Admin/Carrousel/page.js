@@ -191,22 +191,16 @@ const Carousel = () => {
                 <div key={index}>
                   <Label>Imagen {index + 1}</Label>{" "}
                   <Input
-                    defaultValue={
-                      LinksBanner.find((e) => e?.index === index)?.link || ""
-                    }
+                    // defaultValue={
+                    //   LinksBanner?.find((e) => e?.index === index)?.link || ""
+                    // }
                     onChange={(e) => {
                       const { value } = e.target;
 
-                      const NewArray = LinksBanner.reduce((acc, item) => {
-                        if (item.index === index) {
-                          acc.push({ index, link: value });
-                        } else {
-                          acc.push(item);
-                        }
-                        return acc;
-                      }, []);
-
-                      console.log(NewArray);
+                      setLinksBanner((prev) => ({
+                        ...prev,
+                        [index]: { link: value, index },
+                      }));
                     }}
                     type="text"
                   />
@@ -221,7 +215,7 @@ const Carousel = () => {
                     setIsLoading(true);
 
                     await updateDoc(doc(db, "Carrousel", "Inicio"), {
-                      LinksBanner: LinksBanner,
+                      LinksBanner: Object.values(LinksBanner),
                     });
                     toast({
                       title: "Notificación",
