@@ -196,11 +196,17 @@ const Carousel = () => {
                     }
                     onChange={(e) => {
                       const { value } = e.target;
-                      setLinksBanner((prev) => {
-                        const newLinks = prev.find((e) => {
-                          return e.index === index;
-                        });
-                      });
+
+                      const NewArray = LinksBanner.reduce((acc, item) => {
+                        if (item.index === index) {
+                          acc.push({ index, link: value });
+                        } else {
+                          acc.push(item);
+                        }
+                        return acc;
+                      }, []);
+
+                      console.log(NewArray);
                     }}
                     type="text"
                   />
