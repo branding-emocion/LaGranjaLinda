@@ -24,6 +24,13 @@ import { db, storage } from "@/firebase/firebaseClient";
 import { Textarea } from "@/components/ui/textarea";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const ModalReservas = ({ OpenModal, setOpenModal }) => {
   const [InputValues, setInputValues] = useState({});
@@ -50,6 +57,11 @@ const ModalReservas = ({ OpenModal, setOpenModal }) => {
     setLoading(true);
 
     try {
+      if (!InputValues?.NumeroCelular) {
+        alert("Por favor ingrese un numero de celular");
+        return;
+      }
+
       // Convertir a objeto Date fecha y hora
       const fechaReservaDate = new Date(InputValues?.FechaReserva);
 
@@ -90,7 +102,7 @@ const ModalReservas = ({ OpenModal, setOpenModal }) => {
           </DialogTitle>
           <DialogDescription>
             <form onSubmit={HandlerSubmit} className="space-y-4 w-full h-full">
-              <div className="grid grid-cols-1 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="NombreCompleto" className="">
                     Nombre Completo <span className="text-red-600">(*)</span>
@@ -106,6 +118,40 @@ const ModalReservas = ({ OpenModal, setOpenModal }) => {
                     autoFocus
                     type="text"
                   />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="MotivoReserva" className="">
+                    Motivo de la Reserva?
+                  </Label>
+                  <Select
+                    value={InputValues?.MotivoReserva}
+                    required
+                    onValueChange={(e) => {
+                      setInputValues({
+                        ...InputValues,
+                        MotivoReserva: e,
+                      });
+                    }}
+                  >
+                    <SelectTrigger className="">
+                      <SelectValue placeholder="Motivo dela reserva ?" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {[
+                        { id: 1, label: "Cena de Negocios" },
+                        { id: 2, label: "Cumpleaños" },
+                        { id: 3, label: "Aniversario" },
+                        { id: 4, label: "Reunión Familiar" },
+                        { id: 5, label: "Cita Romántica" },
+                        { id: 6, label: "Celebración de Amigos" },
+                        { id: 7, label: "Evento Corporativo" },
+                      ].map((adi, key) => (
+                        <SelectItem key={adi.id} value={adi.label}>
+                          {adi.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div className="space-y-2">
@@ -126,7 +172,8 @@ const ModalReservas = ({ OpenModal, setOpenModal }) => {
 
                 <div className="space-y-2">
                   <Label htmlFor="FechaReserva" className="">
-                    Fecha y hora<span className="text-red-600">(*)</span>
+                    Fecha y hora de la reserva{" "}
+                    <span className="text-red-600">(*)</span>
                   </Label>
                   <div>
                     <input
@@ -141,8 +188,8 @@ const ModalReservas = ({ OpenModal, setOpenModal }) => {
                     />
                   </div>
                 </div>
-                <div>
-                  <Label htmlFor="Celular" className="">
+                <div className="space-y-2">
+                  <Label htmlFor="Celular" className=" ">
                     Celular <span className="text-red-600">(*)</span>
                   </Label>
 
@@ -176,7 +223,7 @@ const ModalReservas = ({ OpenModal, setOpenModal }) => {
                     type="number"
                   />
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-2 lg:col-span-2">
                   <Label htmlFor="Comentario" className="">
                     Comentarios
                   </Label>

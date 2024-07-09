@@ -79,7 +79,7 @@ const Reservas = () => {
 
                         <p className="  text-gray-700">
                           <span className="font-semibold">Dirección: </span>
-                          {Restaurante?.Direction || "No hay dirección"}
+                          {Restaurante?.Direction || "No disponible"}
                         </p>
                       </div>
                     </div>

@@ -27,6 +27,13 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db, storage } from "@/firebase/firebaseClient";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const ModalRestaurantes = ({ OpenModal, setOpenModal }) => {
   const [InputValues, setInputValues] = useState({});
@@ -170,7 +177,7 @@ const ModalRestaurantes = ({ OpenModal, setOpenModal }) => {
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <form onSubmit={HandlerSubmit} className="space-y-4 w-full h-full">
-          <div className="grid grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="NombreLocal" className="">
                 Nombre del local <span className="text-red-600">(*)</span>
@@ -186,6 +193,38 @@ const ModalRestaurantes = ({ OpenModal, setOpenModal }) => {
                 autoFocus
                 type="text"
               />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="EstadoRestaurante" className="">
+                El local esta disponible ?
+                <span className="text-red-600">(*)</span>
+              </Label>
+              <Select
+                id="EstadoRestaurante"
+                value={OpenModal?.InfoEditar?.EstadoRestaurante}
+                required
+                onValueChange={(e) => {
+                  setInputValues({
+                    ...InputValues,
+                    EstadoRestaurante: e,
+                  });
+                }}
+              >
+                <SelectTrigger className="">
+                  <SelectValue placeholder="Estado del restaurante?" />
+                </SelectTrigger>
+                <SelectContent>
+                  {[
+                    // esAdicional
+                    { id: "Si", label: "Si" },
+                    { id: "No", label: "No" },
+                  ].map((adi, key) => (
+                    <SelectItem key={adi.id} value={adi.id}>
+                      {adi.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">
@@ -222,17 +261,15 @@ const ModalRestaurantes = ({ OpenModal, setOpenModal }) => {
               />
             </div>
 
-            <div>
-              <div>
-                <Label htmlFor="Imagenes">
-                  Imagen Principal <span className="text-red-600"> (*)</span>
-                </Label>
-                <FileUploader
-                  setFiles={setFiles}
-                  files={files}
-                  Modal={OpenModal}
-                />
-              </div>
+            <div className="lg:col-span-2">
+              <Label htmlFor="Imagenes">
+                Imagen Principal <span className="text-red-600"> (*)</span>
+              </Label>
+              <FileUploader
+                setFiles={setFiles}
+                files={files}
+                Modal={OpenModal}
+              />
             </div>
           </div>
 

@@ -176,7 +176,7 @@ const ModalProductos = ({ OpenModal, setOpenModal, Categorias }) => {
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <form onSubmit={HandlerSubmit} className="space-y-4 w-full h-full">
-          <div className="grid grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="NombreProducto" className="">
                 Nombre del producto <span className="text-red-600">(*)</span>
@@ -194,6 +194,36 @@ const ModalProductos = ({ OpenModal, setOpenModal, Categorias }) => {
               />
             </div>
             <div className="space-y-2">
+              <Label htmlFor="Disponibilidad" className="">
+                Disponibilidad? <span className="text-red-600">(*)</span>
+              </Label>
+              <Select
+                value={OpenModal?.InfoEditar?.Disponibilidad}
+                required
+                onValueChange={(e) => {
+                  setInputValues({
+                    ...InputValues,
+                    Disponibilidad: e,
+                  });
+                }}
+              >
+                <SelectTrigger className="">
+                  <SelectValue placeholder="El producto esta disponibles? " />
+                </SelectTrigger>
+                <SelectContent>
+                  {[
+                    // esAdicional
+                    { id: "Si", label: "Si" },
+                    { id: "No", label: "No" },
+                  ].map((adi, key) => (
+                    <SelectItem key={adi.id} value={adi.id}>
+                      {adi.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
               <Label htmlFor="Precio" className="">
                 Precio S/ <span className="text-red-600">(*)</span>
               </Label>
@@ -209,10 +239,25 @@ const ModalProductos = ({ OpenModal, setOpenModal, Categorias }) => {
                 step="0.01"
               />
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="EstimadoDia" className="">
+                Estimado del producto al Dia
+              </Label>
+              <Input
+                id="EstimadoDia"
+                name="EstimadoDia"
+                className="w-full text-gray-900"
+                onChange={HandlerChange}
+                defaultValue={OpenModal?.InfoEditar?.EstimadoDia}
+                autoComplete="off"
+                type="number"
+                //step numeros como 123456
+              />
+            </div>
 
             <div className="space-y-2">
               <Label htmlFor="Categoria" className="">
-                Categoria
+                Categoria <span className="text-red-600">(*)</span>
               </Label>
               <Select
                 value={OpenModal?.InfoEditar?.Categoria}
@@ -267,7 +312,7 @@ const ModalProductos = ({ OpenModal, setOpenModal, Categorias }) => {
                 </SelectContent>
               </Select>
             </div>
-            <div>
+            <div className="lg:col-span-2">
               <Label htmlFor="Imagenes">
                 Imagen Principal <span className="text-red-600"> (*)</span>
               </Label>
@@ -277,7 +322,7 @@ const ModalProductos = ({ OpenModal, setOpenModal, Categorias }) => {
                 Modal={OpenModal}
               />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-2 lg:col-span-2">
               <Label htmlFor="Descripcion" className="">
                 Descripción del producto
               </Label>
