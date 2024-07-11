@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Title from "../Title";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "@/firebase/firebaseClient";
 import Image from "next/image";
 import ModalReservas from "./ModalReservas";
@@ -14,17 +14,24 @@ const Reservas = () => {
   const [Restaurantes, setRestaurantes] = useState([]);
 
   useEffect(() => {
-    onSnapshot(
-      collection(db, `Restaurantes`),
-      // orderBy("email", "asc"),
-      (snapshot) =>
-        setRestaurantes(
-          snapshot?.docs?.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }))
-        )
+    // Crear la query con la condición
+    const q = query(
+      collection(db, "Restaurantes"),
+      where("EstadoRestaurante", "==", "Si")
     );
+
+    // Usar la query en onSnapshot
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      setRestaurantes(
+        snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+      );
+    });
+
+    // Limpiar el suscriptor al desmontar el componente
+    return () => unsubscribe();
   }, []);
 
   return (

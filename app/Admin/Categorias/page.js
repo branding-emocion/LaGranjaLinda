@@ -79,7 +79,7 @@ const Categorias = () => {
                 {Categorias?.map((Categoria) => (
                   <div
                     key={Categoria.id}
-                    className="w-full mx-auto border mb-5 border-gray-200 bg-white rounded-lg cursor-pointer shadow-md "
+                    className="w-full mx-auto border mb-5 border-gray-200 bg-white rounded-lg  shadow-md "
                   >
                     <section className="relative w-full h-[200px]">
                       <Image

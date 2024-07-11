@@ -123,7 +123,12 @@ const Restaurantes = () => {
 
                   <div className="flex items-center justify-center gap-x-2 pb-2">
                     <Link
-                      href={`/Admin/Restaurantes/Delyvery/${Restaurante.id}`}
+                      href={{
+                        pathname: `/Admin/Restaurantes/Delyvery/${Restaurante.id}`,
+                        query: {
+                          name: Restaurante.NombreLocal,
+                        },
+                      }}
                     >
                       <button className="bg-orange-500 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-blue-600">
                         <PackageCheck className="w-4 h-4" />
