@@ -33,12 +33,10 @@ const Productos = () => {
   const [FilterByCategoria, setFilterByCategoria] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
 
-  console.log("setFilterByCategoria", FilterByCategoria);
   useEffect(() => {
     onSnapshot(
       collection(db, `Productos`),
-      orderBy("createdAt", "asc"),
-      // orderBy("esAdicional", "asc"),
+      // orderBy("email", "asc"),
       (snapshot) => {
         const data = snapshot?.docs?.map((doc) => ({
           id: doc.id,
