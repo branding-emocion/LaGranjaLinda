@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import ModalDireccion from "./ModalDireccion/page";
+import ModalDireccion from "./ModalDireccion.js";
 import {
   Card,
   CardContent,
@@ -29,10 +29,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const Delyvery = ({ params: { idRestaurante } }) => {
+const Delyvery = ({ params: { idRestaurante }, searchParams: { name } }) => {
   const [OpenModal, setOpenModal] = useState({});
   const [Direcciones, setDirecciones] = useState([]);
-  const [InfoRestaurante, setInfoRestaurante] = useState({});
 
   const columns = [
     {
@@ -138,16 +137,6 @@ const Delyvery = ({ params: { idRestaurante } }) => {
         collection(db, "Restaurantes", `${idRestaurante}`, "Delyvery"),
         orderBy("createdAt", "desc")
       );
-      const unRestaurante = onSnapshot(
-        doc(db, `Restaurantes`, `${idRestaurante}`),
-        // orderBy("email", "asc"),
-        (snapshot) => {
-          setInfoRestaurante({
-            id: snapshot.id,
-            ...snapshot.data(),
-          });
-        }
-      );
 
       const unsubscribe = onSnapshot(qDirection, (snapshot) => {
         setDirecciones(
@@ -160,7 +149,6 @@ const Delyvery = ({ params: { idRestaurante } }) => {
 
       return () => {
         unsubscribe();
-        unRestaurante();
       };
     }
   }, [idRestaurante]);
@@ -208,9 +196,7 @@ const Delyvery = ({ params: { idRestaurante } }) => {
         <Card className="shadow-md">
           <CardHeader>
             <CardTitle>
-              <h1 className="uppercase">
-                {InfoRestaurante?.NombreLocal || "Nombre del restaurante"}
-              </h1>
+              <h1 className="uppercase">{name || "Nombre del restaurante"}</h1>
             </CardTitle>
           </CardHeader>
           <CardContent>

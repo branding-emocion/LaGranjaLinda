@@ -19,7 +19,7 @@ const Footer = () => {
                     <Link href={"/Nosotros"}>Nosotros</Link>
                   </li>
                   <li>
-                    <Link href={"/Nutricion"}>Valores Nutricionales</Link>
+                    <Link href={"/Nutricion"}>Nuestras Experiencias</Link>
                   </li>
                 </ul>
               </div>

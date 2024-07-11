@@ -201,7 +201,10 @@ const ModalRestaurantes = ({ OpenModal, setOpenModal }) => {
               </Label>
               <Select
                 id="EstadoRestaurante"
-                value={OpenModal?.InfoEditar?.EstadoRestaurante}
+                value={
+                  InputValues?.EstadoRestaurante ||
+                  OpenModal?.InfoEditar?.EstadoRestaurante
+                }
                 required
                 onValueChange={(e) => {
                   setInputValues({
@@ -253,6 +256,23 @@ const ModalRestaurantes = ({ OpenModal, setOpenModal }) => {
                 className="w-full text-gray-900"
                 onChange={HandlerChange}
                 defaultValue={OpenModal?.InfoEditar?.Ruc}
+                required
+                autoComplete="off"
+                type="text"
+                pattern=".{6,}"
+                title="6 caracteres mínimo"
+              />
+            </div>
+            <div className="space-y-2 lg:col-span-2">
+              <Label htmlFor="Direction" className="">
+                Dirección <span className="text-red-600">(*)</span>
+              </Label>
+              <Input
+                id="Direction"
+                name="Direction"
+                className="w-full text-gray-900"
+                onChange={HandlerChange}
+                defaultValue={OpenModal?.InfoEditar?.Direction}
                 required
                 autoComplete="off"
                 type="text"
