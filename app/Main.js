@@ -11,7 +11,7 @@ const Main = ({ children }) => {
       {pathname.includes("/Admin") ? (
         <> {children}</>
       ) : (
-        <main className=" bg-gray-50">
+        <main className=" bg-gray-50 overflow-auto h-screen w-screen">
           <MenuPrincipal />
           {children}
           <Footer />

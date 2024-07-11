@@ -51,6 +51,7 @@ const Categorias = () => {
             </CardDescription>
             <div>
               <Button
+                title="Agregar nueva Categoria"
                 onClick={(e) => {
                   e.preventDefault();
                   console.log(e);
@@ -102,6 +103,7 @@ const Categorias = () => {
 
                     <div className="flex items-center justify-center gap-x-2 pb-2">
                       <button
+                        title="Editar Categoria"
                         onClick={(e) => {
                           e.preventDefault();
                           setOpenModal({
@@ -114,6 +116,7 @@ const Categorias = () => {
                         <PencilIcon className="w-4 h-4" />
                       </button>
                       <button
+                        title="Eliminar Categoria"
                         onClick={async (e) => {
                           e.preventDefault();
 

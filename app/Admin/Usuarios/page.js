@@ -278,6 +278,7 @@ const Usuarios = () => {
             </CardDescription>
             <div>
               <Button
+                title="Agregar nuevo usuario"
                 onClick={(e) => {
                   e.preventDefault();
                   console.log(e);

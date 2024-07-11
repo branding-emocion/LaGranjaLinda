@@ -207,6 +207,7 @@ const Carousel = () => {
                 </div>
               ))}
               <Button
+                title="Guardar"
                 className="bg-lagranja"
                 onClick={async (e) => {
                   e.preventDefault();

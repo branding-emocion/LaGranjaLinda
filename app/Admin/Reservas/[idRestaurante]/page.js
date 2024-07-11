@@ -104,6 +104,10 @@ const ShowReservas = ({ params: { idRestaurante } }) => {
                           ).toLocaleTimeString()}
                         </span>
                       </h2>
+                      <p className=" capitalize text-gray-800">
+                        <span className="font-semibold">Motivo: </span>
+                        {reserva?.MotivoReserva}
+                      </p>
                       <h2 className="capitalize text-gray-800 font-semibold">
                         Fecha de creación:{" "}
                         <span className="font-normal">
@@ -142,9 +146,14 @@ const ShowReservas = ({ params: { idRestaurante } }) => {
                         e.preventDefault();
 
                         // Actualizar el estado de la reserva
-                        await updateDoc(doc(db, "Reservas", `${reserva.id}`), {
-                          Estado: "Confirmado",
-                        });
+                        if (confirm("¿Estás seguro de confirmar la reserva?")) {
+                          await updateDoc(
+                            doc(db, "Reservas", `${reserva.id}`),
+                            {
+                              Estado: "Confirmado",
+                            }
+                          );
+                        }
                       }}
                       className="bg-blue-500 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-blue-600"
                     >
@@ -154,9 +163,15 @@ const ShowReservas = ({ params: { idRestaurante } }) => {
                       onClick={async (e) => {
                         e.preventDefault();
                         // Actualizar el estado de la reserva rechazar
-                        await updateDoc(doc(db, "Reservas", `${reserva.id}`), {
-                          Estado: "Rechazado",
-                        });
+
+                        if (confirm("¿Estás seguro de rechazar la reserva?")) {
+                          await updateDoc(
+                            doc(db, "Reservas", `${reserva.id}`),
+                            {
+                              Estado: "Rechazado",
+                            }
+                          );
+                        }
                       }}
                       className="bg-red-500 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-red-600"
                     >

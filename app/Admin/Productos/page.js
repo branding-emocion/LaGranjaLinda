@@ -9,10 +9,18 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BadgePlus, PencilIcon, TrashIcon } from "lucide-react";
-import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
+import { BadgePlus, PencilIcon, Sparkle, TrashIcon } from "lucide-react";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  orderBy,
+} from "firebase/firestore";
 import { db, storage } from "@/firebase/firebaseClient";
 import { deleteObject, listAll, ref } from "firebase/storage";
+import Link from "next/link";
+import Image from "next/image";
 
 const Productos = () => {
   const [OpenModal, setOpenModal] = useState({
@@ -25,7 +33,6 @@ const Productos = () => {
   const [FilterByCategoria, setFilterByCategoria] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
 
-  console.log("setFilterByCategoria", FilterByCategoria);
   useEffect(() => {
     onSnapshot(
       collection(db, `Productos`),
@@ -162,14 +169,26 @@ const Productos = () => {
                 {filteredItems?.map((producto) => (
                   <div
                     key={producto.id}
-                    className="w-full h-full mx-auto bg-white shadow-md border border-gray-200 rounded-lg"
+                    className={`w-full h-full mx-auto shadow-md border  ${
+                      producto?.Disponibilidad == "Si"
+                        ? "bg-green-200 border-green-500 "
+                        : (producto.Disponibilidad == "No" &&
+                            "bg-red-200 border-red-500 ") ||
+                          "bg-white"
+                    }  border-gray-200 rounded-lg`}
                   >
                     <div className="">
-                      <img
-                        className="rounded-t-lg"
-                        src={producto?.Imagenes[0] || ""}
-                        alt="imageproducto"
-                      />
+                      <section className="relative w-full h-[200px]">
+                        <Image
+                          className="rounded-t-lg "
+                          fill
+                          src={producto?.Imagenes[0] || ""}
+                          alt="imageCategoria"
+                          style={{
+                            objectFit: "cover",
+                          }}
+                        />
+                      </section>
 
                       <div className="py-2  px-5">
                         <div className="space-y-1">
@@ -193,7 +212,18 @@ const Productos = () => {
                       </div>
 
                       <div className="flex items-center justify-center gap-x-2 pb-2">
+                        {producto?.esAdicional == "No" && (
+                          <Link
+                            title="Configurar Adiconales"
+                            href={`/Admin/Productos/${producto.id}`}
+                          >
+                            <button className="bg-orange-500 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-orange-600">
+                              <Sparkle className="w-4 h-4" />
+                            </button>
+                          </Link>
+                        )}
                         <button
+                          title={"Editar producto"}
                           onClick={(e) => {
                             e.preventDefault();
                             setOpenModal({
@@ -205,7 +235,9 @@ const Productos = () => {
                         >
                           <PencilIcon className="w-4 h-4" />
                         </button>
+
                         <button
+                          title="Eliminar producto"
                           onClick={async (e) => {
                             e.preventDefault();
 

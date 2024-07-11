@@ -9,11 +9,18 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BadgePlus, PencilIcon, TrashIcon } from "lucide-react";
+import {
+  BadgePlus,
+  LocateIcon,
+  PackageCheck,
+  PencilIcon,
+  TrashIcon,
+} from "lucide-react";
 import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import { db, storage } from "@/firebase/firebaseClient";
 import { deleteObject, listAll, ref } from "firebase/storage";
 import Image from "next/image";
+import Link from "next/link";
 
 const Restaurantes = () => {
   const [OpenModal, setOpenModal] = useState({
@@ -77,7 +84,13 @@ const Restaurantes = () => {
               {Restaurantes?.map((Restaurante) => (
                 <div
                   key={Restaurante.id}
-                  className="w-full mx-auto border mb-5 border-gray-200 bg-white rounded-lg cursor-pointer shadow-md "
+                  className={`w-full mx-auto border mb-5  ${
+                    Restaurante?.EstadoRestaurante == "Si"
+                      ? "bg-green-200 border-green-500"
+                      : (Restaurante?.EstadoRestaurante == "No" &&
+                          "bg-red-200 border-red-500") ||
+                        "bg-white border-gray-200"
+                  } rounded-lg cursor-pointer shadow-md `}
                 >
                   <section className="relative w-full h-[205px]">
                     <Image
@@ -109,6 +122,13 @@ const Restaurantes = () => {
                   </div>
 
                   <div className="flex items-center justify-center gap-x-2 pb-2">
+                    <Link
+                      href={`/Admin/Restaurantes/Delyvery/${Restaurante.id}`}
+                    >
+                      <button className="bg-orange-500 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-blue-600">
+                        <PackageCheck className="w-4 h-4" />
+                      </button>
+                    </Link>
                     <button
                       onClick={(e) => {
                         e.preventDefault();

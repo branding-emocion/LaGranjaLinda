@@ -125,6 +125,10 @@ const ShowReservasHoy = ({ params: { idRestaurante } }) => {
                           ).toLocaleTimeString()}
                         </span>
                       </h2>
+                      <p className=" capitalize text-gray-800">
+                        <span className="font-semibold">Motivo: </span>
+                        {reserva?.MotivoReserva}
+                      </p>
                       <h2 className="capitalize text-gray-800 font-semibold">
                         Fecha de creación:{" "}
                         <span className="font-normal">

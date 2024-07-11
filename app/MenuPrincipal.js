@@ -14,12 +14,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useCarStore } from "@/store";
+import { getCartTotal } from "@/lib/getCartTotal";
 
 const MenuPrincipal = () => {
   const [isOpen, setIsOpen] = useState(false);
   // const [Scroll, setScroll] = useState("");
 
   const pathname = usePathname();
+
+  const cart = useCarStore((state) => state.cart);
+  const total = getCartTotal(cart);
 
   useEffect(() => {
     setIsOpen(false);
@@ -42,7 +47,7 @@ const MenuPrincipal = () => {
   //   };
   // }, []);
   return (
-    <>
+    <div>
       {/* <div className="fixed bottom-4 right-4 z-[100]">
         <a
           href="https://api.whatsapp.com/send?phone=51914125509&text=Hola%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20"
@@ -54,6 +59,36 @@ const MenuPrincipal = () => {
           <FaWhatsapp className="w-10 h-10" />{" "}
         </a>
       </div> */}
+
+      <Link
+        href={"/basket"}
+        className=" fixed top-[40%] right-0 z-40  border-2 border-[#7d2d04] rounded-l-lg bg-granjaPrimary flex w-32 justify-center items-center text-[#7d2d04] font-bold py-4 space-x-1 text-sm"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width={24}
+          height={24}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="w-10 h-10"
+        >
+          <circle cx={8} cy={21} r={1} />
+          <circle cx={19} cy={21} r={1} />
+          <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+        </svg>
+
+        <div>
+          <p className="text-xs font-extralight">
+            {cart.length > 0 ? `${cart.length} Productos` : "No Productos"}
+          </p>
+          <p>{total}</p>
+        </div>
+      </Link>
+
       <nav
         style={{ filter: "drop-shadow(0px 0px 3px black)" }}
         className={`sticky h-28 z-50 top-0 p-2 md:px-11 shadow-sm md:flex md:items-center md:justify-around 2xl:justify-around bg-granjaPrimary `}
@@ -100,7 +135,7 @@ const MenuPrincipal = () => {
             Elige tu pedido, elige tu experiencia 
           </h1>
           <div
-            className={` text-center  flex flex-col h-screen md:h-auto  md:flex md:flex-row  md:items-center  z-[-1] md:z-auto md:static gap-2 absolute text-[#7d2d04] bg-lagranja    md:bg-transparent  w-full left-0 top-full md:w-auto md:py-0  md:pl-0 pl-7 md:opacity-100 opacity-0 right-[-400px] transition-all ease-in  ${
+            className={` text-center  flex flex-col h-screen md:h-auto  md:flex md:flex-row  md:items-center  z-[-1] md:z-auto md:static gap-2 absolute text-[#7d2d04] bg-[#ece4d9]    md:bg-transparent  w-full left-0 top-full md:w-auto md:py-0  md:pl-0 pl-7 md:opacity-100 opacity-0 right-[-400px] transition-all ease-in  ${
               isOpen ? ` right-0 py-11 opacity-100` : `hidden`
             }`}
           >
@@ -136,25 +171,10 @@ const MenuPrincipal = () => {
           </div>
         </div>
         <div className="hidden lg:flex justify-center items-center gap-x-4">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button className="bg-red-700 uppercase">Ordena Aquí</Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem className=" w-full h-full">
-                <Link className="w-full h-full" href="/Delivery">
-                  Delivery
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
+          <Link href="/Delivery">
+            <Button className="bg-red-700 uppercase">Ordena Aquí</Button>
+          </Link>
 
-              <DropdownMenuItem className="hover:cursor-pointer w-full h-full">
-                <Link className="w-full h-full" href={`/Delivery?LLevar=true`}>
-                  Llevar
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
           <div className=" uppercase lg:flex text-[#7d2d04]">
             <p className=" w-20 text-right  h-full tracking-tight leading-4">
               Te lo LLevamos donde estes
@@ -171,7 +191,7 @@ const MenuPrincipal = () => {
           </div>
         </div>
       </nav>
-    </>
+    </div>
   );
 };
 
