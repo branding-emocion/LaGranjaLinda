@@ -19,7 +19,9 @@ const Search = ({ searchParams: { q, name } }) => {
     if (q) {
       const qProductos = query(
         collection(db, "Productos"),
+        where("Disponibilidad", "==", "Si"),
         where("Categoria", "==", q)
+        //Agregar  Disponibilidad="Si" para mostrar solo los productos disponibles
       );
 
       const unsubscribe = onSnapshot(qProductos, (snapshot) => {

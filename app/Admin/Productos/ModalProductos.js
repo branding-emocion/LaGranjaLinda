@@ -41,7 +41,6 @@ const ModalProductos = ({ OpenModal, setOpenModal, Categorias }) => {
   const [InputValues, setInputValues] = useState({});
   const [files, setFiles] = useState([]);
 
-  console.log(Categorias, "Categorias");
   const [Loading, setLoading] = useState(false);
   const { toast } = useToast();
 
@@ -198,7 +197,10 @@ const ModalProductos = ({ OpenModal, setOpenModal, Categorias }) => {
                 Disponibilidad? <span className="text-red-600">(*)</span>
               </Label>
               <Select
-                value={OpenModal?.InfoEditar?.Disponibilidad}
+                value={
+                  InputValues?.Disponibilidad ||
+                  OpenModal?.InfoEditar?.Disponibilidad
+                }
                 required
                 onValueChange={(e) => {
                   setInputValues({
@@ -260,7 +262,9 @@ const ModalProductos = ({ OpenModal, setOpenModal, Categorias }) => {
                 Categoria <span className="text-red-600">(*)</span>
               </Label>
               <Select
-                value={OpenModal?.InfoEditar?.Categoria}
+                value={
+                  InputValues?.Categoria || OpenModal?.InfoEditar?.Categoria
+                }
                 required
                 onValueChange={(e) => {
                   setInputValues({
@@ -287,7 +291,9 @@ const ModalProductos = ({ OpenModal, setOpenModal, Categorias }) => {
                 Adicional?
               </Label>
               <Select
-                value={OpenModal?.InfoEditar?.esAdicional}
+                value={
+                  InputValues?.esAdicional || OpenModal?.InfoEditar?.esAdicional
+                }
                 required
                 onValueChange={(e) => {
                   setInputValues({
