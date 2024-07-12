@@ -9,7 +9,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BadgePlus, PencilIcon, Sparkle, TrashIcon } from "lucide-react";
+import {
+  BadgePlus,
+  CircleHelpIcon,
+  PencilIcon,
+  Sparkle,
+  TrashIcon,
+} from "lucide-react";
 import {
   collection,
   deleteDoc,
@@ -21,11 +27,16 @@ import { db, storage } from "@/firebase/firebaseClient";
 import { deleteObject, listAll, ref } from "firebase/storage";
 import Link from "next/link";
 import Image from "next/image";
+import ModalPreguntas from "./ModalPreguntas";
 
 const Productos = () => {
   const [OpenModal, setOpenModal] = useState({
     Visible: false,
     InfoEditar: {},
+  });
+  const [ModalQuestion, setModalQuestion] = useState({
+    Visible: false,
+    Producto: {},
   });
 
   const [Productos, setProductos] = useState([]);
@@ -85,6 +96,12 @@ const Productos = () => {
 
   return (
     <>
+      {ModalQuestion?.Visible && (
+        <ModalPreguntas
+          ModalQuestion={ModalQuestion}
+          setModalQuestion={setModalQuestion}
+        />
+      )}
       {OpenModal.Visible && (
         <ModalProductos
           OpenModal={OpenModal}
@@ -213,14 +230,29 @@ const Productos = () => {
 
                       <div className="flex items-center justify-center gap-x-2 pb-2">
                         {producto?.esAdicional == "No" && (
-                          <Link
-                            title="Configurar Adiconales"
-                            href={`/Admin/Productos/${producto.id}`}
-                          >
-                            <button className="bg-orange-500 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-orange-600">
-                              <Sparkle className="w-4 h-4" />
+                          <>
+                            <Link
+                              title="Configurar Adiconales"
+                              href={`/Admin/Productos/${producto.id}`}
+                            >
+                              <button className="bg-orange-500 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-orange-600">
+                                <Sparkle className="w-4 h-4" />
+                              </button>
+                            </Link>
+                            <button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                setModalQuestion({
+                                  Visible: true,
+                                  Producto: producto,
+                                });
+                              }}
+                              title="Preguntas adicionales"
+                              className="bg-orange-500 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-orange-600"
+                            >
+                              <CircleHelpIcon className="w-4 h-4" />
                             </button>
-                          </Link>
+                          </>
                         )}
                         <button
                           title={"Editar producto"}
