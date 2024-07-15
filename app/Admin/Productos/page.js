@@ -28,6 +28,7 @@ import { deleteObject, listAll, ref } from "firebase/storage";
 import Link from "next/link";
 import Image from "next/image";
 import ModalPreguntas from "./ModalPreguntas";
+import ModalAdicionales from "./ModalAdicionales";
 
 const Productos = () => {
   const [OpenModal, setOpenModal] = useState({
@@ -37,6 +38,12 @@ const Productos = () => {
   const [ModalQuestion, setModalQuestion] = useState({
     Visible: false,
     Producto: {},
+  });
+
+  const [ModalAditional, setModalAditional] = useState({
+    Visible: false,
+    Producto: {},
+    ProductosAdiconales: [],
   });
 
   const [Productos, setProductos] = useState([]);
@@ -100,6 +107,12 @@ const Productos = () => {
         <ModalPreguntas
           ModalQuestion={ModalQuestion}
           setModalQuestion={setModalQuestion}
+        />
+      )}
+      {ModalAditional?.Visible && (
+        <ModalAdicionales
+          ModalAditional={ModalAditional}
+          setModalAditional={setModalAditional}
         />
       )}
       {OpenModal.Visible && (
@@ -231,29 +244,38 @@ const Productos = () => {
                       <div className="flex items-center justify-center gap-x-2 pb-2">
                         {producto?.esAdicional == "No" && (
                           <>
-                            <Link
-                              title="Configurar Adiconales"
-                              href={`/Admin/Productos/${producto.id}`}
-                            >
-                              <button className="bg-orange-500 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-orange-600">
-                                <Sparkle className="w-4 h-4" />
-                              </button>
-                            </Link>
                             <button
+                              title="Agregar Adicionales"
                               onClick={(e) => {
                                 e.preventDefault();
-                                setModalQuestion({
+                                setModalAditional({
                                   Visible: true,
                                   Producto: producto,
+                                  ProductosAdiconales:
+                                    Productos.filter(
+                                      (item) => item.esAdicional == "Si"
+                                    ) || [],
                                 });
                               }}
-                              title="Preguntas adicionales"
-                              className="bg-orange-500 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-orange-600"
+                              className="bg-violet-600 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-violet-600"
                             >
-                              <CircleHelpIcon className="w-4 h-4" />
+                              <Sparkle className="w-4 h-4" />
                             </button>
                           </>
                         )}
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setModalQuestion({
+                              Visible: true,
+                              Producto: producto,
+                            });
+                          }}
+                          title="Preguntas adicionales"
+                          className="bg-orange-500 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-orange-600"
+                        >
+                          <CircleHelpIcon className="w-4 h-4" />
+                        </button>
                         <button
                           title={"Editar producto"}
                           onClick={(e) => {

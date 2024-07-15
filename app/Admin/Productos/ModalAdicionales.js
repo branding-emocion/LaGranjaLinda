@@ -31,7 +31,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Pencil, XIcon } from "lucide-react";
 
-const ModalPreguntas = ({ ModalQuestion, setModalQuestion }) => {
+const ModalAdicionales = ({ ModalAditional, setModalAditional }) => {
   const [InputValues, setInputValues] = useState({});
   const [ListaPreguntas, setListaPreguntas] = useState([]);
   console.log("ListaPreguntas", ListaPreguntas);
@@ -39,10 +39,11 @@ const ModalPreguntas = ({ ModalQuestion, setModalQuestion }) => {
   const [Loading, setLoading] = useState(false);
   const { toast } = useToast();
 
-  const closeModalQuestion = () => {
-    setModalQuestion({
+  const closeModalAditional = () => {
+    setModalAditional({
       Visible: false,
       Producto: {},
+      ProductosAdiconales: [],
     });
     setInputValues({});
   };
@@ -62,7 +63,7 @@ const ModalPreguntas = ({ ModalQuestion, setModalQuestion }) => {
           doc(
             db,
             `Productos`,
-            `${ModalQuestion?.Producto?.id}`,
+            `${ModalAditional?.Producto?.id}`,
             "OpcionesPersonalizables",
             `${InputValues?.id}`
           ),
@@ -75,7 +76,7 @@ const ModalPreguntas = ({ ModalQuestion, setModalQuestion }) => {
           collection(
             db,
             `Productos`,
-            `${ModalQuestion?.Producto?.id}`,
+            `${ModalAditional?.Producto?.id}`,
             "OpcionesPersonalizables"
           ),
           {
@@ -102,7 +103,7 @@ const ModalPreguntas = ({ ModalQuestion, setModalQuestion }) => {
       collection(
         db,
         `Productos`,
-        `${ModalQuestion?.Producto?.id}`,
+        `${ModalAditional?.Producto?.id}`,
         "OpcionesPersonalizables"
       ),
       // orderBy("email", "asc"),
@@ -118,10 +119,10 @@ const ModalPreguntas = ({ ModalQuestion, setModalQuestion }) => {
 
   console.log("InputValues", InputValues);
   return (
-    <Dialog open={ModalQuestion?.Visible} onOpenChange={closeModalQuestion}>
+    <Dialog open={ModalAditional?.Visible} onOpenChange={closeModalAditional}>
       <DialogContent className="h-auto  w-[90%] md:w-full max-h-[95vh] overflow-auto   sm:max-w-4xl">
         <DialogHeader className="w-full h-full">
-          <DialogTitle>Preguntas adicionales</DialogTitle>
+          <DialogTitle>Adicionales al producto</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <form onSubmit={HandlerSubmit} className="space-y-4 w-full h-full">
@@ -370,7 +371,7 @@ const ModalPreguntas = ({ ModalQuestion, setModalQuestion }) => {
                             doc(
                               db,
                               `Productos`,
-                              `${ModalQuestion?.Producto?.id}`,
+                              `${ModalAditional?.Producto?.id}`,
                               "OpcionesPersonalizables",
                               `${pregunta.id}`
                             )
@@ -409,4 +410,4 @@ const ModalPreguntas = ({ ModalQuestion, setModalQuestion }) => {
   );
 };
 
-export default ModalPreguntas;
+export default ModalAdicionales;
