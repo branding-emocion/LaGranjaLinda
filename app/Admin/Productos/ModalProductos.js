@@ -259,13 +259,12 @@ const ModalProductos = ({ OpenModal, setOpenModal, Categorias }) => {
 
             <div className="space-y-2">
               <Label htmlFor="Categoria" className="">
-                Categoria <span className="text-red-600">(*)</span>
+                Categoria
               </Label>
               <Select
                 value={
                   InputValues?.Categoria || OpenModal?.InfoEditar?.Categoria
                 }
-                required
                 onValueChange={(e) => {
                   setInputValues({
                     ...InputValues,

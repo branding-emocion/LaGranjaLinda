@@ -27,11 +27,11 @@ const BasletInterseption = () => {
     >
       <DialogContent className="h-4/5 w-full overflow-auto max-w-3xl">
         <DialogHeader>
-          <DialogTitle>Cesta</DialogTitle>
+          <DialogTitle>Mi Orden</DialogTitle>
           <DialogDescription>
             <p>
               {" "}
-              Revise los artículos de su cesta y precione checkout cuando esté
+              Revise los artículos de su orden y precione checkout cuando esté
               listo.{" "}
             </p>
           </DialogDescription>

@@ -255,6 +255,7 @@ const Productos = () => {
                                     Productos.filter(
                                       (item) => item.esAdicional == "Si"
                                     ) || [],
+                                  Producto: producto,
                                 });
                               }}
                               className="bg-violet-600 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-violet-600"

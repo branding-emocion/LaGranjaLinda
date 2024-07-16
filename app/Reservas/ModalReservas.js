@@ -145,6 +145,7 @@ const ModalReservas = ({ OpenModal, setOpenModal }) => {
                         { id: 5, label: "Cita Romántica" },
                         { id: 6, label: "Celebración de Amigos" },
                         { id: 7, label: "Evento Corporativo" },
+                        { id: 8, label: "Otro" },
                       ].map((adi, key) => (
                         <SelectItem key={adi.id} value={adi.label}>
                           {adi.label}
@@ -153,6 +154,24 @@ const ModalReservas = ({ OpenModal, setOpenModal }) => {
                     </SelectContent>
                   </Select>
                 </div>
+
+                {InputValues?.MotivoReserva === "Otro" && (
+                  <div className="space-y-2 lg:col-span-2">
+                    <Label htmlFor="OtroMotivo" className="">
+                      Otro Motivo <span className="text-red-600">(*)</span>
+                    </Label>
+                    <Input
+                      id="OtroMotivo"
+                      name="OtroMotivo"
+                      className="w-full text-gray-900"
+                      onChange={HandlerChange}
+                      defaultValue={OpenModal?.InfoEditar?.OtroMotivo}
+                      required
+                      autoComplete="off"
+                      type="text"
+                    />
+                  </div>
+                )}
 
                 <div className="space-y-2">
                   <Label htmlFor="Correo" className="">
