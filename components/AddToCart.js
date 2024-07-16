@@ -39,7 +39,7 @@ const AddToCart = ({ product }) => {
       className="bg-[#7d2d04] uppercase hover:bg-[#7d2d04]/50"
       onClick={() => handleAdd()}
     >
-      añadir a la cesta
+      añadir a mi orden
     </Button>
   );
 };

@@ -106,7 +106,7 @@ const ShowReservas = ({ params: { idRestaurante } }) => {
                       </h2>
                       <p className=" capitalize text-gray-800">
                         <span className="font-semibold">Motivo: </span>
-                        {reserva?.MotivoReserva}
+                        {reserva?.MotivoReserva || reserva?.OtroMotivo || "N/A"}
                       </p>
                       <h2 className="capitalize text-gray-800 font-semibold">
                         Fecha de creación:{" "}
