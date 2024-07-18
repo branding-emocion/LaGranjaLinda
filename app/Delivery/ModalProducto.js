@@ -1,5 +1,4 @@
 import AddToCart from "@/components/AddToCart";
-
 import {
   Dialog,
   DialogContent,
@@ -10,21 +9,33 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { db } from "@/firebase/firebaseClient";
 import { useCarStore } from "@/store";
-import { collection, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  documentId,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const ModalProduct = ({ OpenModal, setOpenModal, name }) => {
-  const [cart, addToCardProduc] = useCarStore((state) => [
-    state.cart,
-    state.addToCardProduc,
-  ]);
+  const [cart, addToCardProduc, addToCard, removeFromCart] = useCarStore(
+    (state) => [
+      state.cart,
+      state.addToCardProduc,
+      state.addToCard,
+      state.removeFromCart,
+    ]
+  );
+
   const [Cantidad, setCantidad] = useState(
     cart.filter((p) => p.id === OpenModal?.Product.id) || []
   );
   const [ListaPreguntas, setListaPreguntas] = useState([]);
 
-  console.log(OpenModal);
+  const [Adicionales, setAdicionales] = useState([]);
+  console.log("cart", cart);
 
   const { toast } = useToast();
 
@@ -75,6 +86,31 @@ const ModalProduct = ({ OpenModal, setOpenModal, name }) => {
       return () => unsubscribe();
     }
   }, [OpenModal?.Product?.id]);
+
+  useEffect(() => {
+    const adicionalesIds =
+      OpenModal?.Product?.Adicionales?.map((adc) => adc.id) || [];
+
+    if (adicionalesIds.length > 0) {
+      const q = query(
+        collection(db, "Productos"),
+        where(documentId(), "in", adicionalesIds)
+      );
+
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const data = snapshot?.docs?.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        console.log("Data", data);
+        setAdicionales(data);
+      });
+
+      return () => {
+        unsubscribe();
+      };
+    }
+  }, [OpenModal?.Product?.Adicionales]);
 
   const handleInputChange = (preguntaId, optionId, checked, tipoPregunta) => {
     setListaPreguntas((prevListaPreguntas) =>
@@ -259,28 +295,29 @@ const ModalProduct = ({ OpenModal, setOpenModal, name }) => {
                 </div>
               )}
 
-              {OpenModal?.Product?.Adicionales?.length > 0 && (
+              {Adicionales?.length > 0 && (
                 <div className="border border-gray-400 rounded-md p-3 space-y-1 capitalize">
                   <h1 className="text-lg font-bold">Adicionales</h1>
                   <div className="grid grid-cols-2 justify-center items-center gap-x-2">
-                    {OpenModal?.Product?.Adicionales?.map((option, key) => (
+                    {Adicionales?.map((option, key) => (
                       <div key={option.id} className="space-x-1">
                         <input
                           type="checkbox"
                           id={`checkbox-${option.id}`}
                           name={`seleccionMultiple-${option.id}`}
                           value={option.id}
-                          // defaultChecked={pregunta?.Respuestas?.includes(
-                          //   option
-                          // )}
-                          // onChange={(e) =>
-                          //   handleInputChange(
-                          //     pregunta.id,
-                          //     option,
-                          //     e.target.checked,
-                          //     "Seleccion Multiple"
-                          //   )
-                          // }
+                          defaultChecked={cart.find((p) => p.id === option.id)}
+                          onChange={(e) => {
+                            // addToCard
+
+                            if (e.target.checked) {
+                              addToCard(option);
+                              return;
+                            } else if (!e.target.checked) {
+                              removeFromCart(option);
+                              return;
+                            }
+                          }}
                         />
                         <label htmlFor={`checkbox-${option.id}`}>
                           {option?.NombreProducto}
