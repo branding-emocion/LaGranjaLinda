@@ -20,13 +20,27 @@ export const useCarStore = create()(
             };
           });
         },
+        addToCardProduc: (product, Cantidad, ListaPreguntas) => {
+          set((state) => {
+            const newCart = state.cart.filter((p) => p.id !== product.id);
+
+            const newCantQuestion = Cantidad?.map((c) => {
+              return {
+                ...c,
+                PreguntasRespuestas: ListaPreguntas,
+              };
+            });
+            return {
+              cart: [...newCart, ...newCantQuestion],
+            };
+          });
+        },
         addToCard: (product) => {
           set((state) => ({
             cart: [...state.cart, product],
           }));
         },
       }),
-
       {
         name: "shopping-cart-storage",
       }

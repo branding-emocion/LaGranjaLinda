@@ -6,6 +6,7 @@ import { useCarStore } from "@/store";
 import Image from "next/image";
 import AddToCart from "./AddToCart";
 import { Button } from "./ui/button";
+import Link from "next/link";
 
 const Basket = () => {
   const cart = useCarStore((state) => state.cart);
@@ -61,10 +62,12 @@ const Basket = () => {
         <p className="font-bold text-2xl text-right text-[#7d2d04] mb-5">
           Total : {BasketTotal}
         </p>
-        <Button className="mt-5 h-20 bg-[#7d2d04] hover:bg-[#7d2d04]/70">
-          {" "}
-          Checkout
-        </Button>
+        <Link href={"/Admin/Pagos"}>
+          <Button className="mt-5 h-20 bg-[#7d2d04] hover:bg-[#7d2d04]/70 w-full">
+            {" "}
+            Checkout
+          </Button>
+        </Link>
       </div>
     </div>
   );
