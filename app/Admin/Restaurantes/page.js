@@ -130,7 +130,10 @@ const Restaurantes = () => {
                         },
                       }}
                     >
-                      <button className="bg-orange-500 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-blue-600">
+                      <button
+                        title="Direcciones delivery"
+                        className="bg-orange-500 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-blue-600"
+                      >
                         <PackageCheck className="w-4 h-4" />
                       </button>
                     </Link>
@@ -142,11 +145,13 @@ const Restaurantes = () => {
                           InfoEditar: Restaurante,
                         });
                       }}
+                      title="Editar"
                       className="bg-blue-500 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-blue-600"
                     >
                       <PencilIcon className="w-4 h-4" />
                     </button>
                     <button
+                      title="Eliminar"
                       onClick={async (e) => {
                         e.preventDefault();
 

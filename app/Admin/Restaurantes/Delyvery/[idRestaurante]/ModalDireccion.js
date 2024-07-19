@@ -51,8 +51,7 @@ const ModalDireccion = ({ OpenModal, setOpenModal, idRestaurante }) => {
         if (Object.keys(InputValues).length > 0) {
           const UpdateRef = doc(
             db,
-            "Restaurantes",
-            `${idRestaurante}`,
+            "DireccionesDelivery",
             `${OpenModal?.InfoEditar?.id}`
           );
 
@@ -60,16 +59,15 @@ const ModalDireccion = ({ OpenModal, setOpenModal, idRestaurante }) => {
           await updateDoc(UpdateRef, {
             ...InputValues,
           });
+          closeOpenModal();
         }
       } else {
-        const docRef = await addDoc(
-          collection(db, "Restaurantes", `${idRestaurante}`, "Delyvery"),
-          {
-            ...InputValues,
-
-            createdAt: serverTimestamp(),
-          }
-        );
+        const docRef = await addDoc(collection(db, "DireccionesDelivery"), {
+          ...InputValues,
+          idRestaurante: idRestaurante,
+          createdAt: serverTimestamp(),
+        });
+        e.target.reset();
       }
     } catch (err) {
       console.error("Error:", err);
@@ -79,6 +77,7 @@ const ModalDireccion = ({ OpenModal, setOpenModal, idRestaurante }) => {
       });
     } finally {
       setLoading(false);
+
       //   closeOpenModal();
     }
   };

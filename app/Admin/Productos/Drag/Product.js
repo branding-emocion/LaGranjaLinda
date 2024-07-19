@@ -60,9 +60,9 @@ const Product = ({
 
   return (
     <div className="p-4 border rounded">
-      <h2 className="text-xl font-bold mb-4">{product.nombre}</h2>
+      <h1 className="text-xl font-bold mb-4">{product.nombre}</h1>
       <div className="p-4 border rounded mb-4" ref={drop}>
-        <h3 className="font-semibold">Adicionales seleccionados:</h3>
+        <h1 className="font-semibold">Adicionales seleccionados:</h1>
         {selectedAdicionales.map((adicional) => (
           <div
             key={adicional.id}
@@ -80,7 +80,7 @@ const Product = ({
         {isOver && <div className="p-4 bg-green-100">Suelta aquí</div>}
       </div>
       <div className="max-h-[530px] overflow-auto">
-        <h3 className="font-semibold">Lista de adicionales:</h3>
+        <h1 className="font-semibold">Lista de adicionales:</h1>
         <input
           type="text"
           placeholder="Buscar adicional..."

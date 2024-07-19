@@ -267,7 +267,7 @@ const ModalPreguntas = ({ ModalQuestion, setModalQuestion }) => {
                   <div className="mt-8">
                     <ul>
                       {InputValues?.Opciones?.map((opcion, key) => (
-                        <li className="p-2 rounded-lg">
+                        <li key={key} className="p-2 rounded-lg">
                           <div className="flex align-middle flex-row justify-between">
                             <div className="p-2">
                               <p className="text-lg text-black">{opcion}</p>
