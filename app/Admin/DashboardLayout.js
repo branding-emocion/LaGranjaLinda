@@ -11,6 +11,7 @@ import {
   CalendarCheck,
   CalendarClock,
   CalendarPlus,
+  CircleDollarSign,
   GalleryHorizontal,
   GalleryThumbnails,
   MessageSquareDot,
@@ -32,7 +33,6 @@ const DashboardLayout = ({ children }) => {
   const pathname = usePathname();
   const router = useRouter();
 
-  console.log(claims);
   useEffect(() => {
     let qTotalReservas;
 
@@ -117,6 +117,13 @@ const DashboardLayout = ({ children }) => {
           : "/Admin/MesasHoy"
       }`,
       icon: <CalendarCheck className="w-6 h-6 text-white" />,
+    },
+    ,
+    {
+      name: "Realizar Pago",
+      link: `/Admin/Checkout`,
+
+      icon: <CircleDollarSign className="w-6 h-6 text-white" />,
     },
   ];
 

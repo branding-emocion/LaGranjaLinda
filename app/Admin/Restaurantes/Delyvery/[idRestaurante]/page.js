@@ -134,8 +134,8 @@ const Delyvery = ({ params: { idRestaurante }, searchParams: { name } }) => {
   useEffect(() => {
     if (idRestaurante) {
       const qDirection = query(
-        collection(db, "Restaurantes", `${idRestaurante}`, "Delyvery"),
-        orderBy("createdAt", "desc")
+        collection(db, "DireccionesDelivery"),
+        where("idRestaurante", "==", idRestaurante)
       );
 
       const unsubscribe = onSnapshot(qDirection, (snapshot) => {
