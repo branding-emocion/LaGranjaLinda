@@ -22,6 +22,10 @@ export async function POST(req) {
       ListClaim.IdRestaurante = IdRestaurante;
     }
 
+    const CreateUser = await AuthAdmin.createUser({
+      ...InfoAdd,
+      password: Pass,
+    });
     await dbAdmin
       .collection("Usuarios")
       .doc(`${CreateUser.uid}`)
@@ -30,15 +34,10 @@ export async function POST(req) {
         createdAt: timeAdmin,
       });
 
-    const CreateUser = await AuthAdmin.createUser({
-      ...InfoAdd,
-      password: Pass,
-    });
     const AddClaim = await AuthAdmin.setCustomUserClaims(
       CreateUser.uid,
       ListClaim
     );
-    console.log("AddClaim", AddClaim);
 
     return NextResponse.json(
       {
@@ -49,7 +48,7 @@ export async function POST(req) {
       }
     );
   } catch (error) {
-    console.log("error");
+    console.log("error", error);
     if (error.code === "auth/email-already-exists") {
       return NextResponse.json(
         {
