@@ -63,15 +63,22 @@ const Checkout = () => {
     }
   }, [InputValues?.Entrega]);
 
-  const handleSuccessfulPayment = async (paymentId) => {
+  const handleSuccessfulPayment = async (paymentDetails) => {
     try {
       const newOrder = {
         cart,
-        total,
+        TotalValue,
         ...InputValues,
-        paymentId,
+        paymentDetails: {
+          ...paymentDetails,
+        },
         createdAt: serverTimestamp(),
-        ...user,
+        displayName: user?.displayName || "",
+        email: user?.email || "",
+        phoneNumber: user?.phoneNumber || "",
+        providerId: user?.providerId || "",
+        photoURL: user?.photoURL || "",
+        userId: user?.uid || "",
       };
 
       await addDoc(collection(db, "Orders"), newOrder);
@@ -82,15 +89,25 @@ const Checkout = () => {
       console.error("Error saving order to Firebase:", error);
     }
   };
-  const handleCulqiAction = async (event) => {
-    if (event.data && event.data.status === "success") {
-      // Payment successful
-      const paymentId = event.data.id; // Adjust according to Culqi's response
 
-      await handleSuccessfulPayment(paymentId);
-    } else if (event.data && event.data.status === "error") {
-      // Handle payment errors
-      console.error("Payment error:", event.data.message);
+  const handleCulqiAction = async () => {
+    if (Culqi.token) {
+      const token = Culqi.token.id;
+      console.log("Se ha creado un Token: ", token);
+      // Aquí puedes manejar el token si lo necesitas
+    } else if (Culqi.order) {
+      const order = Culqi.order;
+      console.log("Se ha creado el objeto Order: ", order);
+      // Aquí puedes manejar la orden si lo necesitas
+
+      if (order.object === "payment" && order.state === "paid") {
+        const paymentId = order.id;
+        await handleSuccessfulPayment(order);
+      } else {
+        console.error("Payment error:", order.user_message);
+      }
+    } else {
+      console.error("Error: ", Culqi.error);
     }
   };
 
