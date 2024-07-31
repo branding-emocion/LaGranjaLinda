@@ -160,7 +160,7 @@ const ModalProduct = ({ OpenModal, setOpenModal, name }) => {
               return;
             }
             addToCardProduc(OpenModal?.Product, Cantidad, ListaPreguntas);
-            // closeOpenModal();
+            closeOpenModal();
           }}
           className="border rounded-md p-3 space-y-2"
         >
