@@ -19,17 +19,29 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
-import { db } from "@/firebase/firebaseClient";
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  query,
+  serverTimestamp,
+  where,
+} from "firebase/firestore";
+import { auth, db } from "@/firebase/firebaseClient";
 import { Textarea } from "@/components/ui/textarea";
+import useAuthState from "@/lib/useAuthState";
+import { getCartTotalValor } from "@/lib/getCartTotalValor";
 
-const Checkoust = () => {
+const Checkout = () => {
+  const [{ user, claims }, loading, error] = useAuthState(auth);
   const cart = useCarStore((state) => state.cart);
+
   const total = getCartTotal(cart);
+  const TotalValue = getCartTotalValor(cart);
   const [VisibleProductos, setVisibleProductos] = useState(false);
   const [InputValues, setInputValues] = useState({});
   const [Direcciones, setDirecciones] = useState([]);
-  console.log(Direcciones);
+  console.log(user);
 
   useEffect(() => {
     if (InputValues?.Entrega == "Delivery") {
@@ -50,6 +62,37 @@ const Checkoust = () => {
       };
     }
   }, [InputValues?.Entrega]);
+
+  const handleSuccessfulPayment = async (paymentId) => {
+    try {
+      const newOrder = {
+        cart,
+        total,
+        ...InputValues,
+        paymentId,
+        createdAt: serverTimestamp(),
+        ...user,
+      };
+
+      await addDoc(collection(db, "Orders"), newOrder);
+      console.log("Order successfully saved to Firebase!");
+
+      // Clear form fields, reset state, or perform other post-payment actions
+    } catch (error) {
+      console.error("Error saving order to Firebase:", error);
+    }
+  };
+  const handleCulqiAction = async (event) => {
+    if (event.data && event.data.status === "success") {
+      // Payment successful
+      const paymentId = event.data.id; // Adjust according to Culqi's response
+
+      await handleSuccessfulPayment(paymentId);
+    } else if (event.data && event.data.status === "error") {
+      // Handle payment errors
+      console.error("Payment error:", event.data.message);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -92,9 +135,61 @@ const Checkoust = () => {
         </CardHeader>
         <CardContent>
           <form
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
-              console.log("Formulario enviado");
+
+              try {
+                const settings = {
+                  title: "La Granja Linda",
+                  currency: "PEN",
+                  amount: Math.round(TotalValue * 100),
+                  order: "ord_live_d1P0Tu1n7Od4nZdp",
+                  xculqirsaid: process.env.NEXT_PUBLIC_RSA_HASH,
+                  rsapublickey: process.env.NEXT_PUBLIC_RSA_PUBLIC_KEY,
+                };
+
+                const paymentMethods = {
+                  // las opciones se ordenan según se configuren
+                  tarjeta: true,
+                  yape: true,
+                  billetera: true,
+                  bancaMovil: true,
+                  agente: true,
+                  cuotealo: true,
+                };
+
+                const options = {
+                  lang: "auto",
+                  installments: true,
+                  modal: true,
+                  container: "#culqi-container", // Opcional
+                  paymentMethods: paymentMethods,
+                  paymentMethodsSort: Object.keys(paymentMethods), // las opciones se ordenan según se configuren en paymentMethods
+                };
+
+                const client = {
+                  email: user?.email || "",
+                };
+
+                const config = {
+                  settings,
+                  client,
+                  options,
+
+                  // appearance,
+                };
+
+                const Culqi = new CulqiCheckout(
+                  process.env.NEXT_PUBLIC_CULQI_PUBLIC_KEY,
+                  config
+                );
+
+                Culqi.culqi = handleCulqiAction;
+
+                Culqi.open();
+              } catch (error) {
+                console.error("Error al crear el token:", error);
+              }
             }}
             className="space-y-3"
           >
@@ -105,7 +200,6 @@ const Checkoust = () => {
               </Label>
               <Select
                 value={InputValues?.Entrega}
-                required
                 onValueChange={(e) => {
                   setInputValues({
                     ...InputValues,
@@ -181,7 +275,7 @@ const Checkoust = () => {
               />
             </div>
 
-            <button type="submit">hola</button>
+            <button type="submit">Prueba Pago</button>
           </form>
         </CardContent>
       </Card>
@@ -189,4 +283,4 @@ const Checkoust = () => {
   );
 };
 
-export default Checkoust;
+export default Checkout;

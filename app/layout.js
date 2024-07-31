@@ -3,6 +3,7 @@ import "./globals.css";
 
 import { Toaster } from "@/components/ui/toaster";
 import Main from "./Main";
+import Script from "next/script";
 
 const mohave = Mohave({ subsets: ["latin"] });
 
@@ -19,6 +20,10 @@ export default function RootLayout({ children, modalStore }) {
         <Main>{children}</Main>
         {modalStore}
         <Toaster />
+        <Script
+          strategy="beforeInteractive"
+          src="https://js.culqi.com/checkout-js"
+        />
       </body>
     </html>
   );
