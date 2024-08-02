@@ -14,6 +14,7 @@ import {
   CircleDollarSign,
   GalleryHorizontal,
   GalleryThumbnails,
+  HistoryIcon,
   MessageSquareDot,
   MonitorXIcon,
   PartyPopper,
@@ -124,6 +125,12 @@ const DashboardLayout = ({ children }) => {
       link: `/Admin/Checkout`,
 
       icon: <CircleDollarSign className="w-6 h-6 text-white" />,
+    },
+    {
+      name: "Historial Compras",
+      link: `/Admin/HistorialCompras`,
+
+      icon: <HistoryIcon className="w-6 h-6 text-white" />,
     },
   ];
 

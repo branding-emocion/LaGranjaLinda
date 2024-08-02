@@ -31,6 +31,8 @@ import { auth, db } from "@/firebase/firebaseClient";
 import { Textarea } from "@/components/ui/textarea";
 import useAuthState from "@/lib/useAuthState";
 import { getCartTotalValor } from "@/lib/getCartTotalValor";
+import ModalCompraSuccess from "./ModalCompraSuccess";
+import { Input } from "@/components/ui/input";
 
 const Checkout = () => {
   const [{ user, claims }, loading, error] = useAuthState(auth);
@@ -41,27 +43,54 @@ const Checkout = () => {
   const [VisibleProductos, setVisibleProductos] = useState(false);
   const [InputValues, setInputValues] = useState({});
   const [Direcciones, setDirecciones] = useState([]);
-  console.log(user);
+  const [stateSucess, setstateSucess] = useState(false);
+  const [Restaurantes, setRestaurantes] = useState([]);
 
   useEffect(() => {
-    if (InputValues?.Entrega == "Delivery") {
-      const unsubscribe = onSnapshot(
+    if (InputValues?.Restaurante) {
+      const queryDirection = query(
         collection(db, "DireccionesDelivery"),
-        (snapshot) => {
-          setDirecciones(
-            snapshot.docs.map((doc) => ({
-              id: doc.id,
-              ...doc.data(),
-            }))
-          );
-        }
+        where("idRestaurante", "==", `${InputValues?.Restaurante}`)
       );
+
+      const unsubscribe = onSnapshot(queryDirection, (snapshot) => {
+        setDirecciones(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
+        );
+      });
 
       return () => {
         unsubscribe();
       };
     }
-  }, [InputValues?.Entrega]);
+  }, [InputValues?.Restaurante]);
+  useEffect(() => {
+    const restaurantesDb = onSnapshot(
+      collection(db, `Restaurantes`),
+      // orderBy("email", "asc"),
+      (snapshot) =>
+        setRestaurantes(
+          snapshot?.docs?.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
+        )
+    );
+
+    return () => {
+      restaurantesDb();
+    };
+  }, []);
+
+  const HandlerChange = (e) => {
+    setInputValues({
+      ...InputValues,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleSuccessfulPayment = async (paymentDetails) => {
     try {
@@ -84,6 +113,7 @@ const Checkout = () => {
       await addDoc(collection(db, "Orders"), newOrder);
       console.log("Order successfully saved to Firebase!");
 
+      setstateSucess(true);
       // Clear form fields, reset state, or perform other post-payment actions
     } catch (error) {
       console.error("Error saving order to Firebase:", error);
@@ -119,6 +149,12 @@ const Checkout = () => {
           setVisibleProductos={setVisibleProductos}
         />
       )}
+      {stateSucess && (
+        <ModalCompraSuccess
+          stateSucess={stateSucess}
+          setstateSucess={setstateSucess}
+        />
+      )}
       <Card className="shadow-md">
         <CardHeader>
           <CardTitle>Bienvenido al módulo de pagos</CardTitle>
@@ -146,70 +182,70 @@ const Checkout = () => {
         </CardHeader>
       </Card>
 
-      <Card className="shadow-md ">
-        <CardHeader>
-          <CardTitle>Opciones de Entrega y Recogida</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form
-            onSubmit={async (e) => {
-              e.preventDefault();
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
 
-              try {
-                const settings = {
-                  title: "La Granja Linda",
-                  currency: "PEN",
-                  amount: Math.round(TotalValue * 100),
-                  order: "ord_live_d1P0Tu1n7Od4nZdp",
-                  xculqirsaid: process.env.NEXT_PUBLIC_RSA_HASH,
-                  rsapublickey: process.env.NEXT_PUBLIC_RSA_PUBLIC_KEY,
-                };
+          try {
+            const settings = {
+              title: "La Granja Linda",
+              currency: "PEN",
+              amount: Math.round(TotalValue * 100),
+              order: "ord_live_d1P0Tu1n7Od4nZdp",
+              xculqirsaid: process.env.NEXT_PUBLIC_RSA_HASH,
+              rsapublickey: process.env.NEXT_PUBLIC_RSA_PUBLIC_KEY,
+            };
 
-                const paymentMethods = {
-                  // las opciones se ordenan según se configuren
-                  tarjeta: true,
-                  yape: true,
-                  billetera: true,
-                  bancaMovil: true,
-                  agente: true,
-                  cuotealo: true,
-                };
+            const paymentMethods = {
+              // las opciones se ordenan según se configuren
+              tarjeta: true,
+              yape: true,
+              billetera: true,
+              bancaMovil: true,
+              agente: true,
+              cuotealo: true,
+            };
 
-                const options = {
-                  lang: "auto",
-                  installments: true,
-                  modal: true,
-                  container: "#culqi-container", // Opcional
-                  paymentMethods: paymentMethods,
-                  paymentMethodsSort: Object.keys(paymentMethods), // las opciones se ordenan según se configuren en paymentMethods
-                };
+            const options = {
+              lang: "auto",
+              installments: true,
+              modal: true,
+              container: "#culqi-container", // Opcional
+              paymentMethods: paymentMethods,
+              paymentMethodsSort: Object.keys(paymentMethods), // las opciones se ordenan según se configuren en paymentMethods
+            };
 
-                const client = {
-                  email: user?.email || "",
-                };
+            const client = {
+              email: user?.email || "",
+            };
 
-                const config = {
-                  settings,
-                  client,
-                  options,
+            const config = {
+              settings,
+              client,
+              options,
 
-                  // appearance,
-                };
+              // appearance,
+            };
 
-                const Culqi = new CulqiCheckout(
-                  process.env.NEXT_PUBLIC_CULQI_PUBLIC_KEY,
-                  config
-                );
+            const Culqi = new CulqiCheckout(
+              process.env.NEXT_PUBLIC_CULQI_PUBLIC_KEY,
+              config
+            );
 
-                Culqi.culqi = handleCulqiAction;
+            Culqi.culqi = handleCulqiAction;
 
-                Culqi.open();
-              } catch (error) {
-                console.error("Error al crear el token:", error);
-              }
-            }}
-            className="space-y-3"
-          >
+            Culqi.open();
+          } catch (error) {
+            console.error("Error al crear el token:", error);
+          }
+        }}
+        className="space-y-3"
+      >
+        <Card className="shadow-md ">
+          <CardHeader>
+            <CardTitle>Opciones de Entrega y Recogida</CardTitle>
+          </CardHeader>
+          <CardContent>
             {/* Delivery o llevar */}
             <div className="space-y-2">
               <Label htmlFor="Disponibilidad" className="">
@@ -240,7 +276,36 @@ const Checkout = () => {
                 </SelectContent>
               </Select>
             </div>
-            {InputValues?.Entrega == "Delivery" && (
+
+            <div className="space-y-2">
+              <Label htmlFor="Restaruante" className="">
+                Seleccione un restaurante ?{" "}
+                <span className="text-red-600">(*)</span>
+              </Label>
+              <Select
+                id="Restaurante"
+                value={InputValues?.Restaurante}
+                onValueChange={(e) => {
+                  setInputValues({
+                    ...InputValues,
+                    Restaurante: e,
+                  });
+                }}
+              >
+                <SelectTrigger className="">
+                  <SelectValue placeholder="Por favor seleccione una opción" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Restaurantes?.map((restaurante, key) => (
+                    <SelectItem key={restaurante.id} value={restaurante.id}>
+                      {restaurante.NombreLocal} - {restaurante.Direction}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {InputValues?.Entrega == "Delivery" && InputValues?.Restaurante && (
               <div className="space-y-2 ">
                 <Label htmlFor="Disponibilidad" className="">
                   Direcciones disponibles
@@ -274,7 +339,7 @@ const Checkout = () => {
               </div>
             )}
 
-            <div className="space-y-2 ">
+            {/* <div className="space-y-2 ">
               <Label htmlFor="ComentarioAdicionalEntre" className="">
                 Comentario adicional de entrega{" "}
               </Label>
@@ -290,12 +355,109 @@ const Checkout = () => {
                 }}
                 autoComplete="off"
               />
-            </div>
+            </div> */}
+          </CardContent>
+        </Card>
 
-            <button type="submit">Prueba Pago</button>
-          </form>
-        </CardContent>
-      </Card>
+        {InputValues?.Entrega == "Delivery" && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Dirección de entrega</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="DireccionEntrega" className="">
+                    Dirección de entrega
+                    <span className="text-red-600">(*)</span>
+                  </Label>
+                  <Input
+                    id="DireccionEntrega"
+                    name="DireccionEntrega"
+                    className="w-full text-gray-900"
+                    onChange={HandlerChange}
+                    required
+                    autoComplete="off"
+                    type="text"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="Numero" className="">
+                    Número
+                    <span className="text-red-600">(*)</span>
+                  </Label>
+                  <Input
+                    id="Numero"
+                    name="Numero"
+                    className="w-full text-gray-900"
+                    onChange={HandlerChange}
+                    required
+                    autoComplete="off"
+                    type="text"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="Interior" className="">
+                    Dptp / Interior (Opcional)
+                    <span className="text-red-600">(*)</span>
+                  </Label>
+                  <Input
+                    id="Interior"
+                    name="Interior"
+                    className="w-full text-gray-900"
+                    onChange={HandlerChange}
+                    autoComplete="off"
+                    type="text"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="Referencia" className="">
+                    Referencia / Urbanización / Barrio / Cruce
+                    {/* <span className="text-red-600">(*)</span> */}
+                  </Label>
+                  <Input
+                    id="Referencia"
+                    name="Referencia"
+                    className="w-full text-gray-900"
+                    onChange={HandlerChange}
+                    autoComplete="off"
+                    type="text"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="Celular" className="">
+                    Celular {/* <span className="text-red-600">(*)</span> */}
+                  </Label>
+                  <Input
+                    id="Celular"
+                    name="Celular"
+                    className="w-full text-gray-900"
+                    onChange={HandlerChange}
+                    autoComplete="off"
+                    type="text"
+                  />
+                </div>
+                {/* <div className="space-y-2">
+                  <Label htmlFor="NombreDireccion" className="">
+                    Nombre de la Direccion{" "}
+                   </Label>
+                  <Input
+                    id="NombreDireccion"
+                    name="NombreDireccion"
+                    className="w-full text-gray-900"
+                    onChange={HandlerChange}
+                    autoComplete="off"
+                    type="text"
+                  />
+                </div> */}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+        <Button className="w-full " type="submit">
+          Realizar Pago
+        </Button>
+      </form>
     </div>
   );
 };
