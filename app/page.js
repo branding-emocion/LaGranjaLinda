@@ -55,7 +55,7 @@ const HomePage = () => {
                   objectFit: "cover",
                 }}
               />
-              <div className="absolute top-0 left-0 bg-[#004f51]/30 w-full h-full" />
+              {/* <div className="absolute top-0 left-0 bg-[#004f51]/30 w-full h-full" /> */}
             </div>
           ))}
         </Carousel>
