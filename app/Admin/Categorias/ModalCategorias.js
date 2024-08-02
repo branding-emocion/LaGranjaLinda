@@ -82,7 +82,7 @@ const ModalCategorias = ({ OpenModal, setOpenModal }) => {
           // Borrar las imágenes antiguas
           const ImgRef = ref(
             storage,
-            `Categorias/${OpenModal?.InfoEditar?.NombreLocal?.replace(
+            `Categorias/${OpenModal?.InfoEditar?.NombreCategoria?.replace(
               /\s+/g,
               "_"
             )}/`
@@ -104,8 +104,8 @@ const ModalCategorias = ({ OpenModal, setOpenModal }) => {
             });
 
           const NombreCarpeta =
-            InputValues?.NombreLocal?.replace(/\s+/g, "_") ||
-            OpenModal?.InfoEditar?.NombreLocal?.replace(/\s+/g, "_");
+            InputValues?.NombreCategoria?.replace(/\s+/g, "_") ||
+            OpenModal?.InfoEditar?.NombreCategoria?.replace(/\s+/g, "_");
 
           // toca modificar la funcion y enviarle el values para que funcione mejor
           const ImagesUrl = await uploadImages(files, NombreCarpeta);
@@ -130,7 +130,10 @@ const ModalCategorias = ({ OpenModal, setOpenModal }) => {
           return;
         }
 
-        const NombreCarpeta = InputValues?.NombreLocal?.replace(/\s+/g, "_");
+        const NombreCarpeta = InputValues?.NombreCategoria?.replace(
+          /\s+/g,
+          "_"
+        );
 
         const ImagesUrl = await uploadImages(files, NombreCarpeta); // Asegúrate de que la promesa se haya resuelto
 
