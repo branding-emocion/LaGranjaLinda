@@ -300,7 +300,10 @@ const ModalProduct = ({ OpenModal, setOpenModal, name }) => {
                   <h1 className="text-lg font-bold">Adicionales</h1>
                   <div className="grid grid-cols-2 justify-center items-center gap-x-2">
                     {Adicionales?.map((option, key) => (
-                      <div key={option.id} className="space-x-1">
+                      <div
+                        key={option.id}
+                        className="space-x-1 flex justify-center items-center"
+                      >
                         <input
                           type="checkbox"
                           id={`checkbox-${option.id}`}
@@ -320,7 +323,10 @@ const ModalProduct = ({ OpenModal, setOpenModal, name }) => {
                           }}
                         />
                         <label htmlFor={`checkbox-${option.id}`}>
-                          {option?.NombreProducto}
+                          {option?.NombreProducto} -{" "}
+                          <span className="font-bold text-green-600 bg-gray-100 p-1 rounded-lg">
+                            S/{option?.Precio}
+                          </span>
                         </label>
                       </div>
                     ))}

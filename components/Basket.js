@@ -23,18 +23,18 @@ const Basket = ({ hiddenCheckout }) => {
           const total = getCartTotal(grouped[sku]);
           return (
             <li key={sku} className="  my-2 pt-2  w-full h-full mx-auto">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-x-3">
                 {item.Imagenes[0] && (
                   <Image
                     src={item.Imagenes[0]}
                     alt={item.NombreProducto}
-                    width={150}
-                    height={150}
+                    width={120}
+                    height={120}
                   />
                 )}
 
-                <div>
-                  <p className="line-clamp-2 font-bold uppercase">
+                <div className="w-full">
+                  <p className="line-clamp-3 font-bold uppercase">
                     {" "}
                     {item.NombreProducto}
                   </p>
