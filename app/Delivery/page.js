@@ -60,16 +60,18 @@ const Delivery = () => {
                   
                       className="max-w-[426px] h-[285px] object-cover rounded-lg"
                     /> */}
-                    <Image
-                      width={426}
-                      height={285}
-                      className="rounded-lg"
-                      src={categoria?.Imagenes[0] || ""}
-                      alt={categoria?.Nombre}
-                      style={{
-                        objectFit: "cover",
-                      }}
-                    />
+                    {categoria?.Imagenes?.length > 0 && (
+                      <Image
+                        width={426}
+                        height={285}
+                        className="rounded-lg"
+                        src={categoria?.Imagenes[0] || ""}
+                        alt={categoria?.Nombre}
+                        style={{
+                          objectFit: "cover",
+                        }}
+                      />
+                    )}
 
                     <div className="absolute bottom-0 left-0 right-0 h-16 bg-black bg-opacity-50 backdrop-blur text-white p-4 rounded-b-lg">
                       <h1 className="text-2xl font-semibold uppercase">
