@@ -81,17 +81,19 @@ const Categorias = () => {
                     key={Categoria.id}
                     className="w-full mx-auto border mb-5 border-gray-200 bg-white rounded-lg  shadow-md "
                   >
-                    <section className="relative w-full h-[200px]">
-                      <Image
-                        className="rounded-t-lg "
-                        fill
-                        src={Categoria?.Imagenes[0] || ""}
-                        alt="imageCategoria"
-                        style={{
-                          objectFit: "cover",
-                        }}
-                      />
-                    </section>
+                    {Categoria?.Imagenes?.length > 0 && (
+                      <section className="relative w-full h-[200px]">
+                        <Image
+                          className="rounded-t-lg "
+                          fill
+                          src={Categoria?.Imagenes[0] || ""}
+                          alt="imageCategoria"
+                          style={{
+                            objectFit: "cover",
+                          }}
+                        />
+                      </section>
+                    )}
 
                     <div className="p-5">
                       <div>

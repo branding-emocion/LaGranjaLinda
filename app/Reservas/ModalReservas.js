@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import { useToast } from "@/components/ui/use-toast";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Timestamp,
@@ -34,6 +34,7 @@ import {
 
 const ModalReservas = ({ OpenModal, setOpenModal }) => {
   const [InputValues, setInputValues] = useState({});
+  const [minDate, setMinDate] = useState("");
 
   const [Loading, setLoading] = useState(false);
   const { toast } = useToast();
@@ -45,6 +46,19 @@ const ModalReservas = ({ OpenModal, setOpenModal }) => {
     });
     setInputValues({});
   };
+
+  useEffect(() => {
+    const today = new Date();
+    today.setDate(today.getDate() + 2); // Agregar 2 días a la fecha actual
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0"); // Meses empiezan en 0
+    const day = String(today.getDate()).padStart(2, "0");
+    const hours = String(today.getHours()).padStart(2, "0");
+    const minutes = String(today.getMinutes()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
+    setMinDate(formattedDate);
+  }, []);
+
   const HandlerChange = (e) => {
     setInputValues({
       ...InputValues,
@@ -93,7 +107,7 @@ const ModalReservas = ({ OpenModal, setOpenModal }) => {
       <DialogContent className="h-auto  w-[90%] md:w-full max-h-[95vh] overflow-auto   sm:max-w-4xl">
         <DialogHeader className="w-full h-full">
           <DialogTitle>
-            Agregar nueva reserva{" "}
+            NUEVA RESERVA{" "}
             <span className="uppercase">
               {OpenModal.InfoRestaurante?.NombreLocal} -{" "}
               {OpenModal.InfoRestaurante?.Direccion ||
@@ -200,10 +214,9 @@ const ModalReservas = ({ OpenModal, setOpenModal }) => {
                       type="datetime-local"
                       name="FechaReserva"
                       id="FechaReserva"
-                      //min date hoy
-                      min={new Date().toISOString().split("T")[0]}
                       required
                       onChange={HandlerChange}
+                      min={minDate}
                     />
                   </div>
                 </div>

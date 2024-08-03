@@ -120,27 +120,6 @@ const Checkout = () => {
     }
   };
 
-  const handleCulqiAction = async () => {
-    if (Culqi.token) {
-      const token = Culqi.token.id;
-      console.log("Se ha creado un Token: ", token);
-      // Aquí puedes manejar el token si lo necesitas
-    } else if (Culqi.order) {
-      const order = Culqi.order;
-      console.log("Se ha creado el objeto Order: ", order);
-      // Aquí puedes manejar la orden si lo necesitas
-
-      if (order.object === "payment" && order.state === "paid") {
-        const paymentId = order.id;
-        await handleSuccessfulPayment(order);
-      } else {
-        console.error("Payment error:", order.user_message);
-      }
-    } else {
-      console.error("Error: ", Culqi.error);
-    }
-  };
-
   return (
     <div className="space-y-6">
       {VisibleProductos && (
@@ -200,10 +179,10 @@ const Checkout = () => {
               // las opciones se ordenan según se configuren
               tarjeta: true,
               yape: true,
-              billetera: true,
-              bancaMovil: true,
-              agente: true,
-              cuotealo: true,
+              // billetera: true,
+              // bancaMovil: true,
+              // agente: true,
+              // cuotealo: true,
             };
 
             const options = {
@@ -227,10 +206,26 @@ const Checkout = () => {
               // appearance,
             };
 
-            const Culqi = new CulqiCheckout(
+            const handleCulqiAction = async () => {
+              if (Culqi.token) {
+                const token = Culqi.token.id;
+                console.log("Se ha creado un Token: ", token);
+              } else if (Culqi.order) {
+                const order = Culqi.order;
+                await handleSuccessfulPayment(order);
+
+                console.log("Se ha creado el objeto Order: ", order);
+              } else {
+                console.log("Errorrr : ", Culqi.error);
+              }
+            };
+
+            let Culqi = new CulqiCheckout(
               process.env.NEXT_PUBLIC_CULQI_PUBLIC_KEY,
               config
             );
+
+            console.log("Culqi", Culqi);
 
             Culqi.culqi = handleCulqiAction;
 
