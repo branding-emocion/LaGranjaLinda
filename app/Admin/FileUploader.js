@@ -49,10 +49,8 @@ const FileUploader = ({ setFiles, files, Modal }) => {
     },
   });
 
-  console.log("Modal", Modal);
-
   const thumbsEditar = Modal?.InfoEditar?.Imagenes?.map((file, key) => (
-    <div style={thumb} key={file.key}>
+    <div style={thumb} key={key}>
       <div style={thumbInner}>
         <img
           src={file}

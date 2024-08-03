@@ -74,9 +74,12 @@ const ModalCategorias = ({ OpenModal, setOpenModal }) => {
           );
 
           // Set the "capital" field of the city 'DC'
-          await updateDoc(UpdateRef, {
-            ...InputValues,
-          });
+
+          if (Object.keys(InputValues).length > 0) {
+            await updateDoc(UpdateRef, {
+              ...InputValues,
+            });
+          }
         }
         if (files?.length > 0) {
           // Borrar las imágenes antiguas
@@ -119,7 +122,7 @@ const ModalCategorias = ({ OpenModal, setOpenModal }) => {
             Imagenes: ImagesUrl,
           });
         }
-        closeOpenModal();
+        // closeOpenModal();
       } else {
         if (!files?.length > 0) {
           toast({
@@ -143,7 +146,7 @@ const ModalCategorias = ({ OpenModal, setOpenModal }) => {
           createdAt: serverTimestamp(),
         });
 
-        closeOpenModal();
+        // closeOpenModal();
       }
     } catch (err) {
       console.error("Error:", err);
