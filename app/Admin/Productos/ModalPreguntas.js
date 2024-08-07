@@ -114,7 +114,7 @@ const ModalPreguntas = ({ ModalQuestion, setModalQuestion }) => {
         setListaPreguntas(data);
       }
     );
-  }, []);
+  }, [ModalQuestion?.Producto?.id]);
 
   console.log("InputValues", InputValues);
   return (

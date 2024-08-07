@@ -33,10 +33,16 @@ import useAuthState from "@/lib/useAuthState";
 import { getCartTotalValor } from "@/lib/getCartTotalValor";
 import ModalCompraSuccess from "./ModalCompraSuccess";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 
 const Checkout = () => {
+  const { toast } = useToast();
+
   const [{ user, claims }, loading, error] = useAuthState(auth);
   const cart = useCarStore((state) => state.cart);
+  const clearCart = useCarStore((state) => state.clearCart);
+
+  console.log("cart", cart);
 
   const total = getCartTotal(cart);
   const TotalValue = getCartTotalValor(cart);
@@ -210,9 +216,34 @@ const Checkout = () => {
               if (Culqi.token) {
                 const token = Culqi.token.id;
                 console.log("Se ha creado un Token: ", token);
+
+                const response = await fetch("/api/ProcesarPago", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    TotalValue,
+                    user,
+                    settings,
+                    token,
+                  }),
+                });
+
+                const data = await response.json();
+
+                await handleSuccessfulPayment(data?.infoPago);
+
+                // Cerrar el modal de Culqi
+                Culqi.close();
+
+                clearCart();
+                // Abrir un modal de éxito
+                setstateSucess(true);
+
+                console.log("response", response);
               } else if (Culqi.order) {
                 const order = Culqi.order;
-                await handleSuccessfulPayment(order);
 
                 console.log("Se ha creado el objeto Order: ", order);
               } else {
@@ -225,13 +256,16 @@ const Checkout = () => {
               config
             );
 
-            console.log("Culqi", Culqi);
-
             Culqi.culqi = handleCulqiAction;
 
             Culqi.open();
           } catch (error) {
             console.error("Error al crear el token:", error);
+            toast({
+              title: "Error al crear el token",
+              message: "Por favor, intente nuevamente",
+              type: "error",
+            });
           }
         }}
         className="space-y-3"
@@ -449,7 +483,12 @@ const Checkout = () => {
             </CardContent>
           </Card>
         )}
-        <Button className="w-full " type="submit">
+
+        <Button
+          disabled={cart?.length == 0 ? true : false}
+          className="w-full "
+          type="submit"
+        >
           Realizar Pago
         </Button>
       </form>

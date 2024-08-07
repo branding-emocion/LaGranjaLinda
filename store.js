@@ -40,6 +40,10 @@ export const useCarStore = create()(
             cart: [...state.cart, product],
           }));
         },
+        // Limpiar el carrito
+        clearCart: () => {
+          set({ cart: [] });
+        },
       }),
       {
         name: "shopping-cart-storage",
