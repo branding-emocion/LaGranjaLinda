@@ -213,7 +213,7 @@ const Productos = () => {
                           className="rounded-t-lg "
                           fill
                           src={producto?.Imagenes[0] || ""}
-                          alt="imageCategoria"
+                          alt={`Imagen de ${producto?.NombreProducto}`}
                           style={{
                             objectFit: "cover",
                           }}

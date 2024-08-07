@@ -13,7 +13,6 @@ const Basket = ({ hiddenCheckout }) => {
   const cart = useCarStore((state) => state.cart);
   const grouped = groupBySKU(cart);
   const BasketTotal = getCartTotal(cart);
-  const router = useRouter();
 
   return (
     <div className="max-w-7xl mx-auto w-full">

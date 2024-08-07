@@ -109,6 +109,10 @@ const DashboardLayout = ({ children }) => {
       }`,
       icon: <CalendarClock className="w-6 h-6 text-white" />,
       Cant: true,
+      hidden:
+        claims?.Rol?.includes("Admin") || claims?.Rol?.includes("Mostrador")
+          ? false
+          : true,
     },
     {
       name: "Reservas para Hoy",
@@ -118,6 +122,10 @@ const DashboardLayout = ({ children }) => {
           : "/Admin/MesasHoy"
       }`,
       icon: <CalendarCheck className="w-6 h-6 text-white" />,
+      hidden:
+        claims?.Rol?.includes("Admin") || claims?.Rol?.includes("Mostrador")
+          ? false
+          : true,
     },
     ,
     {
