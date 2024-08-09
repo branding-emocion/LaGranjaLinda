@@ -22,7 +22,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/firebase/firebaseClient";
 
-const ModalDireccion = ({ OpenModal, setOpenModal, idRestaurante }) => {
+const ModalDireccion = ({ OpenModal, setOpenModal, idDistrito }) => {
   const [InputValues, setInputValues] = useState({});
 
   const [Loading, setLoading] = useState(false);
@@ -64,7 +64,7 @@ const ModalDireccion = ({ OpenModal, setOpenModal, idRestaurante }) => {
       } else {
         const docRef = await addDoc(collection(db, "DireccionesDelivery"), {
           ...InputValues,
-          idRestaurante: idRestaurante,
+          idDistrito: idDistrito,
           createdAt: serverTimestamp(),
         });
         e.target.reset();

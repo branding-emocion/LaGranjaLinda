@@ -29,7 +29,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const Delyvery = ({ params: { idRestaurante }, searchParams: { name } }) => {
+const Delyvery = ({ params: { idDistrito }, searchParams: { name } }) => {
   const [OpenModal, setOpenModal] = useState({});
   const [Direcciones, setDirecciones] = useState([]);
 
@@ -113,7 +113,7 @@ const Delyvery = ({ params: { idRestaurante }, searchParams: { name } }) => {
                         doc(
                           db,
                           "Restaurantes",
-                          `${idRestaurante}`,
+                          `${idDistrito}`,
                           "Delyvery",
                           `${row.id}`
                         )
@@ -132,10 +132,10 @@ const Delyvery = ({ params: { idRestaurante }, searchParams: { name } }) => {
   ];
 
   useEffect(() => {
-    if (idRestaurante) {
+    if (idDistrito) {
       const qDirection = query(
         collection(db, "DireccionesDelivery"),
-        where("idRestaurante", "==", idRestaurante)
+        where("idDistrito", "==", idDistrito)
       );
 
       const unsubscribe = onSnapshot(qDirection, (snapshot) => {
@@ -151,7 +151,7 @@ const Delyvery = ({ params: { idRestaurante }, searchParams: { name } }) => {
         unsubscribe();
       };
     }
-  }, [idRestaurante]);
+  }, [idDistrito]);
 
   return (
     <>
@@ -159,7 +159,7 @@ const Delyvery = ({ params: { idRestaurante }, searchParams: { name } }) => {
         <ModalDireccion
           OpenModal={OpenModal}
           setOpenModal={setOpenModal}
-          idRestaurante={idRestaurante}
+          idDistrito={idDistrito}
         />
       )}
       <div className="space-y-6">
