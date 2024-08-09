@@ -12,6 +12,7 @@ import {
   CalendarClock,
   CalendarPlus,
   CircleDollarSign,
+  FileText,
   GalleryHorizontal,
   GalleryThumbnails,
   HistoryIcon,
@@ -139,6 +140,13 @@ const DashboardLayout = ({ children }) => {
       link: `/Admin/HistorialCompras`,
 
       icon: <HistoryIcon className="w-6 h-6 text-white" />,
+    },
+
+    {
+      name: "Reportes",
+      link: "/Admin/Reportes",
+      icon: <FileText className="w-6 h-6 text-white" />,
+      hidden: claims?.Rol?.includes("Admin") ? false : true,
     },
   ];
 
