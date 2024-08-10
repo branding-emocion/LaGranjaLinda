@@ -16,10 +16,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useCarStore } from "@/store";
 import { getCartTotal } from "@/lib/getCartTotal";
+import useAuthState from "@/lib/useAuthState";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { auth } from "@/firebase/firebaseClient";
 
 const MenuPrincipal = () => {
   const [isOpen, setIsOpen] = useState(false);
   // const [Scroll, setScroll] = useState("");
+  const [{ user, claims }, loading, error] = useAuthState(auth);
 
   const pathname = usePathname();
 
@@ -89,6 +93,23 @@ const MenuPrincipal = () => {
         </div>
       </Link>
 
+      <Link
+        href={"/Admin"}
+        className=" fixed top-[23%] right-0 z-40  border-2 border-[#7d2d04] rounded-l-lg bg-granjaPrimary flex w-32 justify-center items-center text-[#7d2d04] font-bold py-4 space-x-1 text-sm"
+      >
+        <div className=" justify-center items-center ml-4 ">
+          {/* <User className="w-6 h-6 text-white" /> */}
+          <Avatar className="h-6 w-6 lg:w-9 lg:h-9">
+            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+        </div>
+
+        <p className="ml-2 text-sm text-wrap tracking-wide truncate uppercase">
+          {user?.displayName || "Login / Registro"}
+        </p>
+      </Link>
+
       <nav
         style={{ filter: "drop-shadow(0px 0px 3px black)" }}
         className={`sticky h-28 z-50 top-0 p-2 md:px-11 shadow-sm md:flex md:items-center md:justify-around 2xl:justify-around bg-granjaPrimary `}
@@ -154,13 +175,13 @@ const MenuPrincipal = () => {
             >
               Nuestra Carta
             </ItemMenu>
-            <ItemMenu
+            {/* <ItemMenu
               ruta="/Promociones"
               setIsOpen={setIsOpen}
               border={pathname == "/Promociones" ? true : false}
             >
               Promociones
-            </ItemMenu>
+            </ItemMenu> */}
             <ItemMenu
               ruta="/Reservas"
               setIsOpen={setIsOpen}

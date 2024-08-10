@@ -120,28 +120,25 @@ const Restaurantes = () => {
           <CardContent>
             <div className="grid grid-cols-4 gap-2 justify-center items-center">
               {Distrito?.map((distrito) => (
-                <div
-                  className="flex flex-col whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90"
-                  key={distrito.id}
+                <Link
+                  href={{
+                    pathname: `/Admin/Restaurantes/Delyvery/${distrito.id}`,
+                    query: {
+                      name: distrito.NombreDistrito,
+                    },
+                  }}
+                  className=""
                 >
-                  <h1 className="uppercase">{distrito?.NombreDistrito}</h1>
-
-                  <Link
-                    href={{
-                      pathname: `/Admin/Restaurantes/Delyvery/${distrito.id}`,
-                      query: {
-                        name: distrito.NombreDistrito,
-                      },
-                    }}
-                  >
+                  <div className=" p-2 w-full h-full border rounded-lg mx-auto  flex justify-center items-center flex-col hover:bg-green-50">
+                    <h1 className="uppercase">{distrito?.NombreDistrito}</h1>
                     <div
                       title="Direcciones delivery"
-                      className="bg-blue-500 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-blue-600"
+                      className="  space-x-1.5 rounded-lg  px-4 py-1.5  duration-100 w-full h-full mx-auto  "
                     >
-                      <PackageCheck className="w-4 h-4" />
+                      <PackageCheck className="w-4 h-4 mx-auto" />
                     </div>
-                  </Link>
-                </div>
+                  </div>
+                </Link>
               ))}
             </div>
             <div className="mx-auto grid max-w-6xl  grid-cols-1 gap-6 p-6 sm:grid-cols-2 md:grid-cols-3  ">

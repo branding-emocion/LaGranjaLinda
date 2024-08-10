@@ -46,10 +46,12 @@ const Reservas = () => {
           <div className=" bg-white p-5 md:p-10 rounded-lg ">
             <div className=" flex flex-col items-center  space-y-7 ">
               <p className="text-justify">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Consectetur sint fugiat deleniti fugit tenetur necessitatibus
-                voluptatum impedit odit aliquid aliquam numquam, molestiae
-                consequuntur harum officia sequi sed dolores nulla esse.
+                ¡Bienvenido a nuestro módulo de reservas! Aquí puedes asegurar
+                tu mesa en nuestro restaurante de manera rápida y sencilla. Ya
+                sea para una cena íntima, una reunión familiar o una ocasión
+                especial, estamos encantados de recibirte. Elige la fecha, la
+                hora, y el número de comensales, y nosotros nos encargaremos del
+                resto. ¡Tu experiencia gastronómica comienza con un solo clic!
               </p>
 
               <div className="mx-auto grid  w-full h-full  grid-cols-1 gap-6  sm:grid-cols-2 md:grid-cols-3  ">

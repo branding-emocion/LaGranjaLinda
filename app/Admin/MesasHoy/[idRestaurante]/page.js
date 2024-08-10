@@ -12,34 +12,34 @@ import { db } from "@/firebase/firebaseClient";
 import {
   Timestamp,
   collection,
-  doc,
   onSnapshot,
-  orderBy,
   query,
-  updateDoc,
   where,
 } from "firebase/firestore";
-import { BadgePlus, CircleCheckBig, XIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
+
+import { DateRange } from "react-date-range";
+// import { es } from "date-fns/locale";
+import "react-date-range/dist/styles.css"; // main style file
+import "react-date-range/dist/theme/default.css"; // theme css file
+import { es } from "date-fns/locale";
 
 const ShowReservasHoy = ({ params: { idRestaurante } }) => {
   const [Reservas, setReservas] = useState([]);
   const [SearchReservas, setSearchReservas] = useState([]);
+  const [RangesData, setRangesData] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
+  });
 
   useEffect(() => {
     if (idRestaurante) {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
-      const endOfDay = new Date(today);
-      endOfDay.setHours(23, 59, 59, 999);
-
       const qReservas = query(
         collection(db, "Reservas"),
         where("Restaurante", "==", idRestaurante),
         where("Estado", "==", "Confirmado"),
-        where("FechaReserva", ">=", Timestamp.fromDate(today)),
-        where("FechaReserva", "<", Timestamp.fromDate(endOfDay))
+        where("FechaReserva", ">=", RangesData.startDate),
+        where("FechaReserva", "<=", RangesData.endDate)
       );
 
       const unsubscribe = onSnapshot(qReservas, (snapshot) => {
@@ -48,13 +48,28 @@ const ShowReservasHoy = ({ params: { idRestaurante } }) => {
           ...doc.data(),
         }));
 
+        console.log("data", data);
+
         setReservas(data);
         setSearchReservas(data);
       });
 
       return () => unsubscribe();
     }
-  }, [idRestaurante]);
+  }, [idRestaurante, RangesData.endDate, RangesData.startDate]);
+
+  const HandlerFecha = (ranges) => {
+    setRangesData({
+      startDate: ranges.selection.startDate,
+      endDate: ranges.selection.endDate,
+    });
+  };
+
+  const selectionRange = {
+    startDate: RangesData?.startDate,
+    endDate: RangesData?.endDate,
+    key: "selection",
+  };
 
   return (
     <>
@@ -74,6 +89,15 @@ const ShowReservasHoy = ({ params: { idRestaurante } }) => {
         <Card className="shadow-md">
           <CardHeader>
             <CardTitle>Lista de Reservas para hoy</CardTitle>
+
+            <div></div>
+            <div className="w-full h-full mx-auto flex justify-center items-center bg-gray-50">
+              <DateRange
+                ranges={[selectionRange]}
+                onChange={HandlerFecha}
+                locale={es}
+              />
+            </div>
 
             {/* Vamos a agregar un buscador de reservas por nombre */}
 

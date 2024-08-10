@@ -42,21 +42,20 @@ const Checkout = () => {
   const cart = useCarStore((state) => state.cart);
   const clearCart = useCarStore((state) => state.clearCart);
 
-  console.log("cart", cart);
-
   const total = getCartTotal(cart);
-  const TotalValue = getCartTotalValor(cart);
+
   const [VisibleProductos, setVisibleProductos] = useState(false);
   const [InputValues, setInputValues] = useState({});
   const [Direcciones, setDirecciones] = useState([]);
   const [stateSucess, setstateSucess] = useState(false);
-  const [Restaurantes, setRestaurantes] = useState([]);
+  const [Distritos, setDistritos] = useState([]);
+  const TotalValue = getCartTotalValor(cart);
 
   useEffect(() => {
-    if (InputValues?.Restaurante) {
+    if (InputValues?.Distrito) {
       const queryDirection = query(
         collection(db, "DireccionesDelivery"),
-        where("idRestaurante", "==", `${InputValues?.Restaurante}`)
+        where("idDistrito", "==", `${InputValues?.Distrito}`)
       );
 
       const unsubscribe = onSnapshot(queryDirection, (snapshot) => {
@@ -72,13 +71,14 @@ const Checkout = () => {
         unsubscribe();
       };
     }
-  }, [InputValues?.Restaurante]);
+  }, [InputValues?.Distrito]);
+
   useEffect(() => {
     const restaurantesDb = onSnapshot(
-      collection(db, `Restaurantes`),
+      collection(db, `Distritos`),
       // orderBy("email", "asc"),
       (snapshot) =>
-        setRestaurantes(
+        setDistritos(
           snapshot?.docs?.map((doc) => ({
             id: doc.id,
             ...doc.data(),
@@ -175,7 +175,15 @@ const Checkout = () => {
             const settings = {
               title: "La Granja Linda",
               currency: "PEN",
-              amount: Math.round(TotalValue * 100),
+              amount: Math.round(
+                (parseFloat(TotalValue) +
+                  parseFloat(
+                    InputValues?.Entrega == "Delivery"
+                      ? InputValues?.Direccion
+                      : 0
+                  )) *
+                  100
+              ),
               order: "ord_live_d1P0Tu1n7Od4nZdp",
               xculqirsaid: process.env.NEXT_PUBLIC_RSA_HASH,
               rsapublickey: process.env.NEXT_PUBLIC_RSA_PUBLIC_KEY,
@@ -281,6 +289,7 @@ const Checkout = () => {
                 Seleccione una opción? <span className="text-red-600">(*)</span>
               </Label>
               <Select
+                required
                 value={InputValues?.Entrega}
                 onValueChange={(e) => {
                   setInputValues({
@@ -307,65 +316,82 @@ const Checkout = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="Restaruante" className="">
-                Seleccione un restaurante ?{" "}
+              <Label htmlFor="Distrito" className="">
+                Seleccione un Distrito ?{" "}
                 <span className="text-red-600">(*)</span>
               </Label>
               <Select
-                id="Restaurante"
-                value={InputValues?.Restaurante}
+                id="Distrito"
+                value={InputValues?.Distrito}
+                required
                 onValueChange={(e) => {
                   setInputValues({
                     ...InputValues,
-                    Restaurante: e,
+                    Distrito: e,
                   });
                 }}
               >
                 <SelectTrigger className="">
                   <SelectValue placeholder="Por favor seleccione una opción" />
                 </SelectTrigger>
-                <SelectContent>
-                  {Restaurantes?.map((restaurante, key) => (
-                    <SelectItem key={restaurante.id} value={restaurante.id}>
-                      {restaurante.NombreLocal} - {restaurante.Direction}
+                <SelectContent className="uppercase">
+                  {Distritos?.map((distrito, key) => (
+                    <SelectItem key={distrito.id} value={distrito.id}>
+                      {distrito.NombreDistrito}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
+            {InputValues?.Distrito && InputValues?.Entrega == "Delivery" && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="Direccion" className="">
+                    Seleccione una dirección ?{" "}
+                    <span className="text-red-600">(*)</span>
+                  </Label>
+                  <Select
+                    id="Direccion"
+                    value={InputValues?.Direccion}
+                    required
+                    onValueChange={(e) => {
+                      setInputValues({
+                        ...InputValues,
+                        Direccion: e,
+                      });
+                    }}
+                  >
+                    <SelectTrigger className="">
+                      <SelectValue placeholder="Por favor seleccione una dirección" />
+                    </SelectTrigger>
+                    <SelectContent className="uppercase">
+                      {Direcciones?.map((direction, key) => (
+                        <SelectItem
+                          key={direction.id}
+                          value={direction.ValorDomicilio}
+                        >
+                          {direction.NombreUbicacion} - S/{" "}
+                          {direction.ValorDomicilio}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                {InputValues.Direccion &&
+                  InputValues?.Entrega == "Delivery" && (
+                    <>
+                      <h1 className="pt-4 text-center font-bold text-3xl">
+                        Adicional Domicilio S/ {InputValues?.Direccion}
+                      </h1>
 
-            {InputValues?.Entrega == "Delivery" && InputValues?.Restaurante && (
-              <div className="space-y-2 ">
-                <Label htmlFor="Disponibilidad" className="">
-                  Direcciones disponibles
-                  <span className="text-red-600">(*)</span>
-                </Label>
-                <Select
-                  value={InputValues?.IdDireccion}
-                  required
-                  onValueChange={(e) => {
-                    setInputValues({
-                      ...InputValues,
-                      IdDireccion: e,
-                    });
-                  }}
-                >
-                  <SelectTrigger className="">
-                    <SelectValue placeholder="Solo hay disponible en estas direcciones" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Direcciones.map((adi, key) => (
-                      <SelectItem
-                        className="uppercase"
-                        key={adi.id}
-                        value={adi.id}
-                      >
-                        {adi.NombreUbicacion} - S/ {adi.ValorDomicilio}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+                      <h1 className="pt-4 text-center font-bold text-3xl">
+                        Total con Domicilio S/{" "}
+                        {parseFloat(TotalValue) +
+                          parseFloat(InputValues?.Direccion) || 0}
+                      </h1>
+                    </>
+                  )}
+              </>
             )}
 
             {/* <div className="space-y-2 ">
@@ -428,7 +454,6 @@ const Checkout = () => {
                 <div className="space-y-2">
                   <Label htmlFor="Interior" className="">
                     Dptp / Interior (Opcional)
-                    <span className="text-red-600">(*)</span>
                   </Label>
                   <Input
                     id="Interior"
@@ -455,9 +480,10 @@ const Checkout = () => {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="Celular" className="">
-                    Celular {/* <span className="text-red-600">(*)</span> */}
+                    Celular <span className="text-red-600">(*)</span>
                   </Label>
                   <Input
+                    required
                     id="Celular"
                     name="Celular"
                     className="w-full text-gray-900"

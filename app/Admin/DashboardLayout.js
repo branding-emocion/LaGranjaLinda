@@ -6,12 +6,14 @@ import { auth, db } from "@/firebase/firebaseClient";
 import Link from "next/link";
 import {
   Beef,
+  BookmarkMinus,
   BookOpenText,
   BrickWall,
   CalendarCheck,
   CalendarClock,
   CalendarPlus,
   CircleDollarSign,
+  FileText,
   GalleryHorizontal,
   GalleryThumbnails,
   HistoryIcon,
@@ -34,34 +36,34 @@ const DashboardLayout = ({ children }) => {
   const pathname = usePathname();
   const router = useRouter();
 
-  useEffect(() => {
-    let qTotalReservas;
+  // useEffect(() => {
+  //   let qTotalReservas;
 
-    if (claims?.IdRestaurante) {
-      // Consulta para obtener todas las reservas del restaurante especificado en los claims
-      qTotalReservas = query(
-        collection(db, "Reservas"),
-        where("Restaurante", "==", claims.IdRestaurante),
-        where("Estado", "==", "Pendiente")
-      );
-    } else {
-      // Consulta para obtener todas las reservas pendientes sin filtrar por restaurante
-      qTotalReservas = query(
-        collection(db, "Reservas"),
-        where("Estado", "==", "Pendiente")
-      );
-    }
+  //   if (claims?.IdRestaurante) {
+  //     // Consulta para obtener todas las reservas del restaurante especificado en los claims
+  //     qTotalReservas = query(
+  //       collection(db, "Reservas"),
+  //       where("Restaurante", "==", claims.IdRestaurante),
+  //       where("Estado", "==", "Pendiente")
+  //     );
+  //   } else {
+  //     // Consulta para obtener todas las reservas pendientes sin filtrar por restaurante
+  //     qTotalReservas = query(
+  //       collection(db, "Reservas"),
+  //       where("Estado", "==", "Pendiente")
+  //     );
+  //   }
 
-    // Suscripción para las reservas pendientes
-    const unsubscribeTotal = onSnapshot(qTotalReservas, (snapshot) => {
-      setCantReservas(snapshot.size); // Actualizar la cantidad de reservas pendientes
-    });
+  //   // Suscripción para las reservas pendientes
+  //   const unsubscribeTotal = onSnapshot(qTotalReservas, (snapshot) => {
+  //     setCantReservas(snapshot.size); // Actualizar la cantidad de reservas pendientes
+  //   });
 
-    // Limpiar las suscripciones al desmontar el componente
-    return () => {
-      unsubscribeTotal();
-    };
-  }, [claims?.IdRestaurante]);
+  //   // Limpiar las suscripciones al desmontar el componente
+  //   return () => {
+  //     unsubscribeTotal();
+  //   };
+  // }, [claims?.IdRestaurante]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>error</p>;
@@ -108,7 +110,7 @@ const DashboardLayout = ({ children }) => {
           : "/Admin/Reservas"
       }`,
       icon: <CalendarClock className="w-6 h-6 text-white" />,
-      Cant: true,
+      // Cant: true,
       hidden:
         claims?.Rol?.includes("Admin") || claims?.Rol?.includes("Mostrador")
           ? false
@@ -139,6 +141,19 @@ const DashboardLayout = ({ children }) => {
       link: `/Admin/HistorialCompras`,
 
       icon: <HistoryIcon className="w-6 h-6 text-white" />,
+    },
+
+    {
+      name: "Reportes",
+      link: "/Admin/Reportes",
+      icon: <FileText className="w-6 h-6 text-white" />,
+      hidden: claims?.Rol?.includes("Admin") ? false : true,
+    },
+    {
+      name: "LibroReclamaciones",
+      link: "/Admin/LibroReclamaciones",
+      icon: <BookmarkMinus className="w-6 h-6 text-white" />,
+      hidden: claims?.Rol?.includes("Admin") ? false : true,
     },
   ];
 

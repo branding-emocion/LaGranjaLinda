@@ -51,7 +51,7 @@ const ModalCreateUsuario = ({ ModalNewUser, setModalNewUser }) => {
         phoneNumber: phoneNumber,
         email: email,
         displayName: displayName,
-        role: "user",
+        Rol: "Cliente",
       });
     } catch (error) {
       toast({
