@@ -6,6 +6,7 @@ import { auth, db } from "@/firebase/firebaseClient";
 import Link from "next/link";
 import {
   Beef,
+  BookmarkMinus,
   BookOpenText,
   BrickWall,
   CalendarCheck,
@@ -146,6 +147,12 @@ const DashboardLayout = ({ children }) => {
       name: "Reportes",
       link: "/Admin/Reportes",
       icon: <FileText className="w-6 h-6 text-white" />,
+      hidden: claims?.Rol?.includes("Admin") ? false : true,
+    },
+    {
+      name: "LibroReclamaciones",
+      link: "/Admin/LibroReclamaciones",
+      icon: <BookmarkMinus className="w-6 h-6 text-white" />,
       hidden: claims?.Rol?.includes("Admin") ? false : true,
     },
   ];

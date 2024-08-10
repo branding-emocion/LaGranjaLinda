@@ -21,6 +21,9 @@ const Footer = () => {
                   <li>
                     <Link href={"/Nutricion"}>Nuestras Experiencias</Link>
                   </li>
+                  <li>
+                    <p>Libro Reclamaciones</p>
+                  </li>
                 </ul>
               </div>
             </div>
