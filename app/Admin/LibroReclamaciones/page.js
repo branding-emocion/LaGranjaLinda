@@ -5,6 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { BadgePlus } from "lucide-react";
 import React from "react";
 
 const LibroReclamaciones = () => {
