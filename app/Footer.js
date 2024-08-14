@@ -22,7 +22,18 @@ const Footer = () => {
                     <Link href={"/Nutricion"}>Nuestras Experiencias</Link>
                   </li>
                   <li>
-                    <p>Libro Reclamaciones</p>
+                    <Link href={"/Reclamaciones"}>
+                      <Image
+                        src="/LibroReclamaciones.webp"
+                        width={150}
+                        height={150}
+                        alt="Libro de Reclamaciones"
+                        style={{
+                          objectFit: "cover",
+                          cursor: "pointer",
+                        }}
+                      />
+                    </Link>
                   </li>
                 </ul>
               </div>

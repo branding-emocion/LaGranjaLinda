@@ -170,7 +170,8 @@ const ModalUsuarios = ({ OpenModal, setOpenModal }) => {
                 Rol <span className="text-red-600"> (*)</span>
               </Label>
               <Select
-                value={OpenModal?.InfoEditar?.Rol}
+                defaultValue={OpenModal?.InfoEditar?.Rol}
+                value={InputValues?.Rol}
                 required
                 onValueChange={(e) => {
                   setInputValues({
