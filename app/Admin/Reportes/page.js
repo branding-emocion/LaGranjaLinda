@@ -8,8 +8,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import React, { useState } from "react";
-import ReporteVentas from "./ReporteVentas";
-import ReporteClientes from "./ReporteClientes";
 
 const Reportes = () => {
   const [TipoReporte, setTipoReporte] = useState({});
@@ -29,14 +27,14 @@ const Reportes = () => {
       <Card className="shadow-md ">
         <CardHeader>
           <div className="space-x-3">
-            {/* <Button
+            <Button
               onClick={(e) => {
                 e.preventDefault();
                 setTipoReporte("ventas");
               }}
             >
               Reporte de ventas
-            </Button> */}
+            </Button>
             <Button
               onClick={(e) => {
                 e.preventDefault();
@@ -48,8 +46,8 @@ const Reportes = () => {
           </div>
         </CardHeader>
         <CardContent className=" ">
-          {(TipoReporte === "ventas" && <ReporteVentas />) ||
-            (TipoReporte === "Clientes" && <ReporteClientes />)}
+          {/* {(TipoReporte === "ventas" && <ReporteVentas />) ||
+            (TipoReporte === "Clientes" && <ReporteClientes />)} */}
         </CardContent>
       </Card>
     </div>
