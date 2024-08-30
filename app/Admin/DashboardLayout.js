@@ -17,6 +17,7 @@ import {
   GalleryHorizontal,
   GalleryThumbnails,
   HistoryIcon,
+  ListOrdered,
   MessageSquareDot,
   MonitorXIcon,
   PartyPopper,
@@ -100,6 +101,12 @@ const DashboardLayout = ({ children }) => {
       name: "Productos",
       link: "/Admin/Productos",
       icon: <Beef className="w-6 h-6 text-white" />,
+      hidden: claims?.Rol?.includes("Admin") ? false : true,
+    },
+    {
+      name: "Ordernar Categorias",
+      link: "/Admin/OrdernarCategorias",
+      icon: <ListOrdered className="w-6 h-6 text-white" />,
       hidden: claims?.Rol?.includes("Admin") ? false : true,
     },
     {
