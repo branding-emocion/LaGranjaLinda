@@ -6,8 +6,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { db } from "@/firebase/firebaseClient";
+import { collection, onSnapshot } from "firebase/firestore";
 import { BadgePlus } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const LibroReclamaciones = () => {
   const [Reclamos, setReclamos] = useState([]);
@@ -54,7 +56,7 @@ const LibroReclamaciones = () => {
           </div>
         </CardHeader>
       </Card>
-      {Reclamos.map((reclamo) => (
+      {Reclamos?.map((reclamo) => (
         <></>
       ))}
     </div>

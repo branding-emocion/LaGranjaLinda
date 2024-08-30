@@ -165,8 +165,19 @@ const DashboardLayout = ({ children }) => {
 
   return (
     <div>
-      <div className="min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-gray-50  text-black ">
-        <div className="fixed flex flex-col left-0 w-14 hover:w-64 md:w-64 bg-granjaSecondary h-full text-white transition-all duration-300 border-none z-10 sidebar">
+      <div className="min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-gray-50  text-white ">
+        <div
+          className="fixed flex flex-col left-0 w-14 hover:w-64 md:w-64   h-full text-black transition-all duration-300 border-none z-10 sidebar"
+          style={{
+            filter: "drop-shadow(0px 0px 3px black)",
+
+            //  poner de background una imagen esta en "/bg-web.jpg"
+            backgroundImage: "url('/bg-web.jpg')",
+            backgroundPosition: "center",
+            backgroundAttachment: "fixed",
+            backgroundRepeat: "repeat",
+          }}
+        >
           <div className="overflow-y-auto overflow-x-hidden flex flex-col justify-between flex-grow">
             <ul className="flex flex-col py-4 space-y-1">
               <li>
@@ -179,7 +190,7 @@ const DashboardLayout = ({ children }) => {
                     </Avatar>
                   </div>
 
-                  <p className="ml-2 text-sm text-wrap tracking-wide truncate uppercase">
+                  <p className="ml-2 text-sm text-wrap tracking-wide truncate uppercase text-white">
                     {claims?.Rol} - {user?.displayName || "No Disponible"}
                   </p>
                 </div>
@@ -187,7 +198,7 @@ const DashboardLayout = ({ children }) => {
 
               <li className="px-5 hidden md:block">
                 <div className="flex flex-row items-center h-8">
-                  <div className="text-sm font-light tracking-wide text-gray-p00 uppercase">
+                  <div className="text-sm font-light tracking-wide text-gray-p00 uppercase text-white">
                     Dashboard
                   </div>
                 </div>

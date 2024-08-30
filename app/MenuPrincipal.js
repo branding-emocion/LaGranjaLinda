@@ -111,8 +111,16 @@ const MenuPrincipal = () => {
       </Link>
 
       <nav
-        style={{ filter: "drop-shadow(0px 0px 3px black)" }}
-        className={`sticky h-28 z-50 top-0 p-2 md:px-11 shadow-sm md:flex md:items-center md:justify-around 2xl:justify-around bg-granjaPrimary `}
+        style={{
+          filter: "drop-shadow(0px 0px 3px black)",
+
+          //  poner de background una imagen esta en "/bg-web.jpg"
+          backgroundImage: "url('/bg-web.jpg')",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+          backgroundRepeat: "repeat",
+        }}
+        className={`sticky h-28 z-50 top-0 left-0 right-0 p-2 md:px-11 shadow-sm md:flex md:items-center md:justify-around 2xl:justify-around   `}
       >
         <div className="  flex justify-between items-center  ">
           {/* Escudo Logo "inicio" */}
@@ -152,11 +160,11 @@ const MenuPrincipal = () => {
           </span>
         </div>
         <div className="flex flex-col   ">
-          <h1 className="hidden   lg:block lg:text-[#7d2d04] text-2xl ">
+          <h1 className="hidden   lg:block lg:text-white text-2xl ">
             Elige tu pedido, elige tu experiencia 
           </h1>
           <div
-            className={` text-center  flex flex-col h-screen md:h-auto  md:flex md:flex-row  md:items-center  z-[-1] md:z-auto md:static gap-2 absolute text-[#7d2d04] bg-[#ece4d9]    md:bg-transparent  w-full left-0 top-full md:w-auto md:py-0  md:pl-0 pl-7 md:opacity-100 opacity-0 right-[-400px] transition-all ease-in  ${
+            className={` text-center  flex flex-col h-screen md:h-auto  md:flex md:flex-row  md:items-center  z-[-1] md:z-auto md:static gap-2 absolute text-white bg-[#ece4d9]    md:bg-transparent  w-full left-0 top-full md:w-auto md:py-0  md:pl-0 pl-7 md:opacity-100 opacity-0 right-[-400px] transition-all ease-in  ${
               isOpen ? ` right-0 py-11 opacity-100` : `hidden`
             }`}
           >
@@ -196,7 +204,7 @@ const MenuPrincipal = () => {
             <Button className="bg-red-700 uppercase">Ordena Aquí</Button>
           </Link>
 
-          <div className=" uppercase lg:flex text-[#7d2d04]">
+          <div className=" uppercase lg:flex text-white">
             <p className=" w-20 text-right  h-full tracking-tight leading-4">
               Te lo LLevamos donde estes
             </p>
@@ -205,7 +213,7 @@ const MenuPrincipal = () => {
             </div>
             <div className="">
               <h1>LLamanos</h1>
-              <a className="text-[#7d2d04] text-2xl" href="tel:+310403">
+              <a className=" text-2xl" href="tel:+310403">
                 310403
               </a>
             </div>
