@@ -11,7 +11,6 @@ const Carta = () => {
           <div className="w-full h-full  rounded-lg ">
             <iframe
               src="/Carta.pdf"
-              frameborder=""
               className="w-full h-[82vh] rounded-lg"
             ></iframe>
           </div>

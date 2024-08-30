@@ -98,30 +98,38 @@ const ReporteClientes = () => {
             <p>No hay usuarios disponibles.</p>
           ) : (
             <div>
-              <Button>
-                <PDFDownloadLink
-                  document={
+              {(Orders?.length > 0 && (
+                <>
+                  <Button>
+                    <PDFDownloadLink
+                      document={
+                        <ReporteClientesPDF
+                          Orders={Orders}
+                          RangesData={RangesData}
+                        />
+                      }
+                      fileName="reporte-clientes.pdf"
+                    >
+                      {({ loading }) =>
+                        loading
+                          ? "Cargando documento..."
+                          : "Descargar Reporte PDF"
+                      }
+                    </PDFDownloadLink>
+                  </Button>
+
+                  <div className="mt-4">
+                    <h2 className="text-xl font-semibold mb-2">
+                      Previsualización del Reporte
+                    </h2>
+
                     <ReporteClientesPDF
                       Orders={Orders}
                       RangesData={RangesData}
                     />
-                  }
-                  fileName="reporte-clientes.pdf"
-                >
-                  {({ loading }) =>
-                    loading ? "Cargando documento..." : "Descargar Reporte PDF"
-                  }
-                </PDFDownloadLink>
-              </Button>
-
-              <div className="mt-4">
-                <h2 className="text-xl font-semibold mb-2">
-                  Previsualización del Reporte
-                </h2>
-                <PDFViewer style={{ width: "100%", height: "600px" }}>
-                  <ReporteClientesPDF Orders={Orders} RangesData={RangesData} />
-                </PDFViewer>
-              </div>
+                  </div>
+                </>
+              )) || <p>No hay datos para mostrar. </p>}
             </div>
           )}
         </div>

@@ -121,6 +121,7 @@ const Restaurantes = () => {
             <div className="grid grid-cols-4 gap-2 justify-center items-center">
               {Distrito?.map((distrito) => (
                 <Link
+                  key={distrito.id}
                   href={{
                     pathname: `/Admin/Restaurantes/Delyvery/${distrito.id}`,
                     query: {
