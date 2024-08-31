@@ -2,13 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { db } from "@/firebase/firebaseClient";
-import {
-  collection,
-  doc,
-  onSnapshot,
-  orderBy,
-  updateDoc,
-} from "firebase/firestore";
+import { collection, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import ProductList from "../Prueba/ProductList";
 import { Button } from "@/components/ui/button";
@@ -66,8 +60,8 @@ const OrdernarCategorias = () => {
         {" "}
         <CardHeader>
           <CardTitle>
-            Ordene y guarde como desea el orden al momento de visualizar los
-            productos
+            Ordene y guarde como desea el orden al momento de visualizar las
+            categorias
           </CardTitle>
         </CardHeader>
         <CardContent>

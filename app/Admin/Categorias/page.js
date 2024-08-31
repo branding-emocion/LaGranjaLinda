@@ -33,7 +33,7 @@ const Categorias = () => {
             id: doc.id,
             ...doc.data(),
           }))
-        )
+        ).sort((a, b) => a.Order - b.Order)
     );
   }, []);
   return (
