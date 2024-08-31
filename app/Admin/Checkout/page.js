@@ -22,6 +22,7 @@ import {
 import {
   addDoc,
   collection,
+  getDocs,
   onSnapshot,
   query,
   serverTimestamp,
@@ -74,21 +75,35 @@ const Checkout = () => {
   }, [InputValues?.Distrito]);
 
   useEffect(() => {
-    const restaurantesDb = onSnapshot(
-      collection(db, `Distritos`),
-      // orderBy("email", "asc"),
-      (snapshot) =>
-        setDistritos(
-          snapshot?.docs?.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }))
-        )
-    );
+    const obtenerDistritosAbiertos = () => {
+      const ahora = new Date();
+      const horaActual = ahora.toTimeString().slice(0, 5); // Obtiene la hora actual en formato "HH:mm"
 
-    return () => {
-      restaurantesDb();
+      const unsubscribe = onSnapshot(
+        collection(db, "Distritos"),
+        (querySnapshot) => {
+          const distritosFiltrados = querySnapshot.docs
+            .map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }))
+            .filter((distrito) => {
+              const horaInicio = distrito.HoraInicio; // HoraInicio en formato "HH:mm"
+              const horaFin = distrito.HoraFin; // HoraFin en formato "HH:mm"
+
+              // Compara la hora actual con HoraInicio y HoraFin
+              return horaActual >= horaInicio && horaActual < horaFin;
+            });
+
+          setDistritos(distritosFiltrados);
+        }
+      );
+
+      // Limpieza del snapshot cuando el componente se desmonte o la dependencia cambie
+      return () => unsubscribe();
     };
+
+    obtenerDistritosAbiertos();
   }, []);
 
   const HandlerChange = (e) => {

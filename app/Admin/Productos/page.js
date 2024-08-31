@@ -69,10 +69,12 @@ const Productos = () => {
       // orderBy("email", "asc"),
       (snapshot) =>
         setCategorias(
-          snapshot?.docs?.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }))
+          snapshot?.docs
+            ?.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }))
+            .sort((a, b) => a.Order - b.Order)
         )
     );
   }, []);
@@ -196,156 +198,161 @@ const Productos = () => {
           <CardContent>
             <div>
               <div className="mx-auto grid  container  grid-cols-1 gap-5  md:grid-cols-2 lg:grid-cols-3  ">
-                {filteredItems?.map((producto) => (
-                  <div
-                    key={producto.id}
-                    className={`w-full h-full mx-auto shadow-md border  ${
-                      producto?.Disponibilidad == "Si"
-                        ? "bg-green-200 border-green-500 "
-                        : (producto.Disponibilidad == "No" &&
-                            "bg-red-200 border-red-500 ") ||
-                          "bg-white"
-                    }  border-gray-200 rounded-lg`}
-                  >
-                    <div className="">
-                      <section className="relative w-full h-[200px]">
-                        <Image
-                          className="rounded-t-lg "
-                          fill
-                          src={producto?.Imagenes[0] || ""}
-                          alt={`Imagen de ${producto?.NombreProducto}`}
-                          style={{
-                            objectFit: "cover",
-                          }}
-                        />
-                      </section>
+                {filteredItems
+                  ?.sort((a, b) => a.Order - b.Order)
+                  .map((producto) => (
+                    <div
+                      key={producto.id}
+                      className={`w-full h-full mx-auto shadow-md border  ${
+                        producto?.Disponibilidad == "Si"
+                          ? "bg-green-200 border-green-500 "
+                          : (producto.Disponibilidad == "No" &&
+                              "bg-red-200 border-red-500 ") ||
+                            "bg-white"
+                      }  border-gray-200 rounded-lg`}
+                    >
+                      <div className="">
+                        <section className="relative w-full h-[200px]">
+                          <Image
+                            className="rounded-t-lg "
+                            fill
+                            src={producto?.Imagenes[0] || ""}
+                            alt={`Imagen de ${producto?.NombreProducto}`}
+                            style={{
+                              objectFit: "cover",
+                            }}
+                          />
+                        </section>
 
-                      <div className="py-2  px-5">
-                        <div className="space-y-1">
-                          <h1 className="text-gray-900 font-bold uppercase text-center text-2xl tracking-tight ">
-                            {producto?.NombreProducto}
-                          </h1>
-                          <h1 className="capitalize">
-                            <span className="font-semibold">Categoria: </span>
-                            {Categorias.find(
-                              (categoria) => producto.Categoria == categoria.id
-                            )?.NombreCategoria || "Sin Categoria"}
-                          </h1>
-                          <p className="line-clamp-3">{producto.Descripcion}</p>
+                        <div className="py-2  px-5">
+                          <div className="space-y-1">
+                            <h1 className="text-gray-900 font-bold uppercase text-center text-2xl tracking-tight ">
+                              {producto?.NombreProducto}
+                            </h1>
+                            <h1 className="capitalize">
+                              <span className="font-semibold">Categoria: </span>
+                              {Categorias.find(
+                                (categoria) =>
+                                  producto.Categoria == categoria.id
+                              )?.NombreCategoria || "Sin Categoria"}
+                            </h1>
+                            <p className="line-clamp-3">
+                              {producto.Descripcion}
+                            </p>
 
-                          {/* Precio */}
+                            {/* Precio */}
 
-                          <p className="text-3xl m-0 font-normal text-end ">
-                            S/ {producto?.Precio || 0}
-                          </p>
+                            <p className="text-3xl m-0 font-normal text-end ">
+                              S/ {producto?.Precio || 0}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-center gap-x-2 pb-2">
+                          {producto?.esAdicional == "No" && (
+                            <>
+                              <button
+                                title="Agregar Adicionales"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setModalAditional({
+                                    Visible: true,
+                                    Producto: producto,
+                                    ProductosAdiconales:
+                                      Productos.filter(
+                                        (item) => item.esAdicional == "Si"
+                                      ) || [],
+                                    Producto: producto,
+                                  });
+                                }}
+                                className="bg-violet-600 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-violet-600"
+                              >
+                                <Sparkle className="w-4 h-4" />
+                              </button>
+                            </>
+                          )}
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setModalQuestion({
+                                Visible: true,
+                                Producto: producto,
+                              });
+                            }}
+                            title="Preguntas adicionales"
+                            className="bg-orange-500 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-orange-600"
+                          >
+                            <CircleHelpIcon className="w-4 h-4" />
+                          </button>
+                          <button
+                            title={"Editar producto"}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setOpenModal({
+                                Visible: true,
+                                InfoEditar: producto,
+                              });
+                            }}
+                            className="bg-blue-500 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-blue-600"
+                          >
+                            <PencilIcon className="w-4 h-4" />
+                          </button>
+
+                          <button
+                            title="Eliminar producto"
+                            onClick={async (e) => {
+                              e.preventDefault();
+
+                              const Confirm = confirm(
+                                `Esta Seguro de eliminar el producto: ${producto.NombreProducto}`
+                              );
+                              if (Confirm) {
+                                const ImgRef = ref(
+                                  storage,
+                                  `Productos/${producto?.NombreProducto?.replace(
+                                    /\s+/g,
+                                    "_"
+                                  )}/`
+                                );
+
+                                await deleteDoc(
+                                  doc(db, "Productos", `${producto.id}`)
+                                );
+
+                                // Lista todos los objetos (archivos) en el directorio
+                                listAll(ImgRef)
+                                  .then((res) => {
+                                    res.items.forEach((itemRef) => {
+                                      // Ahora debes borrar cada objeto (archivo)
+                                      deleteObject(itemRef).catch((error) => {
+                                        // Maneja cualquier error
+                                        alert(
+                                          ` Error al eliminar ${itemRef.fullPath}`
+                                        );
+                                        console.log(
+                                          `Error al eliminar ${itemRef.fullPath}`,
+                                          error
+                                        );
+                                      });
+                                    });
+                                  })
+                                  .catch((error) => {
+                                    // Maneja cualquier error
+                                    console.error(
+                                      "Error al listar los objetos",
+                                      error
+                                    );
+                                  });
+                              }
+                            }}
+                            className="bg-red-500 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-red-600"
+                          >
+                            <TrashIcon className="w-4 h-4" />
+                          </button>
                         </div>
                       </div>
-
-                      <div className="flex items-center justify-center gap-x-2 pb-2">
-                        {producto?.esAdicional == "No" && (
-                          <>
-                            <button
-                              title="Agregar Adicionales"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                setModalAditional({
-                                  Visible: true,
-                                  Producto: producto,
-                                  ProductosAdiconales:
-                                    Productos.filter(
-                                      (item) => item.esAdicional == "Si"
-                                    ) || [],
-                                  Producto: producto,
-                                });
-                              }}
-                              className="bg-violet-600 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-violet-600"
-                            >
-                              <Sparkle className="w-4 h-4" />
-                            </button>
-                          </>
-                        )}
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setModalQuestion({
-                              Visible: true,
-                              Producto: producto,
-                            });
-                          }}
-                          title="Preguntas adicionales"
-                          className="bg-orange-500 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-orange-600"
-                        >
-                          <CircleHelpIcon className="w-4 h-4" />
-                        </button>
-                        <button
-                          title={"Editar producto"}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setOpenModal({
-                              Visible: true,
-                              InfoEditar: producto,
-                            });
-                          }}
-                          className="bg-blue-500 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-blue-600"
-                        >
-                          <PencilIcon className="w-4 h-4" />
-                        </button>
-
-                        <button
-                          title="Eliminar producto"
-                          onClick={async (e) => {
-                            e.preventDefault();
-
-                            const Confirm = confirm(
-                              `Esta Seguro de eliminar el producto: ${producto.NombreProducto}`
-                            );
-                            if (Confirm) {
-                              const ImgRef = ref(
-                                storage,
-                                `Productos/${producto?.NombreProducto?.replace(
-                                  /\s+/g,
-                                  "_"
-                                )}/`
-                              );
-
-                              await deleteDoc(
-                                doc(db, "Productos", `${producto.id}`)
-                              );
-
-                              // Lista todos los objetos (archivos) en el directorio
-                              listAll(ImgRef)
-                                .then((res) => {
-                                  res.items.forEach((itemRef) => {
-                                    // Ahora debes borrar cada objeto (archivo)
-                                    deleteObject(itemRef).catch((error) => {
-                                      // Maneja cualquier error
-                                      alert(
-                                        ` Error al eliminar ${itemRef.fullPath}`
-                                      );
-                                      console.log(
-                                        `Error al eliminar ${itemRef.fullPath}`,
-                                        error
-                                      );
-                                    });
-                                  });
-                                })
-                                .catch((error) => {
-                                  // Maneja cualquier error
-                                  console.error(
-                                    "Error al listar los objetos",
-                                    error
-                                  );
-                                });
-                            }
-                          }}
-                          className="bg-red-500 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-red-600"
-                        >
-                          <TrashIcon className="w-4 h-4" />
-                        </button>
-                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           </CardContent>

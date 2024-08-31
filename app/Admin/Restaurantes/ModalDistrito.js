@@ -55,18 +55,51 @@ const ModalDistrito = ({ OpenModalDistrito, setOpenModalDistrito }) => {
             `${OpenModalDistrito?.InfoEditar?.id}`
           );
 
+          let newDataGuardar = {
+            ...InputValues,
+          };
+
+          if (InputValues?.HoraInicio) {
+            newDataGuardar = {
+              ...newDataGuardar,
+              HoraInicioTimes: serverTimestamp(InputValues?.HoraInicio),
+            };
+          }
+          if (InputValues?.HoraFin) {
+            newDataGuardar = {
+              ...newDataGuardar,
+              HoraFinTimes: serverTimestamp(InputValues?.HoraFin),
+            };
+          }
+
           // Set the "capital" field of the city 'DC'
           if (Object.keys(InputValues)?.length > 0) {
             await updateDoc(UpdateRef, {
-              ...InputValues,
+              ...newDataGuardar,
             });
           }
         }
 
         closeOpenModalDistrito();
       } else {
-        const docRef = await addDoc(collection(db, "Distritos"), {
+        let newDataGuardar = {
           ...InputValues,
+        };
+
+        if (InputValues?.HoraInicio) {
+          newDataGuardar = {
+            ...newDataGuardar,
+            HoraInicioTimes: serverTimestamp(InputValues?.HoraInicio),
+          };
+        }
+        if (InputValues?.HoraFin) {
+          newDataGuardar = {
+            ...newDataGuardar,
+            HoraFinTimes: serverTimestamp(InputValues?.HoraFin),
+          };
+        }
+        const docRef = await addDoc(collection(db, "Distritos"), {
+          ...newDataGuardar,
           // add timestamp creat_at
           createdAt: serverTimestamp(),
         });
@@ -115,6 +148,50 @@ const ModalDistrito = ({ OpenModalDistrito, setOpenModalDistrito }) => {
                 autoComplete="off"
                 autoFocus
                 type="text"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="Descripcion" className="">
+                Descripción
+              </Label>
+              <Input
+                id="Descripcion"
+                name="Descripcion"
+                className="w-full text-gray-900"
+                onChange={HandlerChange}
+                defaultValue={OpenModalDistrito?.InfoEditar?.Descripcion}
+                autoComplete="off"
+                type="text"
+              />
+            </div>
+            {/* Ahorario de atención hora inicio hora fin genera el codigo laben y input para agregar la hora*/}
+            <div className="space-y-2">
+              <Label htmlFor="HoraInicio" className="">
+                Hora de Inicio
+              </Label>
+              <Input
+                id="HoraInicio"
+                name="HoraInicio"
+                className="w-full text-gray-900"
+                onChange={HandlerChange}
+                defaultValue={OpenModalDistrito?.InfoEditar?.HoraInicio}
+                autoComplete="off"
+                type="time"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="HoraFin" className="">
+                Hora de Fin
+              </Label>
+              <Input
+                id="HoraFin"
+                name="HoraFin"
+                className="w-full text-gray-900"
+                onChange={HandlerChange}
+                defaultValue={OpenModalDistrito?.InfoEditar?.HoraFin}
+                autoComplete="off"
+                type="time"
               />
             </div>
           </div>

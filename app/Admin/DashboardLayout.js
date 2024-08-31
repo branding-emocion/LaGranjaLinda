@@ -110,6 +110,12 @@ const DashboardLayout = ({ children }) => {
       hidden: claims?.Rol?.includes("Admin") ? false : true,
     },
     {
+      name: "Ordernar Productos",
+      link: "/Admin/OrdenarProductos",
+      icon: <ListOrdered className="w-6 h-6 text-white" />,
+      hidden: claims?.Rol?.includes("Admin") ? false : true,
+    },
+    {
       name: "Reservas Pendientes",
       link: `${
         claims?.Rol?.includes("Mostrador") && claims?.IdRestaurante?.length > 0

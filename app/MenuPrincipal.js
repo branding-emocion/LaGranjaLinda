@@ -177,9 +177,9 @@ const MenuPrincipal = () => {
               Inicio
             </ItemMenu>
             <ItemMenu
-              ruta="/Carta"
+              ruta="/Delivery"
               setIsOpen={setIsOpen}
-              border={pathname == "/Carta" ? true : false}
+              border={pathname == "/Delivery" ? true : false}
             >
               Nuestra Carta
             </ItemMenu>

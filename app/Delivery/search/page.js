@@ -1,11 +1,18 @@
 "use client";
 import Product from "@/components/Product";
 import { db } from "@/firebase/firebaseClient";
-import useFirestoreCollection from "@/lib/useFirestoreCollection";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import LoadingSearch from "./loading";
 import ModalProduct from "../ModalProducto";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 const Search = ({ searchParams: { q, name } }) => {
   const [Productos, setProductos] = useState([]);
@@ -15,6 +22,7 @@ const Search = ({ searchParams: { q, name } }) => {
     Visible: false,
     Produc: {},
   });
+
   useEffect(() => {
     if (q) {
       const qProductos = query(
@@ -55,12 +63,30 @@ const Search = ({ searchParams: { q, name } }) => {
         </h1>
         <h2 className="mb-5 text-gray-400">({Productos?.length} results)</h2>
 
+        <div className="py-5">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/">Inicio</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/Delivery">Categorias</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{name}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        </div>
+
         <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {loading ? (
             <LoadingSearch />
           ) : (
             <>
-              {Productos?.map((product) => (
+              {Productos?.sort((a, b) => a.Order - b.Order).map((product) => (
                 <li key={product.id}>
                   <Product
                     product={product}

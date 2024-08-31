@@ -46,7 +46,7 @@ const DraggableProduct = ({ product, index, moveProduct }) => {
         color: "#000",
       }}
     >
-      {product.NombreCategoria}
+      {product.NombreCategoria || product.NombreProducto}
     </div>
   );
 };

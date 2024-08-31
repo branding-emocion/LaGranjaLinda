@@ -35,7 +35,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const ModalRestaurantes = ({ OpenModal, setOpenModal }) => {
+const ModalRestaurantes = ({ OpenModal, setOpenModal, Distrito }) => {
   const [InputValues, setInputValues] = useState({});
   const [files, setFiles] = useState([]);
 
@@ -178,6 +178,35 @@ const ModalRestaurantes = ({ OpenModal, setOpenModal }) => {
         </DialogHeader>
         <form onSubmit={HandlerSubmit} className="space-y-4 w-full h-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="Distrito" className="">
+                Seleccione distrito<span className="text-red-600">(*)</span>
+              </Label>
+              <Select
+                required
+                defaultValue={OpenModal?.InfoEditar?.Distrito}
+                value={InputValues?.Distrito}
+                onValueChange={(e) => {
+                  setInputValues({
+                    ...InputValues,
+                    Distrito: e,
+                  });
+                }}
+                id="Distrito"
+              >
+                <SelectTrigger className="">
+                  <SelectValue placeholder="Por favor seleccione una opción" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Distrito?.map((adi, key) => (
+                    <SelectItem key={adi.id} value={adi.id}>
+                      {adi.NombreDistrito}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="NombreLocal" className="">
                 Nombre del local <span className="text-red-600">(*)</span>

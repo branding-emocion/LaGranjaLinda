@@ -11,6 +11,8 @@ import {
 import { Button } from "@/components/ui/button";
 import {
   BadgePlus,
+  DeleteIcon,
+  Edit2Icon,
   Locate,
   LocateIcon,
   PackageCheck,
@@ -36,6 +38,8 @@ const Restaurantes = () => {
 
   const [Restaurantes, setRestaurantes] = useState([]);
   const [Distrito, setDistrito] = useState([]);
+
+  console.log("Distrito", Distrito);
 
   useEffect(() => {
     onSnapshot(
@@ -64,7 +68,11 @@ const Restaurantes = () => {
   return (
     <>
       {OpenModal.Visible && (
-        <ModalRestaurantes OpenModal={OpenModal} setOpenModal={setOpenModal} />
+        <ModalRestaurantes
+          OpenModal={OpenModal}
+          setOpenModal={setOpenModal}
+          Distrito={Distrito}
+        />
       )}
       {OpenModalDistrito.Visible && (
         <ModalDistrito
@@ -98,7 +106,6 @@ const Restaurantes = () => {
               <Button
                 onClick={(e) => {
                   e.preventDefault();
-                  console.log(e);
                   setOpenModalDistrito({
                     Visible: true,
                     InfoEditar: {},
@@ -120,26 +127,59 @@ const Restaurantes = () => {
           <CardContent>
             <div className="grid grid-cols-4 gap-2 justify-center items-center">
               {Distrito?.map((distrito) => (
-                <Link
-                  key={distrito.id}
-                  href={{
-                    pathname: `/Admin/Restaurantes/Delyvery/${distrito.id}`,
-                    query: {
-                      name: distrito.NombreDistrito,
-                    },
-                  }}
-                  className=""
-                >
-                  <div className=" p-2 w-full h-full border rounded-lg mx-auto  flex justify-center items-center flex-col hover:bg-green-50">
+                <div key={distrito.id} className="">
+                  <div className=" p-2 w-full h-full border rounded-lg mx-auto  flex justify-center items-center flex-col ">
                     <h1 className="uppercase">{distrito?.NombreDistrito}</h1>
-                    <div
-                      title="Direcciones delivery"
-                      className="  space-x-1.5 rounded-lg  px-4 py-1.5  duration-100 w-full h-full mx-auto  "
-                    >
-                      <PackageCheck className="w-4 h-4 mx-auto" />
+                    <div className="  space-x-1.5 rounded-lg  px-4 py-1.5  duration-100 w-full h-full mx-auto flex justify-center items-center   ">
+                      <Link
+                        href={{
+                          pathname: `/Admin/Restaurantes/Delyvery/${distrito.id}`,
+                          query: {
+                            name: distrito.NombreDistrito,
+                          },
+                        }}
+                      >
+                        <Button
+                          title="Agregar direcciones"
+                          className="bg-blue-500 text-white"
+                        >
+                          <PackageCheck className="w-4 h-4 mx-auto" />
+                        </Button>
+                      </Link>
+                      <Button
+                        title="Editar Distrito"
+                        className="bg-yellow-700 text-white"
+                        onClick={(e) => {
+                          e.preventDefault();
+
+                          setOpenModalDistrito({
+                            Visible: true,
+                            InfoEditar: distrito,
+                          });
+                        }}
+                      >
+                        <Edit2Icon className=" text-white w-4 h-4" />
+                      </Button>
+                      <Button
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          const Confirm = confirm(
+                            `Esta Seguro de eliminar el Distrito: ${distrito.NombreDistrito}`
+                          );
+                          if (Confirm) {
+                            await deleteDoc(
+                              doc(db, "Distritos", `${distrito.id}`)
+                            );
+                          }
+                        }}
+                        title="Agregar direcciones"
+                        className="bg-red-500 text-white"
+                      >
+                        <DeleteIcon className="w-4 h-4 mx-auto" />
+                      </Button>
                     </div>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
             <div className="mx-auto grid max-w-6xl  grid-cols-1 gap-6 p-6 sm:grid-cols-2 md:grid-cols-3  ">
