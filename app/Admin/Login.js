@@ -6,10 +6,12 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import ModalCreateUsuario from "./ModaCreateUsuario";
 import { useToast } from "@/components/ui/use-toast";
+import ModalRecoveryPass from "./ModalRecoveryPass";
 
 const Login = () => {
   const [InputValue, setInputValue] = useState({});
   const [ModalNewUser, setModalNewUser] = useState(false);
+  const [OpenModalReset, setOpenModalReset] = useState(false);
   const { toast } = useToast();
 
   const onSubmit = (e) => {
@@ -60,6 +62,13 @@ const Login = () => {
         <ModalCreateUsuario
           ModalNewUser={ModalNewUser}
           setModalNewUser={setModalNewUser}
+        />
+      )}
+
+      {OpenModalReset && (
+        <ModalRecoveryPass
+          OpenModalReset={OpenModalReset}
+          setOpenModalReset={setOpenModalReset}
         />
       )}
       <div className="flex justify-center h-screen">
@@ -135,12 +144,15 @@ const Login = () => {
                     >
                       Contraseña
                     </label>
-                    <a
-                      href="#"
+                    <div
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setOpenModalReset(true);
+                      }}
                       className="text-sm text-gray-600 focus:text-[#7d2d04] hover:text-[#7d2d04] hover:underline"
                     >
                       Olvido su contraseña?
-                    </a>
+                    </div>
                   </div>
                   <input
                     autoComplete="off"
