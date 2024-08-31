@@ -1,12 +1,13 @@
 "use client";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import React, { useState } from "react";
-import { auth } from "@/firebase/firebaseClient";
+import { auth, db, googleProvider } from "@/firebase/firebaseClient";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import ModalCreateUsuario from "./ModaCreateUsuario";
 import { useToast } from "@/components/ui/use-toast";
 import ModalRecoveryPass from "./ModalRecoveryPass";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 
 const Login = () => {
   const [InputValue, setInputValue] = useState({});
@@ -178,7 +179,38 @@ const Login = () => {
                     <hr className="my-6 border-gray-300 w-full" />
                     <button
                       type="button"
-                      disabled
+                      onClick={(e) => {
+                        e.preventDefault();
+
+                        signInWithPopup(auth, googleProvider)
+                          .then(async (result) => {
+                            console.log("result", result);
+
+                            const user = result.user;
+
+                            console.log("user", user);
+                            // setDoc
+                            await setDoc(doc(db, "Usuarios", user.uid), {
+                              uid: user.uid,
+                              email: user.email,
+                              displayName: user.displayName,
+                              photoURL: user.photoURL,
+                              lastLogin: serverTimestamp(),
+                              Rol: "Cliente",
+                            });
+
+                            // IdP data available using getAdditionalUserInfo(result)
+                            // ...
+                          })
+                          .catch((error) => {
+                            // Handle Errors here.
+                            const errorCode = error.code;
+                            const errorMessage = error.message;
+                            console.log("error", error);
+
+                            // ...
+                          });
+                      }}
                       className="w-full block bg-white hover:bg-gray-100 focus:bg-gray-100 text-gray-900 font-semibold rounded-lg px-4 py-3 border border-gray-300 disabled:cursor-not-allowed"
                     >
                       <div className="flex items-center justify-center">

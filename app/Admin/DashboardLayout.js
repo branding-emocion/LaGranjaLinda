@@ -32,6 +32,7 @@ import { collection, onSnapshot, query, where } from "firebase/firestore";
 
 const DashboardLayout = ({ children }) => {
   const [{ user, claims }, loading, error] = useAuthState(auth);
+
   const [Tareas, setTareas] = useState([]);
   const [CantReservas, setCantReservas] = useState(null);
   const pathname = usePathname();
@@ -197,7 +198,13 @@ const DashboardLayout = ({ children }) => {
                   <div className="inline-flex justify-center items-center ml-4">
                     {/* <User className="w-6 h-6 text-white" /> */}
                     <Avatar className="h-6 w-6 lg:w-9 lg:h-9">
-                      <AvatarImage src="https://github.com/shadcn.png" />
+                      <AvatarImage
+                        src={
+                          !user.photoURL
+                            ? "https://github.com/shadcn.png"
+                            : user.photoURL
+                        }
+                      />
                       <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
                   </div>
