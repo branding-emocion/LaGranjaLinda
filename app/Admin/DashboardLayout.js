@@ -75,44 +75,44 @@ const DashboardLayout = ({ children }) => {
     {
       name: "Usuarios",
       link: "/Admin/Usuarios",
-      icon: <Users className="w-6 h-6 text-white" />,
+      icon: <Users className="w-6 h-6 " />,
       hidden: claims?.Rol?.includes("Admin") ? false : true,
     },
     {
       name: "Carrousel",
       link: "/Admin/Carrousel",
-      icon: <GalleryHorizontal className="w-6 h-6 text-white" />,
+      icon: <GalleryHorizontal className="w-6 h-6 " />,
       hidden: claims?.Rol?.includes("Admin") ? false : true,
     },
 
     {
       name: "Restaurantes",
       link: "/Admin/Restaurantes",
-      icon: <Utensils className="w-6 h-6 text-white" />,
+      icon: <Utensils className="w-6 h-6 " />,
       hidden: claims?.Rol?.includes("Admin") ? false : true,
     },
     {
       name: "Categorias",
       link: "/Admin/Categorias",
-      icon: <BrickWall className="w-6 h-6 text-white" />,
+      icon: <BrickWall className="w-6 h-6 " />,
       hidden: claims?.Rol?.includes("Admin") ? false : true,
     },
     {
       name: "Productos",
       link: "/Admin/Productos",
-      icon: <Beef className="w-6 h-6 text-white" />,
+      icon: <Beef className="w-6 h-6 " />,
       hidden: claims?.Rol?.includes("Admin") ? false : true,
     },
     {
       name: "Ordernar Categorias",
       link: "/Admin/OrdernarCategorias",
-      icon: <ListOrdered className="w-6 h-6 text-white" />,
+      icon: <ListOrdered className="w-6 h-6 " />,
       hidden: claims?.Rol?.includes("Admin") ? false : true,
     },
     {
       name: "Ordernar Productos",
       link: "/Admin/OrdenarProductos",
-      icon: <ListOrdered className="w-6 h-6 text-white" />,
+      icon: <ListOrdered className="w-6 h-6 " />,
       hidden: claims?.Rol?.includes("Admin") ? false : true,
     },
     {
@@ -122,7 +122,7 @@ const DashboardLayout = ({ children }) => {
           ? `/Admin/Reservas/${claims?.IdRestaurante}`
           : "/Admin/Reservas"
       }`,
-      icon: <CalendarClock className="w-6 h-6 text-white" />,
+      icon: <CalendarClock className="w-6 h-6 " />,
       // Cant: true,
       hidden:
         claims?.Rol?.includes("Admin") || claims?.Rol?.includes("Mostrador")
@@ -136,7 +136,7 @@ const DashboardLayout = ({ children }) => {
           ? `/Admin/MesasHoy/${claims?.IdRestaurante}`
           : "/Admin/MesasHoy"
       }`,
-      icon: <CalendarCheck className="w-6 h-6 text-white" />,
+      icon: <CalendarCheck className="w-6 h-6 " />,
       hidden:
         claims?.Rol?.includes("Admin") || claims?.Rol?.includes("Mostrador")
           ? false
@@ -147,25 +147,25 @@ const DashboardLayout = ({ children }) => {
       name: "Realizar Pago",
       link: `/Admin/Checkout`,
 
-      icon: <CircleDollarSign className="w-6 h-6 text-white" />,
+      icon: <CircleDollarSign className="w-6 h-6 " />,
     },
     {
       name: "Historial Compras",
       link: `/Admin/HistorialCompras`,
 
-      icon: <HistoryIcon className="w-6 h-6 text-white" />,
+      icon: <HistoryIcon className="w-6 h-6 " />,
     },
 
     {
       name: "Reportes",
       link: "/Admin/Reportes",
-      icon: <FileText className="w-6 h-6 text-white" />,
+      icon: <FileText className="w-6 h-6 " />,
       hidden: claims?.Rol?.includes("Admin") ? false : true,
     },
     {
       name: "LibroReclamaciones",
       link: "/Admin/LibroReclamaciones",
-      icon: <BookmarkMinus className="w-6 h-6 text-white" />,
+      icon: <BookmarkMinus className="w-6 h-6 " />,
       hidden: claims?.Rol?.includes("Admin") ? false : true,
     },
   ];
@@ -180,16 +180,15 @@ const DashboardLayout = ({ children }) => {
     <div>
       <div className="min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-gray-50  text-white ">
         <div
-          className="fixed flex flex-col left-0 w-14 hover:w-64 md:w-64   h-full text-black transition-all duration-300 border-none z-10 sidebar"
-          style={{
-            filter: "drop-shadow(0px 0px 3px black)",
+          className="fixed bg-[#c5b697] flex flex-col left-0 w-14 hover:w-64 md:w-64   h-full text-black transition-all duration-300 border-none z-10 sidebar"
+          // style={{
+          //   filter: "drop-shadow(0px 0px 3px black)",
 
-            //  poner de background una imagen esta en "/bg-web.jpg"
-            backgroundImage: "url('/bg-web.jpg')",
-            backgroundPosition: "center",
-            backgroundAttachment: "fixed",
-            backgroundRepeat: "repeat",
-          }}
+          //    backgroundImage: "url('/bg-web.jpg')",
+          //   backgroundPosition: "center",
+          //   backgroundAttachment: "fixed",
+          //   backgroundRepeat: "repeat",
+          // }}
         >
           <div className="overflow-y-auto overflow-x-hidden flex flex-col justify-between flex-grow">
             <ul className="flex flex-col py-4 space-y-1">
@@ -203,7 +202,7 @@ const DashboardLayout = ({ children }) => {
                     </Avatar>
                   </div>
 
-                  <p className="ml-2 text-sm text-wrap tracking-wide truncate uppercase text-white">
+                  <p className="ml-2 text-sm text-wrap tracking-wide truncate uppercase ">
                     {claims?.Rol} - {user?.displayName || "No Disponible"}
                   </p>
                 </div>
@@ -211,7 +210,7 @@ const DashboardLayout = ({ children }) => {
 
               <li className="px-5 hidden md:block">
                 <div className="flex flex-row items-center h-8">
-                  <div className="text-sm font-light tracking-wide text-gray-p00 uppercase text-white">
+                  <div className="text-sm font-light tracking-wide text-gray-p00 uppercase ">
                     Dashboard
                   </div>
                 </div>
@@ -222,9 +221,9 @@ const DashboardLayout = ({ children }) => {
                     <>
                       <Link
                         href={men.link}
-                        className={` flex flex-row items-center h-11 focus:outline-none hover:bg-yellow-800  text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-yellow-600  pr-6 ${
+                        className={` flex flex-row items-center h-11 focus:outline-none hover:bg-yellow-800  text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-yellow-600  hover:text-white pr-6  ${
                           pathname.includes(men.link) &&
-                          "bg-yellow-800 border-yellow-600 "
+                          "bg-yellow-800 border-yellow-600 text-white "
                         }`}
                       >
                         <span className="inline-flex justify-center items-center ml-4">
@@ -251,7 +250,7 @@ const DashboardLayout = ({ children }) => {
                   className="cursor-pointer relative flex flex-row items-center h-11 focus:outline-none hover:bg-blue-800  text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-blue-500  pr-6"
                 >
                   <span className="inline-flex justify-center items-center ml-4">
-                    <MonitorXIcon className="w-6 h-6 text-white" />{" "}
+                    <MonitorXIcon className="w-6 h-6 " />{" "}
                   </span>
                   <span className="ml-2 text-sm tracking-wide truncate">
                     Cerrar sesión
