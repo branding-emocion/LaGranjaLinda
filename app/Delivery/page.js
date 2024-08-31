@@ -16,10 +16,12 @@ const Delivery = () => {
       // orderBy("email", "asc"),
       (snapshot) => {
         setCategorias(
-          snapshot?.docs?.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }))
+          snapshot?.docs
+            ?.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }))
+            .sort((a, b) => a.Order - b.Order)
         );
         setLoading(false);
       }
