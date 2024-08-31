@@ -143,6 +143,19 @@ const DashboardLayout = ({ children }) => {
           ? false
           : true,
     },
+    {
+      name: "OrdenesMostrador",
+      link: `${
+        claims?.Rol?.includes("Mostrador") && claims?.IdRestaurante?.length > 0
+          ? `/Admin/OrdenesMostrador/${claims?.IdRestaurante}`
+          : "/Admin/OrdenesMostrador"
+      }`,
+      icon: <CalendarCheck className="w-6 h-6 " />,
+      hidden:
+        claims?.Rol?.includes("Admin") || claims?.Rol?.includes("Mostrador")
+          ? false
+          : true,
+    },
     ,
     {
       name: "Realizar Pago",
