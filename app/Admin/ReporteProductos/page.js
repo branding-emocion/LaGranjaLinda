@@ -6,7 +6,7 @@ import { DateRange } from "react-date-range";
 // import { es } from "date-fns/locale";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
-import { es } from "date-fns/locale";
+import { ca, es } from "date-fns/locale";
 import {
   Card,
   CardContent,
@@ -55,20 +55,27 @@ const ReporteProductos = () => {
           ...doc.data(),
         }));
 
-        const DataNormalizada = ordersDB?.reduce((acc, order) => {
-          let key = order.userId;
+        let DataNormalizadaCart = [];
+
+        for (const element of ordersDB) {
+          const cartOrders = element?.cart;
+
+          for (const producto of cartOrders) {
+            DataNormalizadaCart.push(producto);
+          }
+        }
+
+        const DataNormalizada = DataNormalizadaCart?.reduce((acc, order) => {
+          let key = order.NombreProducto;
           if (!acc[key]) {
             acc[key] = {
-              usuario: order.userId,
-              nombre: order.displayName,
-              email: order.email,
-              telefono: order.phoneNumber,
-              orders: [],
-              CantidadProductos: order?.cart?.length || 0,
+              nombreproducto: order.NombreProducto,
+
+              Productos: [],
             };
           }
 
-          acc[key].orders.push(order);
+          acc[key].Productos.push(order);
           return acc;
         }, {});
 
