@@ -1,15 +1,25 @@
 "use client";
 import { db } from "@/firebase/firebaseClient";
-import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import ReporteClientesPDF from "./ReportesClientesPDF";
-import { Button } from "@/components/ui/button";
 import { DateRange } from "react-date-range";
 // import { es } from "date-fns/locale";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { es } from "date-fns/locale";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+import dynamic from "next/dynamic";
+
+const ReporteClientesPDF = dynamic(() => import("./ReportesClientesPDF"), {
+  ssr: false,
+});
 
 const ReporteClientes = () => {
   const [loading, setLoading] = useState(true);
@@ -54,13 +64,13 @@ const ReporteClientes = () => {
               email: order.email,
               telefono: order.phoneNumber,
               orders: [],
+              CantidadProductos: order?.cart?.length || 0,
             };
           }
 
           acc[key].orders.push(order);
           return acc;
         }, {});
-        console.log("DataNormalizada", DataNormalizada);
 
         setOrders(DataNormalizada);
       } catch (error) {
@@ -79,61 +89,59 @@ const ReporteClientes = () => {
     key: "selection",
   };
   return (
-    <div className="p-4">
-      <div className="w-full h-full mx-auto flex justify-center items-center bg-gray-50">
-        <DateRange
-          ranges={[selectionRange]}
-          maxDate={new Date()}
-          onChange={HandlerFecha}
-          locale={es}
-        />
-      </div>
-      {loading ? (
-        <p>Cargando...</p>
-      ) : (
-        <div>
-          <h1 className="text-2xl font-bold mb-4">Reporte de Clientes</h1>
+    <div className="space-y-6">
+      <Card className="shadow-md">
+        <CardHeader>
+          <CardTitle>Bienvenido al módulo de Reporte de Ventas</CardTitle>
 
-          {Orders?.length === 0 ? (
-            <p>No hay usuarios disponibles.</p>
-          ) : (
-            <div>
-              {(Orders?.length > 0 && (
-                <>
-                  <Button>
-                    <PDFDownloadLink
-                      document={
+          <CardDescription>
+            En esta sección, puedes ver los reportes de las ventas por cliente
+          </CardDescription>
+        </CardHeader>
+      </Card>
+
+      <Card className="shadow-md ">
+        <CardContent className=" ">
+          <div className="p-4">
+            <div className="w-full h-full mx-auto flex justify-center items-center bg-gray-50">
+              <DateRange
+                ranges={[selectionRange]}
+                maxDate={new Date()}
+                onChange={HandlerFecha}
+                locale={es}
+              />
+            </div>
+            {loading ? (
+              <p>Cargando...</p>
+            ) : (
+              <div>
+                <h1 className="text-2xl font-bold mb-4">
+                  Reporte de Clientes y ventas
+                </h1>
+
+                {Object.keys(Orders)?.length === 0 ? (
+                  <p>No hay usuarios disponibles.</p>
+                ) : (
+                  <div>
+                    {(Object.keys(Orders)?.length > 0 && (
+                      <div className="mt-4">
+                        <h2 className="text-xl font-semibold mb-2">
+                          Previsualización del Reporte
+                        </h2>
+
                         <ReporteClientesPDF
                           Orders={Orders}
                           RangesData={RangesData}
                         />
-                      }
-                      fileName="reporte-clientes.pdf"
-                    >
-                      {({ loading }) =>
-                        loading
-                          ? "Cargando documento..."
-                          : "Descargar Reporte PDF"
-                      }
-                    </PDFDownloadLink>
-                  </Button>
-
-                  <div className="mt-4">
-                    <h2 className="text-xl font-semibold mb-2">
-                      Previsualización del Reporte
-                    </h2>
-
-                    <ReporteClientesPDF
-                      Orders={Orders}
-                      RangesData={RangesData}
-                    />
+                      </div>
+                    )) || <p>No hay datos para mostrar. </p>}
                   </div>
-                </>
-              )) || <p>No hay datos para mostrar. </p>}
-            </div>
-          )}
-        </div>
-      )}
+                )}
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

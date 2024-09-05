@@ -12,7 +12,7 @@ import {
 import { db } from "@/firebase/firebaseClient";
 import { collection, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import ProductList from "../Prueba/ProductList";
+import ProductList from "../ReporteVentas/ProductList";
 
 const OrderProductos = () => {
   const [Categorias, setCategorias] = useState([]);
