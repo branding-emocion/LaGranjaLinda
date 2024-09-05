@@ -7,7 +7,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import dynamic from "next/dynamic";
 import React, { useState } from "react";
+
+const ReporteVentas = dynamic(() => import("./ReporteVentas"), {
+  ssr: false,
+});
+const ReporteClientes = dynamic(() => import("./ReporteClientes"), {
+  ssr: false,
+});
 
 const Reportes = () => {
   const [TipoReporte, setTipoReporte] = useState({});
@@ -46,8 +54,8 @@ const Reportes = () => {
           </div>
         </CardHeader>
         <CardContent className=" ">
-          {/* {(TipoReporte === "ventas" && <ReporteVentas />) ||
-            (TipoReporte === "Clientes" && <ReporteClientes />)} */}
+          {(TipoReporte === "ventas" && <ReporteVentas />) ||
+            (TipoReporte === "Clientes" && <ReporteClientes />)}
         </CardContent>
       </Card>
     </div>

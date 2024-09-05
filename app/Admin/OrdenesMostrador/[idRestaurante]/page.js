@@ -91,13 +91,7 @@ const OrdenesRestaurante = ({ params: { idRestaurante } }) => {
             <CardTitle>Lista de Reservas para hoy</CardTitle>
 
             <div></div>
-            <div className="w-full h-full mx-auto flex justify-center items-center bg-gray-50">
-              {/* <DateRange
-                ranges={[selectionRange]}
-                onChange={HandlerFecha}
-                locale={es}
-              /> */}
-            </div>
+            <div className="w-full h-full mx-auto flex justify-center items-center bg-gray-50"></div>
 
             {/* Vamos a agregar un buscador de reservas por nombre */}
 

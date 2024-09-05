@@ -187,6 +187,24 @@ const Checkout = () => {
           e.preventDefault();
 
           try {
+            if (
+              Math.round(
+                (parseFloat(TotalValue) +
+                  parseFloat(
+                    InputValues?.Entrega == "Delivery"
+                      ? InputValues?.Direccion
+                      : 0
+                  )) *
+                  100
+              ) < 20000
+            ) {
+              toast({
+                title: "Error al crear el token",
+                description: "El monto mínimo de compra es de S/ 20.00",
+              });
+              return;
+            }
+
             const settings = {
               title: "La Granja Linda",
               currency: "PEN",
@@ -451,19 +469,7 @@ const Checkout = () => {
                     type="text"
                   />
                 </div>
-                {/* <div className="space-y-2">
-                  <Label htmlFor="Numero" className="">
-                    Número
-                   </Label>
-                  <Input
-                    id="Numero"
-                    name="Numero"
-                    className="w-full text-gray-900"
-                    onChange={HandlerChange}
-                     autoComplete="off"
-                    type="text"
-                  />
-                </div> */}
+
                 <div className="space-y-2">
                   <Label htmlFor="Interior" className="">
                     Dptp / Interior (Opcional)
