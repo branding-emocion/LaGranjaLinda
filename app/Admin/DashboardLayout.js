@@ -21,6 +21,7 @@ import {
   MessageSquareDot,
   MonitorXIcon,
   PartyPopper,
+  PartyPopperIcon,
   Users,
   Utensils,
   YoutubeIcon,
@@ -77,6 +78,12 @@ const DashboardLayout = ({ children }) => {
       name: "Usuarios",
       link: "/Admin/Usuarios",
       icon: <Users className="w-6 h-6 " />,
+      hidden: claims?.Rol?.includes("Admin") ? false : true,
+    },
+    {
+      name: "Imagen Promo",
+      link: "/Admin/ImagenPromo",
+      icon: <PartyPopperIcon className="w-6 h-6 " />,
       hidden: claims?.Rol?.includes("Admin") ? false : true,
     },
     {

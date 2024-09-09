@@ -9,16 +9,19 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 const BasletInterseption = () => {
   const router = useRouter();
+
+  const pathname = usePathname();
 
   function onDismiss() {
     router.back();
   }
   return (
     <Dialog
-      open
+      open={pathname.includes("/basket") ? true : false}
       onOpenChange={(isOpen) => {
         if (!isOpen) {
           onDismiss();

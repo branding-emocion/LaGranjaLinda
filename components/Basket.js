@@ -60,12 +60,14 @@ const Basket = ({ hiddenCheckout }) => {
         </p>
 
         {!hiddenCheckout && (
-          <a href="/Admin/Checkout" rel="noopener noreferrer">
+          <Link href="/Admin/Checkout">
+            {/* <a href="/Admin/Checkout" rel="noopener noreferrer"> */}
             <Button className="mt-5 h-20 bg-[#7d2d04] hover:bg-[#7d2d04]/70 w-full">
               {" "}
               Checkout
             </Button>
-          </a>
+            {/* </a> */}
+          </Link>
         )}
       </div>
     </div>
