@@ -187,25 +187,29 @@ const Carousel = () => {
                 Link Imagenes
               </label>
 
-              {BannerInicio?.map((imagen, index) => (
-                <div key={index}>
-                  <Label>Imagen {index + 1}</Label>{" "}
-                  <Input
-                    // defaultValue={
-                    //   LinksBanner?.find((e) => e?.index === index)?.link || ""
-                    // }
-                    onChange={(e) => {
-                      const { value } = e.target;
+              {BannerInicio?.map((imagen, index) => {
+                const { link } =
+                  LinksBanner?.find((e) => e?.index == index) || {};
+                console.log("link", link);
 
-                      setLinksBanner((prev) => ({
-                        ...prev,
-                        [index]: { link: value, index },
-                      }));
-                    }}
-                    type="text"
-                  />
-                </div>
-              ))}
+                return (
+                  <div key={index}>
+                    <Label>Imagen {index + 1}</Label>{" "}
+                    <Input
+                      defaultValue={link || ""}
+                      onChange={(e) => {
+                        const { value } = e.target;
+
+                        setLinksBanner((prev) => ({
+                          ...prev,
+                          [index]: { link: value, index },
+                        }));
+                      }}
+                      type="text"
+                    />
+                  </div>
+                );
+              })}
               <Button
                 title="Guardar"
                 className="bg-lagranja"
