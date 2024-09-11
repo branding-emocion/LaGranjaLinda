@@ -20,46 +20,55 @@ const HomePage = () => {
     Visible: false,
     info: {},
   });
+
   useEffect(() => {
-    const docRef = doc(db, "Carrousel", "Inicio");
-    const unsubscribe = onSnapshot(
-      docRef,
+    // Suscripción a los cambios en el documento de "Carrousel"
+    const carrouselRef = doc(db, "Carrousel", "Inicio");
+    const carrouselUnsubscribe = onSnapshot(
+      carrouselRef,
       (snapshot) => {
         if (snapshot.exists()) {
           setBannerInicio(snapshot.data()?.Imagenes || []);
           setTextosBanner(snapshot.data()?.LinksBanner || []);
           setIsLoading(false);
         } else {
-          console.log("No matching documents.");
+          console.log("No matching documents for Carrousel.");
         }
       },
       (error) => {
-        console.error("Error fetching document:", error);
+        console.error("Error fetching Carrousel document:", error);
       }
     );
 
-    const PromoRef = doc(db, "Promos", "Inicio");
-    const getPromo = async () => {
-      const docSnap = await getDoc(PromoRef);
-      if (docSnap.exists()) {
-        setOpenModalPromo({
-          Visible: true,
-          info: docSnap.data(),
-        });
-      } else {
-        console.log("No such document!");
+    // Suscripción a los cambios en el documento de "Promos"
+    const promoRef = doc(db, "Promos", "Inicio");
+    const promoUnsubscribe = onSnapshot(
+      promoRef,
+      (snapshot) => {
+        if (snapshot.exists()) {
+          setOpenModalPromo({
+            Visible: true,
+            info: snapshot.data(),
+          });
+        } else {
+          console.log("No such document for Promo!");
+        }
+      },
+      (error) => {
+        console.error("Error fetching Promo document: ", error);
       }
-    };
+    );
 
-    // Limpieza del listener cuando el componente se desmonta
+    // Limpieza de las suscripciones cuando el componente se desmonta
     return () => {
-      unsubscribe();
-      getPromo();
+      carrouselUnsubscribe();
+      promoUnsubscribe();
     };
   }, []);
+
   return (
     <div className="">
-      {OpenModalPromo.Visible && (
+      {OpenModalPromo?.info?.Imagenes?.length > 0 && OpenModalPromo.Visible && (
         <ModalPromo
           OpenModalPromo={OpenModalPromo}
           setOpenModalPromo={setOpenModalPromo}
