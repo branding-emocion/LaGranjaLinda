@@ -20,8 +20,6 @@ const ModalPromo = ({ OpenModalPromo, setOpenModalPromo }) => {
     });
   };
 
-  console.log(OpenModalPromo);
-
   return (
     <Dialog open={OpenModalPromo?.Visible} onOpenChange={closeOpenModalPromo}>
       <DialogContent className="h-auto  w-[90%] md:w-full max-h-[95vh] overflow-auto   sm:max-w-4xl">
