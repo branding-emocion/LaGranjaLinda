@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+"use client";
 import {
   Dialog,
   DialogContent,
@@ -6,11 +6,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
-import { useToast } from "@/components/ui/use-toast";
-import React, { useState } from "react";
+import React from "react";
 
 const ModalPromo = ({ OpenModalPromo, setOpenModalPromo }) => {
   const closeOpenModalPromo = () => {
