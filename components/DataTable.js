@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -34,11 +34,13 @@ import {
 } from "@tanstack/react-table";
 
 import { cn } from "@/lib/utils";
+
 export default function DataTable({ data, columns, styles, search }) {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
+  const [RolSelected, setRolSelected] = useState(null);
 
   const table = useReactTable({
     data,
@@ -64,6 +66,30 @@ export default function DataTable({ data, columns, styles, search }) {
     },
   });
 
+  // Generar un objeto que agrupe los roles de los datos
+  const Roles = data?.reduce((acc, curr) => {
+    const keyRol = curr.Rol;
+    if (!acc[keyRol]) {
+      acc[keyRol] = {
+        Roles: [],
+        Rol: keyRol,
+      };
+    }
+    acc[keyRol].Roles.push(curr);
+    return acc;
+  }, {});
+
+  // Actualiza el filtro por rol cuando se seleccione un rol
+  useEffect(() => {
+    if (RolSelected?.Rol) {
+      // Aplica el filtro a la columna "Rol"
+      table.getColumn("Rol")?.setFilterValue(RolSelected.Rol);
+    } else {
+      // Resetea el filtro si no hay un rol seleccionado
+      table.getColumn("Rol")?.setFilterValue("");
+    }
+  }, [RolSelected, table]);
+
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
@@ -77,6 +103,30 @@ export default function DataTable({ data, columns, styles, search }) {
           }
           className="max-w-sm"
         />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="ml-auto">
+              Roles <ChevronDown className="ml-2 h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {Object.values(Roles)?.map((column, key) => {
+              return (
+                <DropdownMenuCheckboxItem
+                  key={key}
+                  className="capitalize"
+                  checked={RolSelected?.Rol === column.Rol}
+                  onCheckedChange={() => {
+                    setRolSelected(column);
+                  }}
+                >
+                  {column.Rol}
+                </DropdownMenuCheckboxItem>
+              );
+            })}
+          </DropdownMenuContent>
+        </DropdownMenu>
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
@@ -109,18 +159,16 @@ export default function DataTable({ data, columns, styles, search }) {
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>

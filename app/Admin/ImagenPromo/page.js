@@ -118,7 +118,6 @@ const ImagenPromo = () => {
                     e.preventDefault();
 
                     try {
-                      debugger;
                       setIsLoading(true);
                       const NewBanner = Files?.filter((baner) => baner.name);
 

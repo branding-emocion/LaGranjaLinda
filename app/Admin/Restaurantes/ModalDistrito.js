@@ -166,34 +166,6 @@ const ModalDistrito = ({ OpenModalDistrito, setOpenModalDistrito }) => {
               />
             </div>
             {/* Ahorario de atención hora inicio hora fin genera el codigo laben y input para agregar la hora*/}
-            <div className="space-y-2">
-              <Label htmlFor="HoraInicio" className="">
-                Hora de Inicio
-              </Label>
-              <Input
-                id="HoraInicio"
-                name="HoraInicio"
-                className="w-full text-gray-900"
-                onChange={HandlerChange}
-                defaultValue={OpenModalDistrito?.InfoEditar?.HoraInicio}
-                autoComplete="off"
-                type="time"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="HoraFin" className="">
-                Hora de Fin
-              </Label>
-              <Input
-                id="HoraFin"
-                name="HoraFin"
-                className="w-full text-gray-900"
-                onChange={HandlerChange}
-                defaultValue={OpenModalDistrito?.InfoEditar?.HoraFin}
-                autoComplete="off"
-                type="time"
-              />
-            </div>
           </div>
 
           <Button
