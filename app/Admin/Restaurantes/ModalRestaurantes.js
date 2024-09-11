@@ -183,7 +183,6 @@ const ModalRestaurantes = ({ OpenModal, setOpenModal, Distrito }) => {
                 Seleccione distrito<span className="text-red-600">(*)</span>
               </Label>
               <Select
-                required
                 defaultValue={OpenModal?.InfoEditar?.Distrito}
                 value={InputValues?.Distrito}
                 onValueChange={(e) => {
@@ -221,6 +220,34 @@ const ModalRestaurantes = ({ OpenModal, setOpenModal, Distrito }) => {
                 autoComplete="off"
                 autoFocus
                 type="text"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="HoraInicio" className="">
+                Hora de Inicio
+              </Label>
+              <Input
+                id="HoraInicio"
+                name="HoraInicio"
+                className="w-full text-gray-900"
+                onChange={HandlerChange}
+                defaultValue={OpenModal?.InfoEditar?.HoraInicio}
+                autoComplete="off"
+                type="time"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="HoraFin" className="">
+                Hora de Fin
+              </Label>
+              <Input
+                id="HoraFin"
+                name="HoraFin"
+                className="w-full text-gray-900"
+                onChange={HandlerChange}
+                defaultValue={OpenModal?.InfoEditar?.HoraFin}
+                autoComplete="off"
+                type="time"
               />
             </div>
             <div className="space-y-2">

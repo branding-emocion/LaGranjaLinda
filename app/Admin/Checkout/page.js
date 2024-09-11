@@ -50,7 +50,10 @@ const Checkout = () => {
   const [Direcciones, setDirecciones] = useState([]);
   const [stateSucess, setstateSucess] = useState(false);
   const [Distritos, setDistritos] = useState([]);
+  const [Restaurantes, setRestaurantes] = useState([]);
   const TotalValue = getCartTotalValor(cart);
+
+  console.log("Restaurantes", Restaurantes);
 
   useEffect(() => {
     if (InputValues?.Distrito) {
@@ -76,24 +79,13 @@ const Checkout = () => {
 
   useEffect(() => {
     const obtenerDistritosAbiertos = () => {
-      const ahora = new Date();
-      const horaActual = ahora.toTimeString().slice(0, 5); // Obtiene la hora actual en formato "HH:mm"
-
       const unsubscribe = onSnapshot(
         collection(db, "Distritos"),
         (querySnapshot) => {
-          const distritosFiltrados = querySnapshot.docs
-            .map((doc) => ({
-              id: doc.id,
-              ...doc.data(),
-            }))
-            .filter((distrito) => {
-              const horaInicio = distrito.HoraInicio; // HoraInicio en formato "HH:mm"
-              const horaFin = distrito.HoraFin; // HoraFin en formato "HH:mm"
-
-              // Compara la hora actual con HoraInicio y HoraFin
-              return horaActual >= horaInicio && horaActual < horaFin;
-            });
+          const distritosFiltrados = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
 
           setDistritos(distritosFiltrados);
         }
@@ -103,7 +95,38 @@ const Checkout = () => {
       return () => unsubscribe();
     };
 
+    const GetRestaurantesAbiertos = async () => {
+      const ahora = new Date();
+      const horaActual = ahora.toTimeString().slice(0, 5); // Obtiene la hora actual en formato "HH:mm"
+      const unsubscribeResta = onSnapshot(
+        collection(db, "Restaurantes"),
+        (querySnapshot) => {
+          const RestaurantesFiltrados = querySnapshot.docs
+            .map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }))
+            .filter((res) => {
+              const horaInicio = res.HoraInicio; // HoraInicio en formato "HH:mm"
+              const horaFin = res.HoraFin; // HoraFin en formato "HH:mm"
+
+              // Compara la hora actual con HoraInicio y HoraFin
+              return (
+                EstadoRestaurante == "Si" &&
+                horaActual >= horaInicio &&
+                horaActual < horaFin
+              );
+            });
+
+          setRestaurantes(RestaurantesFiltrados);
+        }
+      );
+
+      return () => unsubscribeResta();
+    };
+
     obtenerDistritosAbiertos();
+    GetRestaurantesAbiertos();
   }, []);
 
   const HandlerChange = (e) => {
@@ -115,10 +138,15 @@ const Checkout = () => {
 
   const handleSuccessfulPayment = async (paymentDetails) => {
     try {
+      const Restau =
+        Restaurantes.find((res) => res.id == InputValues?.RestauranteId) || {};
+
       const newOrder = {
+        restaurante: Restau,
         cart,
         TotalValue,
         ...InputValues,
+
         paymentDetails: {
           ...paymentDetails,
         },
@@ -371,6 +399,35 @@ const Checkout = () => {
                   {Distritos?.map((distrito, key) => (
                     <SelectItem key={distrito.id} value={distrito.id}>
                       {distrito.NombreDistrito}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="Restaurante" className="">
+                Seleccione un Restaurante ?{" "}
+                <span className="text-red-600">(*)</span>
+              </Label>
+              <Select
+                id="Restaurante"
+                value={InputValues?.RestauranteId}
+                required
+                onValueChange={(e) => {
+                  setInputValues({
+                    ...InputValues,
+                    RestauranteId: e,
+                  });
+                }}
+              >
+                <SelectTrigger className="">
+                  <SelectValue placeholder="Por favor seleccione una opción" />
+                </SelectTrigger>
+                <SelectContent className="uppercase">
+                  {Restaurantes?.map((res, key) => (
+                    <SelectItem key={res.id} value={res.id}>
+                      {`${res?.NombreLocal} - ${res.Direction}`}
                     </SelectItem>
                   ))}
                 </SelectContent>
