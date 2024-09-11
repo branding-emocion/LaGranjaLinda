@@ -9,14 +9,17 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import ModalPromo from "./ModalPromo";
 
 const HomePage = () => {
   const [BannerInicio, setBannerInicio] = useState([]);
   const [TextosBanner, setTextosBanner] = useState([]);
   const [IsLoading, setIsLoading] = useState(true);
   const pathname = usePathname();
-  console.log(pathname);
-
+  const [OpenModalPromo, setOpenModalPromo] = useState({
+    Visible: false,
+    info: {},
+  });
   useEffect(() => {
     const docRef = doc(db, "Carrousel", "Inicio");
     const unsubscribe = onSnapshot(
@@ -35,11 +38,34 @@ const HomePage = () => {
       }
     );
 
+    const PromoRef = doc(db, "Promos", "Inicio");
+    const getPromo = async () => {
+      const docSnap = await getDoc(PromoRef);
+      if (docSnap.exists()) {
+        setOpenModalPromo({
+          Visible: true,
+          info: docSnap.data(),
+        });
+      } else {
+        console.log("No such document!");
+      }
+    };
+
     // Limpieza del listener cuando el componente se desmonta
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+      getPromo();
+    };
   }, []);
   return (
     <div className="">
+      {OpenModalPromo.Visible && (
+        <ModalPromo
+          OpenModalPromo={OpenModalPromo}
+          setOpenModalPromo={setOpenModalPromo}
+        />
+      )}
+
       {IsLoading && !BannerInicio.length >= 0 ? (
         <Skeleton className="flex items-center justify-center h-[100vh] md:h-[84vh] mb-10" />
       ) : (

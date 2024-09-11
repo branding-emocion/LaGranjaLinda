@@ -112,7 +112,7 @@ const Checkout = () => {
 
               // Compara la hora actual con HoraInicio y HoraFin
               return (
-                EstadoRestaurante == "Si" &&
+                res?.EstadoRestaurante == "Si" &&
                 horaActual >= horaInicio &&
                 horaActual < horaFin
               );
