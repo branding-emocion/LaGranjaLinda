@@ -283,8 +283,6 @@ const Checkout = () => {
               settings,
               client,
               options,
-
-              // appearance,
             };
 
             const handleCulqiAction = async () => {
