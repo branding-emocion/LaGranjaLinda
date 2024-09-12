@@ -230,11 +230,11 @@ const Checkout = () => {
                       : 0
                   )) *
                   100
-              ) < 20000
+              ) < 11000
             ) {
               toast({
                 title: "Error al crear el token",
-                description: "El monto mínimo de compra es de S/ 20.00",
+                description: "El monto mínimo de compra es de S/ 11.00",
               });
               return;
             }
@@ -257,7 +257,6 @@ const Checkout = () => {
             };
 
             const paymentMethods = {
-              // las opciones se ordenan según se configuren
               tarjeta: true,
               yape: true,
               // billetera: true,
