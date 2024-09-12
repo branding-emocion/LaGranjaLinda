@@ -257,7 +257,6 @@ const Checkout = () => {
             };
 
             const paymentMethods = {
-              // las opciones se ordenan según se configuren
               tarjeta: true,
               yape: true,
               // billetera: true,
