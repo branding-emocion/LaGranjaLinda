@@ -306,6 +306,10 @@ const Checkout = () => {
                 });
 
                 const data = await response.json();
+                if (data?.paymentDetails?.type == "parameter_error") {
+                  alert("Error en el pago, por favor intente nuevamente");
+                  return;
+                }
 
                 await handleSuccessfulPayment(data?.infoPago);
 
