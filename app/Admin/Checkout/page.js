@@ -221,12 +221,17 @@ const Checkout = () => {
           e.preventDefault();
 
           try {
-            if (
-              Math.round(
-                (parseFloat(TotalValue) + parseFloat(InputValues?.Direccion)) *
-                  100
-              ) > 11000
-            ) {
+            let Monto = Math.round(
+              (parseFloat(TotalValue) +
+                parseFloat(
+                  InputValues?.Entrega == "Delivery"
+                    ? InputValues?.Direccion
+                    : 0
+                )) *
+                100
+            );
+
+            if (Monto < 1100) {
               toast({
                 title: "Error al crear el token",
                 description: "El monto mínimo de compra es de S/ 11.00",
@@ -237,15 +242,7 @@ const Checkout = () => {
             const settings = {
               title: "La Granja Linda",
               currency: "PEN",
-              amount: Math.round(
-                (parseFloat(TotalValue) +
-                  parseFloat(
-                    InputValues?.Entrega == "Delivery"
-                      ? InputValues?.Direccion
-                      : 0
-                  )) *
-                  100
-              ),
+              amount: Monto,
               order: "ord_live_d1P0Tu1n7Od4nZdp",
               xculqirsaid: process.env.NEXT_PUBLIC_RSA_HASH,
               rsapublickey: process.env.NEXT_PUBLIC_RSA_PUBLIC_KEY,
