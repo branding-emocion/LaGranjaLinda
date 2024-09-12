@@ -223,14 +223,9 @@ const Checkout = () => {
           try {
             if (
               Math.round(
-                (parseFloat(TotalValue) +
-                  parseFloat(
-                    InputValues?.Entrega == "Delivery"
-                      ? InputValues?.Direccion
-                      : 0
-                  )) *
+                (parseFloat(TotalValue) + parseFloat(InputValues?.Direccion)) *
                   100
-              ) < 11000
+              ) > 11000
             ) {
               toast({
                 title: "Error al crear el token",
