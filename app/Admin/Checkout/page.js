@@ -141,8 +141,13 @@ const Checkout = () => {
       const Restau =
         Restaurantes.find((res) => res.id == InputValues?.RestauranteId) || {};
 
+      const InfoDristrito =
+        Distritos.find((dist) => dist.id == InputValues?.Distrito) || {};
+
       const newOrder = {
         restaurante: Restau,
+        distrito: InfoDristrito,
+        RestauranteId: Restau.id,
         cart,
         TotalValue,
         ...InputValues,
@@ -157,6 +162,7 @@ const Checkout = () => {
         providerId: user?.providerId || "",
         photoURL: user?.photoURL || "",
         userId: user?.uid || "",
+        estado: "Pendiente",
       };
 
       await addDoc(collection(db, "Orders"), newOrder);
@@ -277,8 +283,6 @@ const Checkout = () => {
               settings,
               client,
               options,
-
-              // appearance,
             };
 
             const handleCulqiAction = async () => {
@@ -300,6 +304,10 @@ const Checkout = () => {
                 });
 
                 const data = await response.json();
+                if (data?.paymentDetails?.type == "parameter_error") {
+                  alert("Error en el pago, por favor intente nuevamente");
+                  return;
+                }
 
                 await handleSuccessfulPayment(data?.infoPago);
 

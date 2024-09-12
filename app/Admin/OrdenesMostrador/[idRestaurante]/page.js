@@ -9,174 +9,145 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { db } from "@/firebase/firebaseClient";
-import {
-  Timestamp,
-  collection,
-  onSnapshot,
-  query,
-  where,
-} from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-
-import { DateRange } from "react-date-range";
-// import { es } from "date-fns/locale";
-import "react-date-range/dist/styles.css"; // main style file
-import "react-date-range/dist/theme/default.css"; // theme css file
-import { es } from "date-fns/locale";
+import MostrarPedido from "./MostrarPedido";
 
 const OrdenesRestaurante = ({ params: { idRestaurante } }) => {
-  const [Reservas, setReservas] = useState([]);
-  const [SearchReservas, setSearchReservas] = useState([]);
-  const [RangesData, setRangesData] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
+  const [OrdenesActuales, setOrdenesActuales] = useState([]);
+  const [ListaComprasModalVisible, setListaComprasModalVisible] = useState({
+    visible: false,
+    cart: [],
   });
 
   useEffect(() => {
     if (idRestaurante) {
-      const qReservas = query(
-        collection(db, "Reservas"),
-        where("Restaurante", "==", idRestaurante),
-        where("Estado", "==", "Confirmado"),
-        where("FechaReserva", ">=", RangesData.startDate),
-        where("FechaReserva", "<=", RangesData.endDate)
+      const FechaActual = new Date();
+
+      // Crear una fecha de inicio y fin del día actual
+      const inicioDia = new Date(FechaActual.setHours(0, 0, 0, 0)); // 00:00:00 del día actual
+      const finDia = new Date(FechaActual.setHours(23, 59, 59, 999)); // 23:59:59 del día actual
+
+      const qOrdenesActuales = query(
+        collection(db, "Orders"),
+        where("RestauranteId", "==", idRestaurante),
+        where("createdAt", ">=", inicioDia),
+        where("createdAt", "<=", finDia),
+        where("estado", "==", "Pendiente")
       );
 
-      const unsubscribe = onSnapshot(qReservas, (snapshot) => {
+      const unsubscribe = onSnapshot(qOrdenesActuales, (snapshot) => {
         const data = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
 
-        console.log("data", data);
-
-        setReservas(data);
-        setSearchReservas(data);
+        setOrdenesActuales(data);
       });
 
       return () => unsubscribe();
     }
-  }, [idRestaurante, RangesData.endDate, RangesData.startDate]);
-
-  const HandlerFecha = (ranges) => {
-    setRangesData({
-      startDate: ranges.selection.startDate,
-      endDate: ranges.selection.endDate,
-    });
-  };
-
-  const selectionRange = {
-    startDate: RangesData?.startDate,
-    endDate: RangesData?.endDate,
-    key: "selection",
-  };
+  }, [idRestaurante]);
 
   return (
     <>
+      {ListaComprasModalVisible?.visible && (
+        <MostrarPedido
+          ListaComprasModalVisible={ListaComprasModalVisible}
+          setListaComprasModalVisible={setListaComprasModalVisible}
+        />
+      )}
       <div className="space-y-6">
         <Card className="shadow-md">
           <CardHeader>
             <CardTitle>
-              Bienvenido al módulo para ver las reservas aceptadas
+              Bienvenido al módulo para ver las ordenes de mostrador
             </CardTitle>
 
             <CardDescription>
-              En esta sección, puedes visualizar las reservas aceptadas .
+              En esta sección, puedes visualizar los pedidos .
             </CardDescription>
           </CardHeader>
         </Card>
 
         <Card className="shadow-md">
           <CardHeader>
-            <CardTitle>Lista de Reservas para hoy</CardTitle>
+            <CardTitle>Ordenes Mostrador</CardTitle>
 
-            <div></div>
             <div className="w-full h-full mx-auto flex justify-center items-center bg-gray-50"></div>
 
             {/* Vamos a agregar un buscador de reservas por nombre */}
-
-            <div className="flex justify-center">
-              <Input
-                onChange={(e) => {
-                  const value = e.target.value;
-                  // Agregla el filter y quita espacios en blanco al realizar la busqueda
-                  if (value.trim() === "") {
-                    setSearchReservas(Reservas);
-                  } else {
-                    const filterReservas = Reservas.filter((reserva) =>
-                      reserva.NombreCompleto.toLowerCase().includes(
-                        value.toLowerCase().trim()
-                      )
-                    );
-
-                    setSearchReservas(filterReservas);
-                  }
-                }}
-                type="text"
-                placeholder="Buscar por nombre ..."
-                autoFocus
-              />
-            </div>
           </CardHeader>
           <CardContent>
             <div className="mx-auto grid max-w-6xl  grid-cols-1 gap-6 p-6 sm:grid-cols-2 md:grid-cols-3  ">
-              {SearchReservas?.map((reserva) => (
+              {OrdenesActuales?.map((order) => (
                 <div
-                  key={reserva.id}
+                  key={order.id}
                   className="w-full bg-sky-50 hover:scale-105 mx-auto border mb-5 border-gray-200  rounded-lg cursor-pointer shadow-lg "
                 >
                   <div className="p-5">
                     <div>
                       <h1 className="text-gray-900 font-bold text-2xl tracking-tight text-center capitalize ">
-                        {reserva?.NombreCompleto}
+                        {order?.displayName}
                       </h1>
 
                       <h2 className="capitalize text-gray-800 font-semibold text-lg">
-                        Reserva:{" "}
-                        <span className="font-normal">
-                          {/* Date Firebase fecha y hora */}
-                          {new Date(
-                            reserva.FechaReserva?.toDate()
-                          ).toLocaleDateString()}{" "}
-                          {new Date(
-                            reserva.FechaReserva?.toDate()
-                          ).toLocaleTimeString()}
-                        </span>
+                        Entrega:{" "}
+                        <span className="font-normal">{order?.Entrega} </span>
                       </h2>
-                      <p className=" capitalize text-gray-800">
-                        <span className="font-semibold">Motivo: </span>
-                        {reserva?.MotivoReserva}
-                      </p>
+                      {order?.DireccionEntrega?.length && (
+                        <p className=" capitalize text-gray-800">
+                          <span className="font-semibold">
+                            Dirección Entrega:{" "}
+                          </span>
+                          {order?.DireccionEntrega}
+                        </p>
+                      )}
+
                       <h2 className="capitalize text-gray-800 font-semibold">
                         Fecha de creación:{" "}
                         <span className="font-normal">
                           {/* Date Firebase */}
                           {new Date(
-                            reserva.createdAt?.toDate()
+                            order.createdAt?.toDate()
                           ).toLocaleDateString()}{" "}
                           {new Date(
-                            reserva.createdAt?.toDate()
+                            order.createdAt?.toDate()
                           ).toLocaleTimeString()}
                         </span>
                       </h2>
 
-                      <p className=" capitalize text-gray-700">
-                        <span className="font-semibold">N° Personas: </span>
-                        {reserva?.CantPersonas}
-                      </p>
-                      <p className=" capitalize text-gray-700">
+                      <div className=" capitalize text-gray-700">
                         <span className="font-semibold">Mail: </span>
-                        <a href={`${reserva.Correo}`}>{reserva.Correo}</a>
-                      </p>
+                        <a href={`${order.email}`}>{order.email}</a>
+                      </div>
                       <p className=" capitalize text-gray-700">
                         <span className="font-semibold">Celular: </span>
-                        <a href={`tel:+${reserva.NumeroCelular}`}>
-                          {reserva.NumeroCelular}
-                        </a>
+                        <a href={`tel:+${order.Celular}`}>{order.Celular}</a>
                       </p>
                       <p className="w-full max-h-52 overflow-auto">
-                        {reserva.Comentario}
+                        {order.Comentario}
                       </p>
+
+                      <p className=" capitalize text-gray-800">
+                        <span className="font-semibold">
+                          Cantidad Productos:{" "}
+                        </span>
+                        {order?.cart?.length}
+                      </p>
+
+                      <Button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setListaComprasModalVisible({
+                            visible: true,
+                            cart: order.cart,
+                          });
+                        }}
+                      >
+                        Lista de compra
+                      </Button>
                     </div>
                   </div>
                 </div>
