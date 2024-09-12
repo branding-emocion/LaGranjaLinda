@@ -141,8 +141,13 @@ const Checkout = () => {
       const Restau =
         Restaurantes.find((res) => res.id == InputValues?.RestauranteId) || {};
 
+      const InfoDristrito =
+        Distritos.find((dist) => dist.id == InputValues?.Distrito) || {};
+
       const newOrder = {
         restaurante: Restau,
+        distrito: InfoDristrito,
+        RestauranteId: Restau.id,
         cart,
         TotalValue,
         ...InputValues,
@@ -157,6 +162,7 @@ const Checkout = () => {
         providerId: user?.providerId || "",
         photoURL: user?.photoURL || "",
         userId: user?.uid || "",
+        estado: "Pendiente",
       };
 
       await addDoc(collection(db, "Orders"), newOrder);
