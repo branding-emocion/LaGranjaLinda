@@ -239,10 +239,12 @@ const Checkout = () => {
               return;
             }
 
+            // convertor monto a entero
+
             const settings = {
               title: "La Granja Linda",
               currency: "PEN",
-              amount: Monto,
+              amount: parseInt(Monto),
               order: "ord_live_d1P0Tu1n7Od4nZdp",
               xculqirsaid: process.env.NEXT_PUBLIC_RSA_HASH,
               rsapublickey: process.env.NEXT_PUBLIC_RSA_PUBLIC_KEY,
