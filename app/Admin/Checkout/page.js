@@ -51,6 +51,7 @@ const Checkout = () => {
   const [stateSucess, setstateSucess] = useState(false);
   const [Distritos, setDistritos] = useState([]);
   const [Restaurantes, setRestaurantes] = useState([]);
+  const [RestaurantesShow, setRestaurantesShow] = useState([]);
   const TotalValue = getCartTotalValor(cart);
 
   console.log("Restaurantes", Restaurantes);
@@ -221,13 +222,15 @@ const Checkout = () => {
           e.preventDefault();
 
           try {
+            let totalValue = parseFloat(TotalValue);
+            let deliveryValue = parseFloat(InputValues?.Direccion);
+
+            if (isNaN(totalValue)) totalValue = 0; // Asegurar que TotalValue es un número válido
+            if (isNaN(deliveryValue)) deliveryValue = 0; // Asegurar que Direccion es un número válido si aplica
+
             let Monto = Math.round(
-              (parseFloat(TotalValue) +
-                parseFloat(
-                  InputValues?.Entrega == "Delivery"
-                    ? InputValues?.Direccion
-                    : 0
-                )) *
+              (totalValue +
+                (InputValues?.Entrega === "Delivery" ? deliveryValue : 0)) *
                 100
             );
 
@@ -244,7 +247,7 @@ const Checkout = () => {
             const settings = {
               title: "La Granja Linda",
               currency: "PEN",
-              amount: parseInt(Monto),
+              amount: Monto,
               order: "ord_live_d1P0Tu1n7Od4nZdp",
               xculqirsaid: process.env.NEXT_PUBLIC_RSA_HASH,
               rsapublickey: process.env.NEXT_PUBLIC_RSA_PUBLIC_KEY,
@@ -280,7 +283,7 @@ const Checkout = () => {
 
             const handleCulqiAction = async () => {
               if (Culqi.token) {
-                const token = Culqi.token.id;
+                const token = await Culqi.token.id;
                 console.log("Se ha creado un Token: ", token);
 
                 const response = await fetch("/api/ProcesarPago", {
@@ -289,18 +292,19 @@ const Checkout = () => {
                     "Content-Type": "application/json",
                   },
                   body: JSON.stringify({
-                    TotalValue,
+                    Monto,
                     user,
                     settings,
                     token,
                   }),
+                }).catch((error) => {
+                  console.log("Error al procesar el pago:", error);
+                  alert(`Error al procesar el pago ${error}`);
+                  return;
                 });
 
                 const data = await response.json();
-                if (data?.paymentDetails?.type == "parameter_error") {
-                  alert("Error en el pago, por favor intente nuevamente");
-                  return;
-                }
+                console.log("data", data);
 
                 await handleSuccessfulPayment(data?.infoPago);
 
@@ -387,6 +391,9 @@ const Checkout = () => {
                 value={InputValues?.Distrito}
                 required
                 onValueChange={(e) => {
+                  setRestaurantesShow(
+                    Restaurantes.filter((res) => res.Distrito == e)
+                  );
                   setInputValues({
                     ...InputValues,
                     Distrito: e,
@@ -426,7 +433,7 @@ const Checkout = () => {
                   <SelectValue placeholder="Por favor seleccione una opción" />
                 </SelectTrigger>
                 <SelectContent className="uppercase">
-                  {Restaurantes?.map((res, key) => (
+                  {RestaurantesShow?.map((res, key) => (
                     <SelectItem key={res.id} value={res.id}>
                       {`${res?.NombreLocal} - ${res.Direction}`}
                     </SelectItem>
