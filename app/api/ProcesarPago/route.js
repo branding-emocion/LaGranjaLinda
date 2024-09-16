@@ -31,6 +31,7 @@ export async function POST(req) {
     });
 
     const data = await response.json();
+    console.log(data);
 
     return NextResponse.json(
       { message: "Pago realizado correctamente", infoPago: data },

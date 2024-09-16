@@ -138,6 +138,10 @@ const Checkout = () => {
   };
 
   const handleSuccessfulPayment = async (paymentDetails) => {
+    if (paymentDetails?.error) {
+      alert(`Error al procesar el pago ${paymentDetails.error}`);
+      return;
+    }
     try {
       const Restau =
         Restaurantes.find((res) => res.id == InputValues?.RestauranteId) || {};
@@ -165,6 +169,10 @@ const Checkout = () => {
         userId: user?.uid || "",
         estado: "Pendiente",
       };
+
+      Culqi.close();
+
+      clearCart();
 
       await addDoc(collection(db, "Orders"), newOrder);
       console.log("Order successfully saved to Firebase!");
@@ -285,35 +293,36 @@ const Checkout = () => {
               if (Culqi.token) {
                 const token = await Culqi.token.id;
                 console.log("Se ha creado un Token: ", token);
-
                 const response = await fetch("/api/ProcesarPago", {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
                   },
                   body: JSON.stringify({
-                    Monto,
+                    TotalValue: Monto,
                     user,
                     settings,
                     token,
                   }),
-                }).catch((error) => {
-                  console.log("Error al procesar el pago:", error);
-                  alert(`Error al procesar el pago ${error}`);
-                  return;
-                });
+                })
+                  .catch((error) => {
+                    console.log("Error al procesar el pago:", error);
+                    alert(`Error al procesar el pago ${error}`);
+                    return;
+                  })
+                  .then((res) => {
+                    console.log("res", res);
 
-                const data = await response.json();
-                console.log("data", data);
+                    return res.json();
+                  });
 
-                await handleSuccessfulPayment(data?.infoPago);
+                console.log("response", response);
+
+                await handleSuccessfulPayment(response);
 
                 // Cerrar el modal de Culqi
-                Culqi.close();
 
-                clearCart();
                 // Abrir un modal de éxito
-                setstateSucess(true);
 
                 console.log("response", response);
               } else if (Culqi.order) {
@@ -331,7 +340,6 @@ const Checkout = () => {
             );
 
             Culqi.culqi = handleCulqiAction;
-
             Culqi.open();
           } catch (error) {
             console.error("Error al crear el token:", error);
