@@ -54,8 +54,6 @@ const Checkout = () => {
   const [RestaurantesShow, setRestaurantesShow] = useState([]);
   const TotalValue = getCartTotalValor(cart);
 
-  console.log("Restaurantes", Restaurantes);
-
   useEffect(() => {
     if (InputValues?.Distrito) {
       const queryDirection = query(
@@ -139,7 +137,7 @@ const Checkout = () => {
 
   const handleSuccessfulPayment = async (paymentDetails) => {
     if (paymentDetails?.error) {
-      alert(`Error al procesar el pago ${paymentDetails.error}`);
+      alert(`Error al procesar el pago ${paymentDetails?.error?.message}`);
       return;
     }
     try {
@@ -311,20 +309,27 @@ const Checkout = () => {
                     return;
                   })
                   .then((res) => {
-                    console.log("res", res);
-
                     return res.json();
                   });
+
+                if (response?.error?.message) {
+                  console.error("Error al procesar el pago:", response.error);
+
+                  alert(
+                    `Error al procesar el pago ${response?.error?.message}`
+                  );
+
+                  // toast({
+                  //   title: "Error al procesar el pago",
+                  //   description: response.error.message,
+                  //   variant: "destructive",
+                  // });
+                  return;
+                }
 
                 console.log("response", response);
 
                 await handleSuccessfulPayment(response);
-
-                // Cerrar el modal de Culqi
-
-                // Abrir un modal de éxito
-
-                console.log("response", response);
               } else if (Culqi.order) {
                 const order = Culqi.order;
 
