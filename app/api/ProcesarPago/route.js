@@ -4,6 +4,11 @@ export async function POST(req) {
   try {
     const { TotalValue, user, settings, token } = await req.json();
 
+    console.log("TotalValue", TotalValue);
+    console.log("user", user);
+    console.log("settings", settings);
+    console.log("token", token);
+
     // Validar que se tengan los datos necesarios
     if (!TotalValue || !user?.email || !token) {
       return NextResponse.json(
@@ -20,7 +25,7 @@ export async function POST(req) {
         Authorization: `Bearer sk_live_XnXkdI1L3dKfd3zY`,
       },
       body: JSON.stringify({
-        amount: Math.round(TotalValue * 100), // Monto en centavos
+        amount: TotalValue, // Monto en centavos
         currency_code: "PEN",
         description: "Pago La granja Linda",
         email: user.email,
@@ -31,7 +36,14 @@ export async function POST(req) {
     });
 
     const data = await response.json();
-    console.log(data);
+
+    if ((data.type = "card_error" || data.object)) {
+      return NextResponse.json(
+        { error: { message: data.merchant_message } },
+        { status: 400 }
+      );
+    }
+    console.log("data", data);
 
     return NextResponse.json(
       { message: "Pago realizado correctamente", infoPago: data },
