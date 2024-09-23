@@ -54,6 +54,8 @@ const Checkout = () => {
   const [RestaurantesShow, setRestaurantesShow] = useState([]);
   const TotalValue = getCartTotalValor(cart);
 
+  console.log("Distritos", Distritos);
+
   useEffect(() => {
     if (InputValues?.Distrito) {
       const queryDirection = query(
@@ -289,8 +291,14 @@ const Checkout = () => {
 
             const handleCulqiAction = async () => {
               if (Culqi.token) {
+                const InfoRes = Restaurantes.find(
+                  (res) => res.id == InputValues?.RestauranteId
+                );
                 const token = await Culqi.token.id;
                 console.log("Se ha creado un Token: ", token);
+
+                console.log(InfoRes);
+
                 const response = await fetch("/api/ProcesarPago", {
                   method: "POST",
                   headers: {
@@ -301,6 +309,8 @@ const Checkout = () => {
                     user,
                     settings,
                     token,
+                    Direccion: InfoRes?.Direction || "La granja linda",
+                    Celular: InputValues?.Celular || "310403",
                   }),
                 })
                   .catch((error) => {
@@ -419,7 +429,7 @@ const Checkout = () => {
                 <SelectContent className="uppercase">
                   {Distritos?.map((distrito, key) => (
                     <SelectItem key={distrito.id} value={distrito.id}>
-                      {distrito.NombreDistrito}
+                      {distrito?.NombreDistrito}
                     </SelectItem>
                   ))}
                 </SelectContent>
