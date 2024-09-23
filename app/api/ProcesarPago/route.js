@@ -2,12 +2,15 @@ import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try {
-    const { TotalValue, user, settings, token } = await req.json();
+    const { TotalValue, user, settings, token, Direccion, Celular } =
+      await req.json();
 
     console.log("TotalValue", TotalValue);
     console.log("user", user);
     console.log("settings", settings);
     console.log("token", token);
+    console.log("Direccion", Direccion);
+    console.log("Celular", Celular);
 
     // Validar que se tengan los datos necesarios
     if (!TotalValue || !user?.email || !token) {
@@ -27,11 +30,26 @@ export async function POST(req) {
       body: JSON.stringify({
         amount: TotalValue, // Monto en centavos
         currency_code: "PEN",
-        description: "Pago La granja Linda",
-        email: user.email,
-        capture: true,
+        email: user?.email,
         source_id: token, // Usar el token generado aquí
-        installments: settings?.installments || 1, // Opcional, establecer cuotas si están habilitadas
+        capture: true,
+        description: "Pago La granja Linda",
+        installments: 1, // Opcional
+        antifraud_details: {
+          address: Direccion || "La Granja Linda",
+          address_city: "Lima",
+          country_code: "PE",
+          first_name: user?.displayName || "", // Asegúrate de que estos campos existan en el objeto user
+          last_name: user?.displayName || "",
+          phone_number: Celular || "310403",
+        },
+        authentication_3DS: {
+          xid: "Y2FyZGluYWxjb21tZXJjZWF1dGg=",
+          cavv: "AAABAWFlmQAAAABjRWWZEEFgFz+=",
+          directoryServerTransactionId: "88debec7-a798-46d1-bcfb-db3075fedb82",
+          eci: "06",
+          protocolVersion: "2.1.0",
+        },
       }),
     });
 
