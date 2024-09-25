@@ -242,7 +242,7 @@ const Checkout = () => {
                 100
             );
 
-            if (Monto < 1100) {
+            if (Monto < 900) {
               toast({
                 title: "Error al crear el token",
                 description: "El monto mínimo de compra es de S/ 11.00",
@@ -294,11 +294,8 @@ const Checkout = () => {
                 const InfoRes = Restaurantes.find(
                   (res) => res.id == InputValues?.RestauranteId
                 );
+
                 const token = await Culqi.token.id;
-                console.log("Se ha creado un Token: ", token);
-
-                console.log(InfoRes);
-
                 const response = await fetch("/api/ProcesarPago", {
                   method: "POST",
                   headers: {
@@ -306,9 +303,16 @@ const Checkout = () => {
                   },
                   body: JSON.stringify({
                     TotalValue: Monto,
-                    user,
+                    user: {
+                      email: user?.email,
+                      displayName: user?.displayName,
+                      phoneNumber: user?.phoneNumber,
+                      providerId: user?.providerId,
+                      photoURL: user?.photoURL,
+                      userId: user?.uid,
+                    },
                     settings,
-                    token,
+                    culquiToken: token || {},
                     Direccion: InfoRes?.Direction || "La granja linda",
                     Celular: InputValues?.Celular || "310403",
                   }),
