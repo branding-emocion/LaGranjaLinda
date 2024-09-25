@@ -5,6 +5,12 @@ export async function POST(req) {
     const { TotalValue, user, settings, culquiToken, Direccion, Celular } =
       await req.json();
 
+    const nameParts = user?.displayName?.split(" ") || [];
+
+    // Asignar el primer valor como el primer nombre y el resto como el apellido
+    const FirsName = nameParts[0] || "";
+    const LastName = nameParts.slice(1).join(" ") || "";
+
     const InfoEnviarPago = {
       amount: TotalValue, // Monto en centavos
       currency_code: "PEN",
@@ -17,8 +23,8 @@ export async function POST(req) {
         address: Direccion || "La Granja Linda",
         address_city: "Lima",
         country_code: "PE",
-        first_name: user?.displayName || "", // Asegúrate de que estos campos existan en el objeto user
-        last_name: user?.displayName || "",
+        first_name: FirsName || user?.displayName || "", // Asegúrate de que estos campos existan en el objeto user
+        last_name: LastName || "",
         phone_number: Celular || "310403",
       },
       // authentication_3DS: {
@@ -29,9 +35,6 @@ export async function POST(req) {
       //   protocolVersion: "2.1.0",
       // },
     };
-    console.log("CulturiToken", culquiToken);
-
-    console.log("InfoEnviarPago", InfoEnviarPago);
 
     // Validar que se tengan los datos necesarios
     if (!TotalValue || !user?.email || !culquiToken) {
