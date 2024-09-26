@@ -165,12 +165,12 @@ const Checkout = () => {
         userId: user?.uid || "",
         estado: "Comprado",
       };
+      await addDoc(collection(db, "Orders"), newOrder);
 
       Culqi.close();
 
       clearCart();
 
-      await addDoc(collection(db, "Orders"), newOrder);
       console.log("Order successfully saved to Firebase!");
 
       setstateSucess(true);
@@ -341,8 +341,6 @@ const Checkout = () => {
                 }
               } else if (Culqi.order) {
                 const order = Culqi.order;
-
-                console.log("Se ha creado el objeto Order: ", order);
               } else {
                 console.log("Errorrr : ", Culqi.error);
               }
