@@ -57,7 +57,7 @@ export async function POST(req) {
     const data = await response.json();
     console.log("data", data);
 
-    if ((data.type = "card_error" || data?.object == "error")) {
+    if (data?.object == "error") {
       return NextResponse.json(
         { error: { message: data?.merchant_message } },
         { status: 400 }

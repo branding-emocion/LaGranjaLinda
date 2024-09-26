@@ -17,6 +17,7 @@ import {
   GalleryHorizontal,
   GalleryThumbnails,
   HistoryIcon,
+  Home,
   ListOrdered,
   MessageSquareDot,
   MonitorXIcon,
@@ -194,6 +195,11 @@ const DashboardLayout = ({ children }) => {
       link: "/Admin/LibroReclamaciones",
       icon: <BookmarkMinus className="w-6 h-6 " />,
       hidden: claims?.Rol?.includes("Admin") ? false : true,
+    },
+    {
+      name: "Volver a la web",
+      link: "/",
+      icon: <Home className="w-6 h-6 " />,
     },
   ];
 
