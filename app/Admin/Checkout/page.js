@@ -138,10 +138,6 @@ const Checkout = () => {
   };
 
   const handleSuccessfulPayment = async (paymentDetails) => {
-    if (paymentDetails?.error) {
-      alert(`Error al procesar el pago ${paymentDetails?.error?.message}`);
-      return;
-    }
     try {
       const Restau =
         Restaurantes.find((res) => res.id == InputValues?.RestauranteId) || {};
@@ -167,14 +163,14 @@ const Checkout = () => {
         providerId: user?.providerId || "",
         photoURL: user?.photoURL || "",
         userId: user?.uid || "",
-        estado: "Pendiente",
+        estado: "Comprado",
       };
+      await addDoc(collection(db, "Orders"), newOrder);
 
       Culqi.close();
 
       clearCart();
 
-      await addDoc(collection(db, "Orders"), newOrder);
       console.log("Order successfully saved to Firebase!");
 
       setstateSucess(true);
@@ -327,7 +323,7 @@ const Checkout = () => {
                   });
 
                 if (response?.error?.message) {
-                  console.error("Error al procesar el pago:", response.error);
+                  console.log("Error al procesar el pago:", response.error);
 
                   alert(
                     `Error al procesar el pago ${response?.error?.message}`
@@ -340,14 +336,11 @@ const Checkout = () => {
                   // });
                   return;
                 }
-
-                console.log("response", response);
-
-                await handleSuccessfulPayment(response);
+                if (response?.infoPago) {
+                  await handleSuccessfulPayment(response?.infoPago);
+                }
               } else if (Culqi.order) {
                 const order = Culqi.order;
-
-                console.log("Se ha creado el objeto Order: ", order);
               } else {
                 console.log("Errorrr : ", Culqi.error);
               }
