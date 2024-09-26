@@ -64,10 +64,7 @@ export async function POST(req) {
       );
     }
 
-    return NextResponse.json(
-      { message: "Pago realizado correctamente", infoPago: data },
-      { status: 200 }
-    );
+    return NextResponse.json({ infoPago: data }, { status: 200 });
   } catch (error) {
     console.error("Error creating payment:", error);
     return NextResponse.json(
