@@ -139,6 +139,8 @@ const Checkout = () => {
 
   const handleSuccessfulPayment = async (paymentDetails) => {
     try {
+      console.log("paymentDetails", paymentDetails);
+
       const Restau =
         Restaurantes.find((res) => res.id == InputValues?.RestauranteId) || {};
 
@@ -167,13 +169,6 @@ const Checkout = () => {
       };
       await addDoc(collection(db, "Orders"), newOrder);
 
-      Culqi.close();
-
-      clearCart();
-
-      console.log("Order successfully saved to Firebase!");
-
-      setstateSucess(true);
       // Clear form fields, reset state, or perform other post-payment actions
     } catch (error) {
       console.error("Error saving order to Firebase:", error);
@@ -292,6 +287,8 @@ const Checkout = () => {
                 );
 
                 const token = await Culqi.token.id;
+                await Culqi?.close();
+
                 const response = await fetch("/api/ProcesarPago", {
                   method: "POST",
                   headers: {
@@ -338,7 +335,11 @@ const Checkout = () => {
                 }
                 if (response?.infoPago) {
                   await handleSuccessfulPayment(response?.infoPago);
+                  clearCart();
+                  setstateSucess(true);
                 }
+
+                Culqi?.close();
               } else if (Culqi.order) {
                 const order = Culqi.order;
               } else {

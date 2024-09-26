@@ -33,7 +33,7 @@ const OrdenesRestaurante = ({ params: { idRestaurante } }) => {
         where("RestauranteId", "==", idRestaurante),
         where("createdAt", ">=", inicioDia),
         where("createdAt", "<=", finDia),
-        where("estado", "==", "Pendiente")
+        where("estado", "==", "Comprado")
       );
 
       const unsubscribe = onSnapshot(qOrdenesActuales, (snapshot) => {
