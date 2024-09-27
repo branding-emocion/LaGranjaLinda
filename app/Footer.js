@@ -8,7 +8,7 @@ const Footer = () => {
   return (
     <>
       <footer className="border-t -mt-[41px]  py-6 px-4 lg:px-0 bg-granjaSecondary text-white">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 justify-center gap-4 items-center sm:items-start">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 justify-center gap-4 items-center sm:items-start">
           <div className=" lg:mx-auto  ">
             <h1 className="font-semibold mb-2 text-xl">Granja Linda</h1>
             <hr className="mb-2" />
@@ -18,9 +18,9 @@ const Footer = () => {
                   <li>
                     <Link href={"/Nosotros"}>Nosotros</Link>
                   </li>
-                  <li>
+                  {/* <li>
                     <Link href={"/Nutricion"}>Nuestras Experiencias</Link>
-                  </li>
+                  </li> */}
                   <li>
                     <Link href={"/Reclamaciones"}>
                       <Image
@@ -65,28 +65,16 @@ const Footer = () => {
               <div className="flex space-x-2 items-center ">
                 <ul>
                   <li>
-                    <Link href={"/Delivery"}>Términos y Condiciones</Link>
+                    <Link href={"/Terminos"}>Términos y Condiciones</Link>
                   </li>
                   <li>
-                    <Link href={"/PoliticasPrivacidad"}>
-                      Políticas de privacidad
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href={"/TerminosCondiciones"}>
-                      Términos y Condiciones
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href={"/PromocionesComerciales"}>
-                      Promociones Comerciales
-                    </Link>
+                    <Link href={"/Politica"}>Políticas de privacidad</Link>
                   </li>
                 </ul>
               </div>
             </div>
           </div>
-          <div className=" lg:mx-auto  ">
+          {/* <div className=" lg:mx-auto  ">
             <h1 className="font-semibold mb-2 text-xl uppercase">
               CONTÁCTANOS
             </h1>
@@ -103,7 +91,7 @@ const Footer = () => {
                 </ul>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div className="  sm:col-span-2 lg:col-span-4 ">
             <div className="">
