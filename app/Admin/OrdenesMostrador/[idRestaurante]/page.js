@@ -82,8 +82,10 @@ const OrdenesRestaurante = ({ params: { idRestaurante } }) => {
             <div className="mx-auto grid max-w-6xl  grid-cols-1 gap-6 p-6 sm:grid-cols-2 md:grid-cols-3  ">
               {OrdenesActuales?.map((order) => (
                 <div
-                  key={order.id}
-                  className="w-full bg-sky-50 hover:scale-105 mx-auto border mb-5 border-gray-200  rounded-lg cursor-pointer shadow-lg "
+                  key={order?.id}
+                  className={`${
+                    order?.Estrega == "Listado" ? "bg-green-400" : "bg-sky-50"
+                  } w-full  hover:scale-105 mx-auto border mb-5 border-gray-200  rounded-lg cursor-pointer shadow-lg`}
                 >
                   <div className="p-5">
                     <div>
@@ -119,14 +121,14 @@ const OrdenesRestaurante = ({ params: { idRestaurante } }) => {
 
                       <div className=" capitalize text-gray-700">
                         <span className="font-semibold">Mail: </span>
-                        <a href={`${order.email}`}>{order.email}</a>
+                        <a href={`${order?.email}`}>{order?.email}</a>
                       </div>
                       <p className=" capitalize text-gray-700">
                         <span className="font-semibold">Celular: </span>
-                        <a href={`tel:+${order.Celular}`}>{order.Celular}</a>
+                        <a href={`tel:+${order?.Celular}`}>{order.Celular}</a>
                       </p>
                       <p className="w-full max-h-52 overflow-auto">
-                        {order.Comentario}
+                        {order?.Comentario}
                       </p>
 
                       <p className=" capitalize text-gray-800">
@@ -143,6 +145,7 @@ const OrdenesRestaurante = ({ params: { idRestaurante } }) => {
                           setListaComprasModalVisible({
                             visible: true,
                             cart: order.cart,
+                            order: order,
                           });
                         }}
                       >

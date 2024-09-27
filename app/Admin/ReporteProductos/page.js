@@ -1,6 +1,12 @@
 "use client";
 import { db } from "@/firebase/firebaseClient";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  onSnapshot,
+} from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { DateRange } from "react-date-range";
 // import { es } from "date-fns/locale";
@@ -15,6 +21,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import dynamic from "next/dynamic";
+import { Button } from "@/components/ui/button";
 // import ReportesProductosPDF from "./ReporteProductoPDF";
 
 const ReportesProductosPDF = dynamic(() => import("./ReporteProductoPDF"), {
@@ -24,8 +31,10 @@ const ReportesProductosPDF = dynamic(() => import("./ReporteProductoPDF"), {
 const ReporteProductos = () => {
   const [loading, setLoading] = useState(true);
   const [Orders, setOrders] = useState([]);
-
-  console.log("Orders", Orders);
+  const [Restaurantes, setRestaurantes] = useState([]);
+  const [Distrito, setDistrito] = useState([]);
+  const [OrdersFiltered, setOrdersFiltered] = useState({});
+  const [Title, setTitle] = useState("Reporte de Ventas por Producto");
 
   const [RangesData, setRangesData] = useState({
     startDate: new Date(),
@@ -61,7 +70,12 @@ const ReporteProductos = () => {
           const cartOrders = element?.cart;
 
           for (const producto of cartOrders) {
-            DataNormalizadaCart.push(producto);
+            DataNormalizadaCart.push({
+              ...producto,
+              restaurante: element?.restaurante?.id,
+              distrito: element?.Distrito,
+              orden: element?.id,
+            });
           }
         }
 
@@ -79,6 +93,8 @@ const ReporteProductos = () => {
           return acc;
         }, {});
 
+        setOrdersFiltered(DataNormalizada);
+
         setOrders(DataNormalizada);
       } catch (error) {
         console.error("Error fetching data: ", error);
@@ -89,6 +105,31 @@ const ReporteProductos = () => {
 
     getData();
   }, [RangesData]);
+
+  useEffect(() => {
+    onSnapshot(
+      collection(db, `Restaurantes`),
+      // orderBy("email", "asc"),
+      (snapshot) =>
+        setRestaurantes(
+          snapshot?.docs?.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
+        )
+    );
+    onSnapshot(
+      collection(db, `Distritos`),
+      // orderBy("email", "asc"),
+      (snapshot) =>
+        setDistrito(
+          snapshot?.docs?.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
+        )
+    );
+  }, []);
 
   const selectionRange = {
     startDate: RangesData?.startDate,
@@ -123,14 +164,103 @@ const ReporteProductos = () => {
             ) : (
               <div>
                 <h1 className="text-2xl font-bold mb-4">
-                  Reporte de Clientes y ventas
+                  Reporte de Productos
                 </h1>
+                <div className="flex flex-col">
+                  <h1 className=" font-semibold text-xl">
+                    {" "}
+                    Seleccione un Restaurante
+                  </h1>
 
-                {Object.keys(Orders)?.length === 0 ? (
-                  <p>No hay usuarios disponibles.</p>
+                  <div className="flex w-full  justify-center items-center gap-x-2 pb-2">
+                    {Restaurantes?.map((restaurante) => (
+                      <Button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setTitle(
+                            `Reporte de Ventas por Producto: ${restaurante.NombreLocal}`
+                          );
+
+                          const OrdersFilteredByRestaurante = Object.values(
+                            Orders
+                          )[0]?.Productos?.filter(
+                            (res) => res.restaurante == restaurante.id
+                          );
+
+                          const Productos = OrdersFilteredByRestaurante?.reduce(
+                            (acc, el) => {
+                              const key = el.NombreProducto;
+                              if (!acc[key]) {
+                                acc[key] = {
+                                  ...el,
+
+                                  Productos: [],
+                                };
+                              }
+                              acc[key].Productos.push(el);
+                              return acc;
+                            },
+                            {}
+                          );
+                          console.log("Productos", Productos);
+
+                          setOrdersFiltered(Productos);
+                        }}
+                        key={restaurante.id}
+                      >
+                        {restaurante.NombreLocal}
+                      </Button>
+                    ))}
+                  </div>
+                  <h1 className=" font-semibold text-xl">
+                    Seleccione un Distrito
+                  </h1>
+                  <div className="flex w-full  justify-center items-center gap-x-2 pb-2">
+                    {Distrito?.map((distrito) => (
+                      <Button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setTitle(
+                            `Reporte de Ventas por Producto Distrito: ${distrito.NombreDistrito}`
+                          );
+
+                          const OrdersFilteredByDistrito = Object.values(
+                            Orders
+                          )[0]?.Productos?.filter(
+                            (res) => res.distrito == distrito.id
+                          );
+
+                          const Productos = OrdersFilteredByDistrito?.reduce(
+                            (acc, el) => {
+                              const key = el.NombreProducto;
+                              if (!acc[key]) {
+                                acc[key] = {
+                                  ...el,
+
+                                  Productos: [],
+                                };
+                              }
+                              acc[key].Productos.push(el);
+                              return acc;
+                            },
+                            {}
+                          );
+
+                          setOrdersFiltered(Productos);
+                        }}
+                        key={distrito.id}
+                      >
+                        {distrito.NombreDistrito}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
+                {Object.keys(OrdersFiltered)?.length === 0 ? (
+                  <p>No hay datos para mostrar.</p>
                 ) : (
                   <div>
-                    {(Object.keys(Orders)?.length > 0 && (
+                    {(Object.keys(OrdersFiltered)?.length > 0 && (
                       <>
                         <div className="mt-4">
                           <h2 className="text-xl font-semibold mb-2">
@@ -138,8 +268,9 @@ const ReporteProductos = () => {
                           </h2>
 
                           <ReportesProductosPDF
-                            Orders={Orders}
+                            Orders={OrdersFiltered}
                             RangesData={RangesData}
+                            Title={Title}
                           />
                         </div>
                       </>

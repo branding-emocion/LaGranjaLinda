@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
 const formatCurrency = (value) =>
   value ? `S/ ${value.toFixed(2)}` : "S/ 0.00";
 
-const ReporteClientesPDF = ({ Orders, RangesData }) => {
+const ReporteClientesPDF = ({ Orders, RangesData, Title }) => {
   const totalGeneral = Object.keys(Orders).reduce((acc, order) => {
     const totalValue = Orders[order].orders?.reduce(
       (total, el) => total + (el.TotalValue || 0),
@@ -100,7 +100,8 @@ const ReporteClientesPDF = ({ Orders, RangesData }) => {
       <Document>
         <Page style={styles.page}>
           <View style={styles.section}>
-            <Text style={styles.title}>Reporte de Compras por Usuario</Text>
+            {Title && <Text style={styles.title}>{Title}</Text>}
+            {/* <Text style={styles.title}>Reporte de Compras por Usuario</Text> */}
             <Text style={styles.subtitle}>
               Fecha de inicio:{" "}
               {RangesData?.startDate
