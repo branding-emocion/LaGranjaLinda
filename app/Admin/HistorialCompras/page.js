@@ -34,6 +34,7 @@ const HistorialCompras = () => {
         collection(db, "Orders"),
         where("userId", "==", `${user?.uid}`),
         orderBy("createdAt", "desc")
+        // las primeras 10 pedidos
       );
 
       const unsubscribe = onSnapshot(qReservas, (snapshot) => {

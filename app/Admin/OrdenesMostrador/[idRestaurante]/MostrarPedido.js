@@ -134,7 +134,7 @@ const MostrarPedido = ({
               );
             })}
           </ul>
-          {!ListaComprasModalVisible?.order?.Estrega == "Listado" && (
+          {ListaComprasModalVisible?.order?.estado == "Comprado" && (
             <form
               onSubmit={async (e) => {
                 e.preventDefault();
@@ -143,7 +143,7 @@ const MostrarPedido = ({
                     doc(db, "Orders", `${ListaComprasModalVisible?.order?.id}`),
                     {
                       ...InputValues,
-                      Estrega: "Listado",
+                      EstadoEntraga: "Listado",
                     }
                   );
                   setListaComprasModalVisible({
@@ -155,28 +155,54 @@ const MostrarPedido = ({
               }}
               className="py-2 w-full h-full"
             >
-              {ListaComprasModalVisible?.order?.Entrega == "Delivery" && (
-                <div className="flex justify-between">
-                  <div className="flex  gap-x-5">
-                    <div>
-                      <Label htmlFor="NombreMotogranjero" className="">
-                        Nombre de Motogranjero
-                      </Label>
-                      <Input
-                        type="text"
-                        id="NombreMotogranjero"
-                        name="NombreMotogranjero"
-                        className="w-full text-gray-900"
-                        onChange={(e) => {
-                          setInputValues({
-                            ...InputValues,
-                            NombreMotogranjero: e.target.value,
-                          });
-                        }}
-                        autoComplete="off"
-                        required
-                      />
+              <div className="flex justify-between">
+                {ListaComprasModalVisible?.order?.Entrega == "Delivery" &&
+                  ListaComprasModalVisible?.order?.EstadoEntraga !=
+                    "Listado" && (
+                    <div className="flex  gap-x-5">
+                      <div>
+                        <Label htmlFor="NombreMotogranjero" className="">
+                          Nombre de Motogranjero
+                        </Label>
+                        <Input
+                          type="text"
+                          id="NombreMotogranjero"
+                          name="NombreMotogranjero"
+                          className="w-full text-gray-900"
+                          onChange={(e) => {
+                            setInputValues({
+                              ...InputValues,
+                              NombreMotogranjero: e.target.value,
+                            });
+                          }}
+                          autoComplete="off"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="ObservacionesPedido" className="">
+                          Observaciones de Pedido
+                        </Label>
+                        <Input
+                          type="text"
+                          id="ObservacionesPedido"
+                          name="ObservacionesPedido"
+                          className="w-full text-gray-900"
+                          onChange={(e) => {
+                            setInputValues({
+                              ...InputValues,
+                              ObservacionesPedido: e.target.value,
+                            });
+                          }}
+                          autoComplete="off"
+                          required
+                        />
+                      </div>
                     </div>
+                  )}
+                {ListaComprasModalVisible?.order?.Entrega == "Llevar" &&
+                  ListaComprasModalVisible?.order?.EstadoEntraga !=
+                    "Listado" && (
                     <div>
                       <Label htmlFor="ObservacionesPedido" className="">
                         Observaciones de Pedido
@@ -196,19 +222,52 @@ const MostrarPedido = ({
                         required
                       />
                     </div>
-                  </div>
-
-                  <div className="font-bold text-xl">
-                    Total Pagado ${" "}
-                    {ListaComprasModalVisible?.order?.paymentDetails?.amount /
-                      100}
-                  </div>
+                  )}
+                <div className="font-bold text-xl">
+                  Total Pagado ${" "}
+                  {ListaComprasModalVisible?.order?.paymentDetails?.amount /
+                    100}
                 </div>
-              )}
+              </div>
 
-              <Button className="mt-2 bg-blue-500 text-white" type="submit">
-                Entregar Pedido
-              </Button>
+              <div className="space-x-3">
+                <Button className="mt-2 bg-blue-500 text-white" type="submit">
+                  Entregar Pedido
+                </Button>
+
+                <Button
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    if (!InputValues?.ObservacionesPedido) {
+                      alert("Debes agregar observaciones");
+                      return;
+                    }
+                    if (confirm("¿Estás seguro de no entregar el pedido?")) {
+                      await updateDoc(
+                        doc(
+                          db,
+                          "Orders",
+                          `${ListaComprasModalVisible?.order?.id}`
+                        ),
+                        {
+                          ...InputValues,
+                          EstadoEntraga: "NoEntregado",
+                        }
+                      );
+                      setListaComprasModalVisible({
+                        visible: false,
+                        cart: [],
+                        order: {},
+                      });
+                      alert("Pedido no entregado correctamente");
+                    }
+                  }}
+                  type="button"
+                  className="bg-red-600"
+                >
+                  No entregar pedido
+                </Button>
+              </div>
             </form>
           )}
         </div>
