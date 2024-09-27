@@ -18,9 +18,9 @@ const Footer = () => {
                   <li>
                     <Link href={"/Nosotros"}>Nosotros</Link>
                   </li>
-                  {/* <li>
-                    <Link href={"/Nutricion"}>Nuestras Experiencias</Link>
-                  </li> */}
+                  <li>
+                    <Link href={"/Momentos"}>Momentos mágicos</Link>
+                  </li>
                   <li>
                     <Link href={"/Reclamaciones"}>
                       <Image

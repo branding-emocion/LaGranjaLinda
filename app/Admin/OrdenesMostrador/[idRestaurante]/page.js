@@ -84,7 +84,9 @@ const OrdenesRestaurante = ({ params: { idRestaurante } }) => {
                 <div
                   key={order?.id}
                   className={`${
-                    order?.Estrega == "Listado" ? "bg-green-400" : "bg-sky-50"
+                    (order?.EstadoEntraga == "Listado" && "bg-green-400") ||
+                    (order?.EstadoEntraga == "NoEntregado" && "bg-red-400") ||
+                    "bg-sky-50"
                   } w-full  hover:scale-105 mx-auto border mb-5 border-gray-200  rounded-lg cursor-pointer shadow-lg`}
                 >
                   <div className="p-5">
@@ -97,6 +99,10 @@ const OrdenesRestaurante = ({ params: { idRestaurante } }) => {
                         Entrega:{" "}
                         <span className="font-normal">{order?.Entrega} </span>
                       </h2>
+                      {order?.EstadoEntraga == "NoEntregado" && (
+                        <h1 className=" font-semibold text-xl">No entregado</h1>
+                      )}
+
                       {order?.DireccionEntrega?.length && (
                         <p className=" capitalize text-gray-800">
                           <span className="font-semibold">
