@@ -194,6 +194,7 @@ export async function PUT(req) {
       Habilitar,
       Inhabilitar,
       IdRestaurante,
+      Rol,
     } = await req?.json();
 
     let InfoEditar = {};
@@ -203,9 +204,26 @@ export async function PUT(req) {
     } else if (Inhabilitar) {
       InfoEditar.disabled = true;
     }
+    if (IdRestaurante || Rol) {
+      const user = await AuthAdmin.getUser(uid);
+      const existingClaims = user.customClaims || {}; // Asegúrate de manejar el caso donde no hay claims previos
 
-    if (IdRestaurante) {
-      InfoEditar.IdRestaurante = IdRestaurante;
+      if (IdRestaurante) {
+        InfoEditar.IdRestaurante = IdRestaurante;
+
+        await AuthAdmin.setCustomUserClaims(uid, {
+          ...existingClaims,
+          IdRestaurante: IdRestaurante,
+        });
+        console;
+      }
+      if (Rol) {
+        InfoEditar.Rol = Rol;
+        await AuthAdmin.setCustomUserClaims(uid, {
+          ...existingClaims,
+          Rol: Rol,
+        });
+      }
     }
 
     if (NombreCompleto) {
@@ -215,6 +233,7 @@ export async function PUT(req) {
     } else if (Pass) {
       InfoEditar.password = Pass;
     }
+    console.log(InfoEditar);
 
     if (Object.keys(InfoEditar).length) {
       await AuthAdmin.updateUser(uid, InfoEditar);

@@ -18,6 +18,7 @@ import {
   GalleryThumbnails,
   HistoryIcon,
   Home,
+  HomeIcon,
   ListOrdered,
   MessageSquareDot,
   MonitorXIcon,
@@ -196,11 +197,6 @@ const DashboardLayout = ({ children }) => {
       icon: <BookmarkMinus className="w-6 h-6 " />,
       hidden: claims?.Rol?.includes("Admin") ? false : true,
     },
-    {
-      name: "Volver a la web",
-      link: "/",
-      icon: <Home className="w-6 h-6 " />,
-    },
   ];
 
   menu.find((men) => {
@@ -282,6 +278,19 @@ const DashboardLayout = ({ children }) => {
                   )}
                 </li>
               ))}
+
+              <li>
+                <Link href={"/"}>
+                  <div className="cursor-pointer relative flex flex-row items-center h-11 focus:outline-none hover:bg-blue-800  text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-blue-500  pr-6">
+                    <span className="inline-flex justify-center items-center ml-4">
+                      <HomeIcon className="w-6 h-6 " />{" "}
+                    </span>
+                    <span className="ml-2 text-sm tracking-wide truncate">
+                      Volver a la web
+                    </span>
+                  </div>
+                </Link>
+              </li>
 
               <li>
                 <div

@@ -471,12 +471,19 @@ const Checkout = () => {
                   </Label>
                   <Select
                     id="Direccion"
-                    value={InputValues?.Direccion}
+                    value={InputValues?.DireccionId}
                     required
                     onValueChange={(e) => {
+                      const InfoDireccion = Direcciones.find(
+                        (direccion) => direccion.id == e
+                      );
+
                       setInputValues({
                         ...InputValues,
-                        Direccion: e,
+                        Direccion: InfoDireccion?.ValorDomicilio,
+                        DireccionSelected: InfoDireccion?.NombreUbicacion || "",
+                        DireccionId: InfoDireccion?.id,
+                        DireccionValorDomicilio: InfoDireccion?.ValorDomicilio,
                       });
                     }}
                   >
@@ -485,10 +492,7 @@ const Checkout = () => {
                     </SelectTrigger>
                     <SelectContent className="uppercase">
                       {Direcciones?.map((direction, key) => (
-                        <SelectItem
-                          key={direction.id}
-                          value={direction.ValorDomicilio}
-                        >
+                        <SelectItem key={direction.id} value={direction.id}>
                           {direction.NombreUbicacion} - S/{" "}
                           {direction.ValorDomicilio}
                         </SelectItem>

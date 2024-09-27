@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
 const formatCurrency = (value) =>
   value ? `S/ ${value.toFixed(2)}` : "S/ 0.00";
 
-const ReportesProductosPDF = ({ Orders, RangesData }) => {
+const ReportesProductosPDF = ({ Orders, RangesData, Title }) => {
   // Agrupando productos y calculando cantidad vendida y total generado por producto
   const productSales = {};
 
@@ -91,7 +91,7 @@ const ReportesProductosPDF = ({ Orders, RangesData }) => {
       <Document>
         <Page style={styles.page}>
           <View style={styles.section}>
-            <Text style={styles.title}>Reporte de Ventas por Producto</Text>
+            <Text style={styles.title}>{Title}</Text>
             <Text style={styles.subtitle}>
               Fecha de inicio:{" "}
               {RangesData?.startDate
@@ -139,7 +139,9 @@ const ReportesProductosPDF = ({ Orders, RangesData }) => {
                   >
                     <View style={styles.tableCol}>
                       <Text style={styles.tableCell}>
-                        {Orders[productName]?.nombreproducto}
+                        {Orders[productName]?.nombreproducto ||
+                          Orders[productName]?.NombreProducto ||
+                          ""}
                       </Text>
                     </View>
                     <View style={styles.tableCol}>
