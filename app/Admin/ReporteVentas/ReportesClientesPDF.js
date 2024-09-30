@@ -139,6 +139,7 @@ const ReporteClientesPDF = ({ Orders, RangesData, Title }) => {
                     Cantidad de Productos
                   </Text>
                 </View>
+
                 <View style={styles.tableCol}>
                   <Text style={[styles.tableCell, styles.tableHeaderCell]}>
                     Valor Total
@@ -195,6 +196,7 @@ const ReporteClientesPDF = ({ Orders, RangesData, Title }) => {
                         {cantidadProductos || 0}
                       </Text>
                     </View>
+
                     <View style={styles?.tableCol}>
                       <Text style={styles?.tableCell}>
                         {formatCurrency(totalValue)}
@@ -220,6 +222,7 @@ const ReporteClientesPDF = ({ Orders, RangesData, Title }) => {
               <View style={styles.tableCol}>
                 <Text style={styles.tableCell}></Text> {/* Columna vacía */}
               </View>
+
               <View style={styles.tableCol}>
                 <Text style={styles.tableCell}>
                   {formatCurrency(totalGeneral)}

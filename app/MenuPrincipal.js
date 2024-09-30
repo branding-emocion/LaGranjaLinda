@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import ItemMenu from "./ItemMenu";
 import { usePathname } from "next/navigation";
-import { PhoneCall, Smartphone } from "lucide-react";
+import { PackageIcon, PhoneCall, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -108,6 +108,16 @@ const MenuPrincipal = () => {
         <p className="ml-2 text-sm text-wrap tracking-wide truncate uppercase">
           {user?.displayName || "Login / Registro"}
         </p>
+      </Link>
+
+      <Link
+        href={"/Admin/Delivery"}
+        className="block md:hidden fixed top-[55%] right-0 z-40  border-2 border-[#7d2d04] rounded-l-lg bg-granjaPrimary flex w-32 justify-center items-center text-[#7d2d04] font-bold py-1 space-x-1 text-sm"
+      >
+        <div className=" justify-center items-center ml-4">
+          <h1 className="text-xl">Ordenar</h1>
+          <PackageIcon className="w-6 h-6 mx-auto" />
+        </div>
       </Link>
 
       <nav
