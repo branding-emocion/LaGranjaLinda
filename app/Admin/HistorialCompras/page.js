@@ -15,6 +15,7 @@ import {
   orderBy,
   query,
   where,
+  limit,
 } from "firebase/firestore";
 import { EyeIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -33,7 +34,8 @@ const HistorialCompras = () => {
       const qReservas = query(
         collection(db, "Orders"),
         where("userId", "==", `${user?.uid}`),
-        orderBy("createdAt", "desc")
+        orderBy("createdAt", "desc"),
+        limit(3)
         // las primeras 10 pedidos
       );
 
