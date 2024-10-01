@@ -170,12 +170,14 @@ const DashboardLayout = ({ children }) => {
       link: `/Admin/Checkout`,
 
       icon: <CircleDollarSign className="w-6 h-6 " />,
+      hidden: !claims?.Rol?.includes("Mostrador") ? false : true,
     },
     {
       name: "Historial Compras",
       link: `/Admin/HistorialCompras`,
 
       icon: <HistoryIcon className="w-6 h-6 " />,
+      hidden: !claims?.Rol?.includes("Mostrador") ? false : true,
     },
 
     {
