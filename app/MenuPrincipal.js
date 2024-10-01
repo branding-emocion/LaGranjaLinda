@@ -36,7 +36,7 @@ const MenuPrincipal = () => {
 
   return (
     <div>
-      <div className="fixed top-[45%] right-4 z-[100]">
+      <div className="fixed top-[47%] right-4 z-[100]">
         <a
           href="https://api.whatsapp.com/send?phone=51914125509&text=Hola%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20"
           target="_blank"
@@ -109,7 +109,7 @@ const MenuPrincipal = () => {
         href={"/Admin/Delivery"}
         className="md:hidden fixed bottom-0 right-0 z-40  border-2 border-[#7d2d04] rounded-l-lg bg-granjaPrimary flex w-full justify-center items-center text-[#7d2d04] font-bold py-5"
       >
-        <Button className="">Ordena Aquí</Button>
+        <Button className="bg-[#ce0d05]">Ordena Aquí</Button>
       </Link>
 
       <nav
