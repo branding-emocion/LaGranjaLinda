@@ -139,8 +139,6 @@ const Checkout = () => {
 
   const handleSuccessfulPayment = async (paymentDetails) => {
     try {
-      console.log("paymentDetails", paymentDetails);
-
       const Restau =
         Restaurantes.find((res) => res.id == InputValues?.RestauranteId) || {};
 
@@ -333,13 +331,10 @@ const Checkout = () => {
                   // });
                   return;
                 }
-                if (response?.infoPago) {
-                  await handleSuccessfulPayment(response?.infoPago);
-                  clearCart();
-                  setstateSucess(true);
-                }
-
-                Culqi?.close();
+                console.log("response", response);
+                await handleSuccessfulPayment(response?.infoPago);
+                clearCart();
+                setstateSucess(true);
               } else if (Culqi.order) {
                 const order = Culqi.order;
               } else {
