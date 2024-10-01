@@ -32,13 +32,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const ModalReservas = ({ OpenModal, setOpenModal }) => {
+const ModalReservas = ({ OpenModal, setOpenModal, setAlertaState }) => {
   const [InputValues, setInputValues] = useState({});
   const [minDate, setMinDate] = useState("");
-
-  console.log("OpenModal", OpenModal);
-
-  console.log("minDate", minDate);
 
   const [Loading, setLoading] = useState(false);
   const { toast } = useToast();
@@ -105,11 +101,12 @@ const ModalReservas = ({ OpenModal, setOpenModal }) => {
         Estado: "Pendiente",
         FechaReserva: Timestamp.fromDate(fechaReservaDate), // Almacenar como Timestamp
       });
-      toast({
-        title: "Reserva solicitada",
-        description: "En breve nos comunicaremos contigo",
-      });
+      // toast({
+      //   title: "Reserva solicitada",
+      //   description: "En breve nos comunicaremos contigo",
+      // });
       closeOpenModal();
+      setAlertaState(true);
     } catch (err) {
       console.error("Error:", err);
       toast({
