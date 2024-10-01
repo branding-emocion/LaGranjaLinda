@@ -162,18 +162,31 @@ const ShowReservas = ({ params: { idRestaurante } }) => {
                     <button
                       onClick={async (e) => {
                         e.preventDefault();
-                        // Actualizar el estado de la reserva rechazar
 
+                        // Confirmar si el usuario quiere rechazar la reserva
                         if (confirm("¿Estás seguro de rechazar la reserva?")) {
-                          await updateDoc(
-                            doc(db, "Reservas", `${reserva.id}`),
-                            {
-                              Estado: "Rechazado",
-                            }
+                          // Pedir el motivo de rechazo
+                          const motivoRechazo = prompt(
+                            "Por favor, ingresa el motivo del rechazo:"
                           );
+
+                          if (motivoRechazo) {
+                            // Actualizar el estado de la reserva y agregar el motivo de rechazo
+                            await updateDoc(
+                              doc(db, "Reservas", `${reserva.id}`),
+                              {
+                                Estado: "Rechazado",
+                                MotivoRechazo: motivoRechazo,
+                              }
+                            );
+                          } else {
+                            alert(
+                              "Debes ingresar un motivo para rechazar la reserva."
+                            );
+                          }
                         }
                       }}
-                      className="bg-red-500 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-red-600"
+                      className="bg-red-500 space-x-1.5 rounded-lg px-4 py-1.5 text-white duration-100 hover:bg-red-600"
                     >
                       <XIcon className="w-4 h-4" />
                     </button>

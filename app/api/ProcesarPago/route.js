@@ -55,16 +55,15 @@ export async function POST(req) {
     });
 
     const data = await response.json();
-    console.log("data", data);
 
     if (data?.object == "error") {
       return NextResponse.json(
         { error: { message: data?.merchant_message } },
-        { status: 400 }
+        { status: 500 }
       );
     }
 
-    return NextResponse.json({ infoPago: data }, { status: 200 });
+    return NextResponse.json({ infoPago: data });
   } catch (error) {
     console.error("Error creating payment:", error);
     return NextResponse.json(

@@ -32,7 +32,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const ModalReservas = ({ OpenModal, setOpenModal }) => {
+const ModalReservas = ({ OpenModal, setOpenModal, setAlertaState }) => {
   const [InputValues, setInputValues] = useState({});
   const [minDate, setMinDate] = useState("");
 
@@ -49,20 +49,22 @@ const ModalReservas = ({ OpenModal, setOpenModal }) => {
 
   useEffect(() => {
     const today = new Date();
-    today.setDate(today.getDate() + 2); // Agregar 2 días a la fecha actual
+    today.setDate(today.getDate() + 1); // Agregar 1 día a la fecha actual
     const year = today.getFullYear();
     const month = String(today.getMonth() + 1).padStart(2, "0"); // Meses empiezan en 0
     const day = String(today.getDate()).padStart(2, "0");
-    const hours = String(today.getHours()).padStart(2, "0");
-    const minutes = String(today.getMinutes()).padStart(2, "0");
-    const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
-    setMinDate(formattedDate);
+
+    // Hora mínima 12:00 PM
+    const formattedDateMin = `${year}-${month}-${day}T12:00`;
+    setMinDate(formattedDateMin);
   }, []);
 
   const HandlerChange = (e) => {
+    const { name, value } = e.target;
+
     setInputValues({
       ...InputValues,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
@@ -79,6 +81,19 @@ const ModalReservas = ({ OpenModal, setOpenModal }) => {
       // Convertir a objeto Date fecha y hora
       const fechaReservaDate = new Date(InputValues?.FechaReserva);
 
+      // Establecer las horas de validación (12 PM y 9 PM)
+      const minHour = 12;
+      const maxHour = 21;
+
+      // Validar que la fecha sea mayor a la fecha mínima y esté entre las 12 PM y 9 PM
+      if (
+        fechaReservaDate < minDate ||
+        fechaReservaDate.getHours() < minHour ||
+        fechaReservaDate.getHours() >= maxHour
+      ) {
+        alert("La hora mínima es de las 12 PM y la máxima es las 9 PM");
+        return;
+      }
       const docRef = await addDoc(collection(db, "Reservas"), {
         ...InputValues,
         Restaurante: OpenModal?.InfoRestaurante?.id,
@@ -86,11 +101,12 @@ const ModalReservas = ({ OpenModal, setOpenModal }) => {
         Estado: "Pendiente",
         FechaReserva: Timestamp.fromDate(fechaReservaDate), // Almacenar como Timestamp
       });
-      toast({
-        title: "Reserva solicitada",
-        description: "En breve nos comunicaremos contigo",
-      });
+      // toast({
+      //   title: "Reserva solicitada",
+      //   description: "En breve nos comunicaremos contigo",
+      // });
       closeOpenModal();
+      setAlertaState(true);
     } catch (err) {
       console.error("Error:", err);
       toast({
@@ -110,7 +126,7 @@ const ModalReservas = ({ OpenModal, setOpenModal }) => {
             NUEVA RESERVA{" "}
             <span className="uppercase">
               {OpenModal.InfoRestaurante?.NombreLocal} -{" "}
-              {OpenModal.InfoRestaurante?.Direccion ||
+              {OpenModal.InfoRestaurante?.Direction ||
                 "Dirección no disponible"}
             </span>
           </DialogTitle>

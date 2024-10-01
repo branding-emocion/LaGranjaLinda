@@ -5,6 +5,7 @@ import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "@/firebase/firebaseClient";
 import Image from "next/image";
 import ModalReservas from "./ModalReservas";
+import ModalAlerta from "./ModalAlerta";
 
 const Reservas = () => {
   const [OpenModal, setOpenModal] = useState({
@@ -12,6 +13,7 @@ const Reservas = () => {
     InfoRestaurante: {},
   });
   const [Restaurantes, setRestaurantes] = useState([]);
+  const [AlertaState, setAlertaState] = useState(false);
 
   useEffect(() => {
     // Crear la query con la condición
@@ -37,7 +39,17 @@ const Reservas = () => {
   return (
     <div className="  bg-[#eaeaea]  mb-10">
       {OpenModal.Visible && (
-        <ModalReservas OpenModal={OpenModal} setOpenModal={setOpenModal} />
+        <ModalReservas
+          OpenModal={OpenModal}
+          setOpenModal={setOpenModal}
+          setAlertaState={setAlertaState}
+        />
+      )}
+      {AlertaState && (
+        <ModalAlerta
+          setAlertaState={setAlertaState}
+          AlertaState={AlertaState}
+        />
       )}
       <Title title={"Reservas"} image="/One.webp" />
 
