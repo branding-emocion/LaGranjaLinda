@@ -13,7 +13,7 @@ const Reservas = () => {
     InfoRestaurante: {},
   });
   const [Restaurantes, setRestaurantes] = useState([]);
-  const [AlertaState, setAlertaState] = useState(true);
+  const [AlertaState, setAlertaState] = useState(false);
 
   useEffect(() => {
     // Crear la query con la condición
