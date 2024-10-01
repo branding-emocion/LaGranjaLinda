@@ -38,7 +38,7 @@ const MenuPrincipal = () => {
     <div>
       <div className="fixed top-[47%] right-4 z-[100]">
         <a
-          href="https://api.whatsapp.com/send?phone=51914125509&text=Hola%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20"
+          href="https://api.whatsapp.com/send?phone=+51945756201&text=Hola%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20"
           target="_blank"
           title="Contacto via whatsapp"
           rel="noopener noreferrer"
