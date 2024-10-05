@@ -22,14 +22,15 @@ import React, { useEffect, useState } from "react";
 
 const ShowReservas = ({ params: { idRestaurante } }) => {
   const [Reservas, setReservas] = useState([]);
+  console.log("Reservas", Reservas);
 
   useEffect(() => {
     if (idRestaurante) {
       const qReservas = query(
         collection(db, "Reservas"),
         where("Restaurante", "==", idRestaurante),
-        where("Estado", "==", "Pendiente") // Filtrar por estado pendiente
-        // orderBy("createdAt", "desc")
+        where("Estado", "in", ["Pendiente", "Rechazado"]), // Filtrar por estado pendiente o rechazado
+        orderBy("FechaReserva", "desc")
       );
 
       const unsubscribe = onSnapshot(qReservas, (snapshot) => {
@@ -85,7 +86,9 @@ const ShowReservas = ({ params: { idRestaurante } }) => {
               {Reservas?.map((reserva) => (
                 <div
                   key={reserva.id}
-                  className="w-full mx-auto border mb-5 border-gray-200 bg-sky-50 rounded-lg cursor-pointer shadow-lg "
+                  className={`w-full mx-auto border mb-5 border-gray-200  ${
+                    reserva.Estado == "Rechazado" ? "bg-red-200" : "bg-sky-50"
+                  } rounded-lg cursor-pointer shadow-lg `}
                 >
                   <div className="p-5">
                     <div>
@@ -139,58 +142,84 @@ const ShowReservas = ({ params: { idRestaurante } }) => {
                       </p>
                     </div>
                   </div>
+                  {reserva.Estado == "Rechazado" ? (
+                    <>
+                      <p className=" text-center font-medium ">
+                        {" "}
+                        Motivo de rechazo: {reserva?.MotivoRechazo}
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      {" "}
+                      <div className="flex items-center justify-center gap-x-2 pb-2">
+                        <button
+                          onClick={async (e) => {
+                            e.preventDefault();
 
-                  <div className="flex items-center justify-center gap-x-2 pb-2">
-                    <button
-                      onClick={async (e) => {
-                        e.preventDefault();
-
-                        // Actualizar el estado de la reserva
-                        if (confirm("¿Estás seguro de confirmar la reserva?")) {
-                          await updateDoc(
-                            doc(db, "Reservas", `${reserva.id}`),
-                            {
-                              Estado: "Confirmado",
+                            // Actualizar el estado de la reserva
+                            if (
+                              confirm("¿Estás seguro de confirmar la reserva?")
+                            ) {
+                              await updateDoc(
+                                doc(db, "Reservas", `${reserva.id}`),
+                                {
+                                  Estado: "Confirmado",
+                                }
+                              );
                             }
-                          );
-                        }
-                      }}
-                      className="bg-blue-500 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-blue-600"
-                    >
-                      <CircleCheckBig className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={async (e) => {
-                        e.preventDefault();
+                          }}
+                          className="bg-blue-500 space-x-1.5 rounded-lg  px-4 py-1.5 text-white duration-100 hover:bg-blue-600"
+                        >
+                          <CircleCheckBig className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={async (e) => {
+                            e.preventDefault();
 
-                        // Confirmar si el usuario quiere rechazar la reserva
-                        if (confirm("¿Estás seguro de rechazar la reserva?")) {
-                          // Pedir el motivo de rechazo
-                          const motivoRechazo = prompt(
-                            "Por favor, ingresa el motivo del rechazo:"
-                          );
+                            // Confirmar si el usuario quiere rechazar la reserva
+                            if (
+                              confirm("¿Estás seguro de rechazar la reserva?")
+                            ) {
+                              // Pedir el motivo de rechazo
+                              const motivoRechazo = prompt(
+                                "Por favor, ingresa el motivo del rechazo:"
+                              );
 
-                          if (motivoRechazo) {
-                            // Actualizar el estado de la reserva y agregar el motivo de rechazo
-                            await updateDoc(
-                              doc(db, "Reservas", `${reserva.id}`),
-                              {
-                                Estado: "Rechazado",
-                                MotivoRechazo: motivoRechazo,
+                              // Validar que el motivo de rechazo no sea vacío
+                              if (
+                                !motivoRechazo ||
+                                motivoRechazo.trim() === ""
+                              ) {
+                                alert(
+                                  "Debes ingresar un motivo para rechazar la reserva."
+                                );
+                                return;
                               }
-                            );
-                          } else {
-                            alert(
-                              "Debes ingresar un motivo para rechazar la reserva."
-                            );
-                          }
-                        }
-                      }}
-                      className="bg-red-500 space-x-1.5 rounded-lg px-4 py-1.5 text-white duration-100 hover:bg-red-600"
-                    >
-                      <XIcon className="w-4 h-4" />
-                    </button>
-                  </div>
+
+                              if (motivoRechazo) {
+                                // Actualizar el estado de la reserva y agregar el motivo de rechazo
+                                await updateDoc(
+                                  doc(db, "Reservas", `${reserva.id}`),
+                                  {
+                                    Estado: "Rechazado",
+                                    MotivoRechazo: motivoRechazo,
+                                  }
+                                );
+                              } else {
+                                alert(
+                                  "Debes ingresar un motivo para rechazar la reserva."
+                                );
+                              }
+                            }
+                          }}
+                          className="bg-red-500 space-x-1.5 rounded-lg px-4 py-1.5 text-white duration-100 hover:bg-red-600"
+                        >
+                          <XIcon className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </>
+                  )}
                 </div>
               ))}
             </div>

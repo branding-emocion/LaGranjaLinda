@@ -7,12 +7,12 @@ export default function ModalAlerta({ AlertaState, setAlertaState }) {
   return (
     <div className="flex items-center justify-center min-h-screen">
       {AlertaState && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-          <div className="bg-[#4CAF50] p-6 rounded-lg max-w-2xl w-full">
-            <h2 className="text-white text-2xl font-bold text-center mb-4">
+        <div className="fixed z-50 inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+          <div className=" bg-white p-6 rounded-lg max-w-2xl w-full">
+            <h2 className=" text-2xl font-bold text-center mb-4">
               RESERVA SOLICITADA
             </h2>
-            <ul className="text-white space-y-4 list-disc list-inside">
+            <ul className=" space-y-4 list-disc list-inside">
               <li>
                 Si usted solicitó reservar entre las 21:00 hrs y 11:00 hrs del
                 siguiente día un granjero se comunicará con usted a las 12 del

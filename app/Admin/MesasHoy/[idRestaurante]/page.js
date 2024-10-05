@@ -8,7 +8,14 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { db } from "@/firebase/firebaseClient";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  onSnapshot,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 
 import { DateRange } from "react-date-range";
@@ -16,6 +23,7 @@ import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { es } from "date-fns/locale";
+import { Button } from "@/components/ui/button";
 
 const ShowReservasHoy = ({ params: { idRestaurante } }) => {
   const [Reservas, setReservas] = useState([]);
@@ -122,7 +130,11 @@ const ShowReservasHoy = ({ params: { idRestaurante } }) => {
               {SearchReservas?.map((reserva) => (
                 <div
                   key={reserva.id}
-                  className="w-full bg-sky-50 hover:scale-105 mx-auto border mb-5 border-gray-200  rounded-lg cursor-pointer shadow-lg "
+                  className={`w-full ${
+                    reserva?.UltimoMomento == "Rechazado"
+                      ? "bg-red-200"
+                      : "bg-green-50"
+                  } hover:scale-105 mx-auto border mb-5 border-gray-200  rounded-lg cursor-pointer shadow-lg `}
                 >
                   <div className="p-5">
                     <div>
@@ -176,6 +188,88 @@ const ShowReservasHoy = ({ params: { idRestaurante } }) => {
                       <p className="w-full max-h-52 overflow-auto">
                         {reserva.Comentario}
                       </p>
+
+                      {reserva?.UltimoMomento == "Rechazado" && (
+                        <>
+                          <p className=" text-center font-medium ">
+                            {" "}
+                            Motivo de rechazo: {reserva?.MotivoRechazo}
+                          </p>
+                        </>
+                      )}
+
+                      {reserva?.UltimoMomento == "Atendido" && (
+                        <>
+                          <p className=" text-center font-medium ">
+                            {" "}
+                            Comentario: {reserva?.Comentario}
+                          </p>
+                        </>
+                      )}
+                      <div className="flex items-center justify-between  gap-x-2 pb-2">
+                        {!reserva?.UltimoMomento && (
+                          <>
+                            <Button
+                              onClick={async (e) => {
+                                e.preventDefault();
+                                // Actualizar el estado de la reserva
+                                if (confirm("La reserva ha sido atendida ?")) {
+                                  const Comentario = prompt("Comentario");
+
+                                  await updateDoc(
+                                    doc(db, "Reservas", `${reserva.id}`),
+                                    {
+                                      UltimoMomento: "Atendido",
+                                      Comentario: Comentario || "",
+                                    }
+                                  );
+                                }
+                              }}
+                            >
+                              Atendido
+                            </Button>
+                            <Button
+                              onClick={async (e) => {
+                                e.preventDefault();
+
+                                if (
+                                  confirm(
+                                    "¿Estás seguro de rechazar la reserva?"
+                                  )
+                                ) {
+                                  // Pedir el motivo de rechazo
+                                  const motivoRechazo = prompt(
+                                    "Por favor, ingresa el motivo del rechazo:"
+                                  );
+
+                                  // Validar que el motivo de rechazo no sea vacío
+                                  if (
+                                    !motivoRechazo ||
+                                    motivoRechazo.trim() === ""
+                                  ) {
+                                    alert(
+                                      "Debes ingresar un motivo para rechazar la reserva."
+                                    );
+                                    return;
+                                  }
+
+                                  // Actualizar el estado de la reserva y agregar el motivo de rechazo
+                                  await updateDoc(
+                                    doc(db, "Reservas", `${reserva.id}`),
+                                    {
+                                      UltimoMomento: "Rechazado",
+                                      MotivoRechazo: motivoRechazo,
+                                    }
+                                  );
+                                }
+                              }}
+                            >
+                              {" "}
+                              Rechazo ultimo momento
+                            </Button>
+                          </>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
