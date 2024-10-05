@@ -5,12 +5,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { PackageCheck } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const ModalCompraSuccess = ({ stateSucess, setstateSucess }) => {
+  const router = useRouter();
+
   const closestateSucess = () => {
     setstateSucess(false);
+    router.push("/");
   };
 
   return (

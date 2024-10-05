@@ -94,6 +94,18 @@ const OrdenesRestaurante = ({ params: { idRestaurante } }) => {
                       <h1 className="text-gray-900 font-bold text-2xl tracking-tight text-center capitalize ">
                         {order?.displayName}
                       </h1>
+                      <h2 className="capitalize text-gray-800 font-semibold">
+                        Fecha de creación:{" "}
+                        <span className="font-normal">
+                          {/* Date Firebase */}
+                          {new Date(
+                            order.createdAt?.toDate()
+                          ).toLocaleDateString()}{" "}
+                          {new Date(
+                            order.createdAt?.toDate()
+                          ).toLocaleTimeString()}
+                        </span>
+                      </h2>
 
                       <h2 className="capitalize text-gray-800 font-semibold text-lg">
                         Entrega:{" "}
@@ -111,19 +123,23 @@ const OrdenesRestaurante = ({ params: { idRestaurante } }) => {
                           {order?.DireccionEntrega}
                         </p>
                       )}
+                      {/* Referencia del pedido */}
 
-                      <h2 className="capitalize text-gray-800 font-semibold">
-                        Fecha de creación:{" "}
-                        <span className="font-normal">
-                          {/* Date Firebase */}
-                          {new Date(
-                            order.createdAt?.toDate()
-                          ).toLocaleDateString()}{" "}
-                          {new Date(
-                            order.createdAt?.toDate()
-                          ).toLocaleTimeString()}
-                        </span>
-                      </h2>
+                      {order?.Interior && (
+                        <p className=" capitalize text-gray-800">
+                          <span className="font-semibold">Interior: </span>
+                          {order?.Interior}
+                        </p>
+                      )}
+                      {order?.Referencia && (
+                        <p className=" capitalize text-gray-800">
+                          <span className="font-semibold">Referencia: </span>
+                          {order?.Referencia}
+                        </p>
+                      )}
+                      {/* Interior */}
+
+                      {/* Celular del pedido */}
 
                       <div className=" capitalize text-gray-700">
                         <span className="font-semibold">Mail: </span>

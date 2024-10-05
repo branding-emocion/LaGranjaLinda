@@ -36,7 +36,7 @@ const MenuPrincipal = () => {
 
   return (
     <div>
-      <div className="fixed top-[47%] right-4 z-[100]">
+      <div className="fixed top-[52%] right-4 z-[100]">
         <a
           href="https://api.whatsapp.com/send?phone=+51945756201&text=Hola%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20"
           target="_blank"
@@ -59,7 +59,7 @@ const MenuPrincipal = () => {
 
       <Link
         href={"/basket"}
-        className=" fixed top-[35%] right-0 z-40  border-2 border-[#7d2d04] rounded-l-lg bg-granjaPrimary flex w-32 justify-center items-center text-[#7d2d04] font-bold py-4 space-x-1 text-sm"
+        className=" fixed top-[38%] right-0 z-40  border-2 border-[#7d2d04] rounded-l-lg bg-granjaPrimary flex w-32 justify-center items-center text-[#7d2d04] font-bold py-4 space-x-1 text-sm"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -88,7 +88,7 @@ const MenuPrincipal = () => {
 
       <Link
         href={"/Admin"}
-        className=" fixed top-[23%] right-0 z-40  border-2 border-[#7d2d04] rounded-l-lg bg-granjaPrimary flex w-32 justify-center items-center text-[#7d2d04] font-bold py-4 space-x-1 text-sm"
+        className=" fixed top-[20%] right-0 z-40  border-2 border-[#7d2d04] rounded-l-lg bg-granjaPrimary flex w-32 justify-center items-center text-[#7d2d04] font-bold py-4 space-x-1 text-sm"
       >
         <div className=" justify-center items-center ml-4 ">
           {/* <User className="w-6 h-6 text-white" /> */}
@@ -183,13 +183,13 @@ const MenuPrincipal = () => {
             >
               Nuestra Carta
             </ItemMenu>
-            {/* <ItemMenu
-              ruta="/Promociones"
+            <ItemMenu
+              ruta="/Delivery/search?q=ggs0TtukmK3EbAesEO03&name=PROMOS+"
               setIsOpen={setIsOpen}
               border={pathname == "/Promociones" ? true : false}
             >
               Promociones
-            </ItemMenu> */}
+            </ItemMenu>
             <ItemMenu
               ruta="/Reservas"
               setIsOpen={setIsOpen}

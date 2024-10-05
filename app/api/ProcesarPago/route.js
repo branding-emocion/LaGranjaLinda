@@ -63,9 +63,9 @@ export async function POST(req) {
       );
     }
 
-    return NextResponse.json({ infoPago: data });
+    return NextResponse.json({ infoPago: data || {} });
   } catch (error) {
-    console.error("Error creating payment:", error);
+    console.log("Error creating payment:", error);
     return NextResponse.json(
       { error: { message: "Internal Server Error", details: error.message } },
       { status: 500 }
