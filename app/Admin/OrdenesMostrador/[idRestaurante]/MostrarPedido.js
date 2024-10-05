@@ -200,6 +200,7 @@ const MostrarPedido = ({
                       </div>
                     </div>
                   )}
+
                 {ListaComprasModalVisible?.order?.Entrega == "Llevar" &&
                   ListaComprasModalVisible?.order?.EstadoEntraga !=
                     "Listado" && (
