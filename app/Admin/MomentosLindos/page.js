@@ -190,10 +190,12 @@ export default function RestaurantMoments() {
               </div>
               <div className="mt-4">
                 <Button
-                  onClick={(e) => {
+                  onClick={async (e) => {
                     e.preventDefault();
                     if (confirm("¿Estás seguro de eliminar el momento?")) {
-                      deleteDoc(doc(db, "MomentosLindos", moment.id));
+                      await deleteDoc(
+                        doc(db, "MomentosLindos", `${moment.id}`)
+                      );
                     }
                   }}
                 >

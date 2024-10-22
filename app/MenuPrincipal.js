@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import ItemMenu from "./ItemMenu";
 import { usePathname } from "next/navigation";
-import { PackageIcon, PhoneCall, Smartphone } from "lucide-react";
+import { PackageIcon, PhoneCall, Smartphone, UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -92,10 +92,19 @@ const MenuPrincipal = () => {
       >
         <div className=" justify-center items-center ml-4 ">
           {/* <User className="w-6 h-6 text-white" /> */}
-          <Avatar className="h-6 w-6 lg:w-9 lg:h-9">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
+
+          {user?.photoURL ? (
+            <Avatar className="h-6 w-6 lg:w-9 lg:h-9">
+              <AvatarImage
+                src={user?.photoURL || "https://github.com/shadcn.png"}
+              />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+          ) : (
+            <>
+              <UserCircle className=" h-6 w-6 lg:w-9 lg:h-9 object-cover aspect-square" />
+            </>
+          )}
         </div>
 
         <p className="ml-2 text-sm text-wrap tracking-wide truncate uppercase">
@@ -115,12 +124,12 @@ const MenuPrincipal = () => {
           filter: "drop-shadow(0px 0px 3px black)",
 
           //  poner de background una imagen esta en "/bg-web.jpg"
-          backgroundImage: "url('/bg-web.jpg')",
+          backgroundImage: "url('/bg-web.webp')",
           backgroundPosition: "center",
           backgroundAttachment: "fixed",
           backgroundRepeat: "repeat",
         }}
-        className={`sticky h-28 z-50 top-0 left-0 right-0 p-2 md:px-11 shadow-sm md:flex md:items-center md:justify-around 2xl:justify-around   `}
+        className={`fixed h-28 z-50 top-0 left-0 right-0 p-2 md:px-11 shadow-sm md:flex md:items-center md:justify-around 2xl:justify-around   `}
       >
         <div className="  flex justify-between items-center  ">
           {/* Escudo Logo "inicio" */}
@@ -132,7 +141,7 @@ const MenuPrincipal = () => {
               <Image
                 title="Ir a inicio"
                 src="/GranjaCompleto.webp"
-                width={150}
+                width={190}
                 height={70}
                 alt="Logotype"
                 style={{
@@ -141,7 +150,7 @@ const MenuPrincipal = () => {
               />
             </div>
           </Link>
-          <span className="text-3xl cursor-pointer mx-2 md:hidden block text-white">
+          <span className="text-3xl cursor-pointer mx-2 md:hidden block text-black">
             <button name="Menu" onClick={() => setIsOpen(!isOpen)}>
               <svg
                 className="h-10 w-10 text-[#7d2d04]"
@@ -160,11 +169,11 @@ const MenuPrincipal = () => {
           </span>
         </div>
         <div className="flex flex-col   ">
-          <h1 className="hidden   lg:block lg:text-white text-2xl ">
+          <h1 className="hidden   lg:block lg:text-green-800 text-2xl ">
             Elige tu pedido, elige tu experiencia 
           </h1>
           <div
-            className={` text-center  flex flex-col h-screen md:h-auto  md:flex md:flex-row  md:items-center  z-[-1] md:z-auto md:static gap-2 absolute text-white bg-[#ece4d9]    md:bg-transparent  w-full left-0 top-full md:w-auto md:py-0  md:pl-0 pl-7 md:opacity-100 opacity-0 right-[-400px] transition-all ease-in  ${
+            className={` text-center  flex flex-col h-screen md:h-auto  md:flex md:flex-row  md:items-center  z-[-1] md:z-auto md:static gap-2 absolute text-green-800 bg-[#ece4d9]    md:bg-transparent  w-full left-0 top-full md:w-auto md:py-0  md:pl-0 pl-7 md:opacity-100 opacity-0 right-[-400px] transition-all ease-in  ${
               isOpen ? ` right-0 py-11 opacity-100` : `hidden`
             }`}
           >
@@ -199,12 +208,17 @@ const MenuPrincipal = () => {
             </ItemMenu>
           </div>
         </div>
-        <div className="hidden lg:flex justify-center items-center gap-x-4">
-          <Link href="/Delivery">
+        <div className="hidden lg:flex  justify-center items-center gap-x-4">
+          <Link href="/Delivery" className="flex items-center ">
+            <img
+              src="/Iconos/Gallo.png"
+              alt=""
+              className="w-16 h-16 object-cover  object-cover"
+            />
             <Button className="bg-red-700 uppercase">Ordena Aquí</Button>
           </Link>
 
-          <div className=" uppercase lg:flex text-white">
+          <div className=" uppercase lg:flex text-green-800">
             <p className=" w-20 text-right  h-full tracking-tight leading-4">
               Te lo LLevamos donde estes
             </p>

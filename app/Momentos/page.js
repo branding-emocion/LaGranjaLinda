@@ -27,8 +27,8 @@ const Momentos = () => {
 
   return (
     <div className="bg-amber-100 min-h-screen p-8">
-      <h1 className="text-4xl font-bold text-amber-800 mb-8 text-center">
-        Momentos Lindos
+      <h1 className="text-4xl font-bold text-amber-800 mb-8 text-center uppercase">
+        Momentos Mágicos
       </h1>
 
       <ScrollArea className="w-full whitespace-nowrap rounded-md border">

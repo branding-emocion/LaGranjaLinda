@@ -28,6 +28,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import SubirDirecciones from "./SubirDirecciones.js";
 
 const Delyvery = ({ params: { idDistrito }, searchParams: { name } }) => {
   const [OpenModal, setOpenModal] = useState({});

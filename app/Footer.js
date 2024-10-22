@@ -7,19 +7,46 @@ import React from "react";
 const Footer = () => {
   return (
     <>
-      <footer className="border-t -mt-[41px]  py-6 px-4 lg:px-0 bg-granjaSecondary text-white">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 justify-center gap-4 items-center sm:items-start">
+      <footer
+        className="border-t -mt-[41px]  py-6 px-4 lg:px-0 bg-granjaSecondary text-white"
+        style={{
+          filter: "drop-shadow(0px 0px 3px black)",
+
+          //  poner de background una imagen esta en "/bg-web.jpg"
+          backgroundImage: "url('/bg-botton.webp')",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+          backgroundRepeat: "repeat",
+        }}
+      >
+        <div className="grid sm:grid-cols-2 lg:grid-cols-5   justify-center gap-4 items-center sm:items-start">
           <div className=" lg:mx-auto  ">
-            <h1 className="font-semibold mb-2 text-xl">Granja Linda</h1>
+            <div className="flex relative ">
+              <h1 className="font-semibold mb-2 text-xl"> La Granja Linda</h1>
+              <img
+                src="/Iconos/Nata.png"
+                alt=" log "
+                className="w-24 h-24 object-cover absolute top-0 -left-28"
+              />
+            </div>
             <hr className="mb-2" />
             <div className="space-y-2">
               <div className="flex space-x-2 items-center ">
                 <ul>
                   <li>
-                    <Link href={"/Nosotros"}>Nosotros</Link>
+                    <Link href={"/Historia"}>Historia</Link>
                   </li>
                   <li>
-                    <Link href={"/Momentos"}>Momentos mágicos</Link>
+                    <Link href={"/Historia"}>Propósito</Link>
+                  </li>
+                  <li>
+                    <Link href={"/Misión"}>Misión</Link>
+                  </li>
+                  <li>
+                    <Link href={"/Valores"}>Valores</Link>
+                  </li>
+                  <li>
+                    <Link href={"/Creencias"}>Creencias</Link>
                   </li>
                   <li>
                     <Link href={"/Reclamaciones"}>
@@ -40,7 +67,16 @@ const Footer = () => {
             </div>
           </div>
           <div className=" lg:mx-auto  ">
-            <h1 className="font-semibold mb-2 text-xl uppercase">Servicios</h1>
+            <div className="relative">
+              <h1 className="font-semibold mb-2 text-xl uppercase">
+                Servicios
+              </h1>
+              <img
+                src="/Iconos/Morita.png"
+                alt=""
+                className="w-24 h-24 object-cover absolute top-0 -left-28"
+              />
+            </div>
             <hr className="mb-2" />
             <div className="space-y-2">
               <div className="flex space-x-2 items-center ">
@@ -57,9 +93,17 @@ const Footer = () => {
           </div>
 
           <div className=" lg:mx-auto  ">
-            <h1 className="font-semibold mb-2 text-xl uppercase">
-              POLÍTICAS Y TÉRMINOS
-            </h1>
+            <div className="relative">
+              <h1 className="font-semibold mb-2 text-xl uppercase">
+                POLÍTICAS Y TÉRMINOS
+              </h1>
+
+              <img
+                src="/Iconos/Casa.png"
+                alt=""
+                className="w-24 h-24 object-cover absolute top-0 -left-28"
+              />
+            </div>
             <hr className="mb-2" />
             <div className="space-y-2">
               <div className="flex space-x-2 items-center ">
@@ -74,24 +118,50 @@ const Footer = () => {
               </div>
             </div>
           </div>
-          {/* <div className=" lg:mx-auto  ">
+          <div className=" lg:mx-auto  ">
             <h1 className="font-semibold mb-2 text-xl uppercase">
-              CONTÁCTANOS
+              Metodos de pago
             </h1>
             <hr className="mb-2" />
             <div className="space-y-2">
               <div className="flex space-x-2 items-center ">
                 <ul>
                   <li>
-                    <Link href={"/Escríbenos"}>Escríbenos</Link>
+                    <img
+                      src="/Visa.png"
+                      className="w-40 h-20 object-contain "
+                      alt="visa"
+                    />
                   </li>
                   <li>
-                    <Link href={"/Reservas"}>Trabaja con nosotros</Link>
+                    <img
+                      src="/yape.png"
+                      className="w-40 h-20 object-contain "
+                      alt="yape"
+                    />
                   </li>
                 </ul>
               </div>
             </div>
-          </div> */}
+          </div>
+          <div className=" lg:mx-auto  ">
+            <h1 className="font-semibold mb-2 text-xl uppercase">
+              Metodos de pago
+            </h1>
+            <hr className="mb-2" />
+            <div className="space-y-2">
+              <div className="flex space-x-2 items-center ">
+                <ul>
+                  <li>
+                    <Link href={"/Escribenos"}>Escríbenos</Link>
+                  </li>
+                  <li>
+                    <Link href={"/Escribenos"}>Trabaja con nosotros</Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
 
           <div className="  sm:col-span-2 lg:col-span-4 ">
             <div className="">

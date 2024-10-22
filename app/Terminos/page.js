@@ -12,7 +12,7 @@ const Terminos = () => {
         <div className=" flex justify-center items-center  p-1 lg:p-7 gap-x-10">
           <div className="w-full h-full  rounded-lg ">
             <iframe
-              src="/TÉRMINOS-Y-CONDICIONES-GRANJA-LINDA-BORRADOR.pdf"
+              src="/Pdf/TÉRMINOSYCONDICIONES.pdf"
               className="w-full h-[82vh] rounded-lg"
             ></iframe>
           </div>
