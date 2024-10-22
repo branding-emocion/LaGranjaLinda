@@ -16,7 +16,9 @@ const Main = ({ children }) => {
         </>
       ) : (
         <main className=" bg-gray-50 overflow-auto h-screen w-screen">
-          <MenuPrincipal />
+          <div className="h-28 ">
+            <MenuPrincipal />
+          </div>
           {children}
           <Footer />
         </main>

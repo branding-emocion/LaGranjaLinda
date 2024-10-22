@@ -88,6 +88,12 @@ const DashboardLayout = ({ children }) => {
       hidden: claims?.Rol?.includes("Admin") ? false : true,
     },
     {
+      name: "Momentos Mágicos",
+      link: "/Admin/MomentosLindos",
+      icon: <Heart className="w-6 h-6 " />,
+      hidden: claims?.Rol?.includes("Admin") ? false : true,
+    },
+    {
       name: "Carrousel",
       link: "/Admin/Carrousel",
       icon: <GalleryHorizontal className="w-6 h-6 " />,
@@ -196,12 +202,6 @@ const DashboardLayout = ({ children }) => {
       name: "LibroReclamaciones",
       link: "/Admin/LibroReclamaciones",
       icon: <BookmarkMinus className="w-6 h-6 " />,
-      hidden: claims?.Rol?.includes("Admin") ? false : true,
-    },
-    {
-      name: "Momentos Lindos",
-      link: "/Admin/MomentosLindos",
-      icon: <Heart className="w-6 h-6 " />,
       hidden: claims?.Rol?.includes("Admin") ? false : true,
     },
   ];

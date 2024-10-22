@@ -34,7 +34,7 @@ import {
 
 const ModalReservas = ({ OpenModal, setOpenModal, setAlertaState }) => {
   const [InputValues, setInputValues] = useState({});
-  const [minDate, setMinDate] = useState("");
+  const [MinDate, setMinDate] = useState(null);
 
   const [Loading, setLoading] = useState(false);
   const { toast } = useToast();
@@ -47,18 +47,6 @@ const ModalReservas = ({ OpenModal, setOpenModal, setAlertaState }) => {
     setInputValues({});
   };
 
-  useEffect(() => {
-    const today = new Date();
-    today.setDate(today.getDate() + 1); // Agregar 1 día a la fecha actual
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0"); // Meses empiezan en 0
-    const day = String(today.getDate()).padStart(2, "0");
-
-    // Hora mínima 12:00 PM
-    const formattedDateMin = `${year}-${month}-${day}T12:00`;
-    setMinDate(formattedDateMin);
-  }, []);
-
   const HandlerChange = (e) => {
     const { name, value } = e.target;
 
@@ -68,6 +56,14 @@ const ModalReservas = ({ OpenModal, setOpenModal, setAlertaState }) => {
     });
   };
 
+  useEffect(() => {
+    const today = new Date();
+    // Sumamos 2 días a la fecha actual
+    today.setDate(today.getDate() + 2);
+    const formattedDate = today.toISOString().split("T")[0];
+
+    setMinDate(formattedDate);
+  }, []);
   const HandlerSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -79,21 +75,10 @@ const ModalReservas = ({ OpenModal, setOpenModal, setAlertaState }) => {
       }
 
       // Convertir a objeto Date fecha y hora
-      const fechaReservaDate = new Date(InputValues?.FechaReserva);
+      const fechaReservaDate = new Date(
+        `${InputValues.FechaReserva}T${InputValues.HoraReserva}`
+      );
 
-      // Establecer las horas de validación (12 PM y 9 PM)
-      const minHour = 12;
-      const maxHour = 21;
-
-      // Validar que la fecha sea mayor a la fecha mínima y esté entre las 12 PM y 9 PM
-      if (
-        fechaReservaDate < minDate ||
-        fechaReservaDate.getHours() < minHour ||
-        fechaReservaDate.getHours() >= maxHour
-      ) {
-        alert("La hora mínima es de las 12 PM y la máxima es las 9 PM");
-        return;
-      }
       const docRef = await addDoc(collection(db, "Reservas"), {
         ...InputValues,
         Restaurante: OpenModal?.InfoRestaurante?.id,
@@ -219,7 +204,7 @@ const ModalReservas = ({ OpenModal, setOpenModal, setAlertaState }) => {
                   />
                 </div>
 
-                <div className="space-y-2">
+                {/* <div className="space-y-2">
                   <Label htmlFor="FechaReserva" className="">
                     Fecha y hora de la reserva{" "}
                     <span className="text-red-600">(*)</span>
@@ -235,7 +220,41 @@ const ModalReservas = ({ OpenModal, setOpenModal, setAlertaState }) => {
                       min={minDate}
                     />
                   </div>
+                </div> */}
+
+                <div className=" flex gap-x-2  ">
+                  <div className="">
+                    <Label htmlFor="FechaReserva" className="">
+                      Fecha de la reserva{" "}
+                      <span className="text-red-600">(*)</span>
+                    </Label>
+
+                    <Input
+                      type="date"
+                      name="FechaReserva"
+                      id="FechaReserva"
+                      required
+                      onChange={HandlerChange}
+                      min={MinDate}
+                    />
+                  </div>
+                  <div className="">
+                    <Label htmlFor="HoraReserva" className="">
+                      Hora de la reserva{" "}
+                      <span className="text-red-600">(*)</span>
+                    </Label>
+                    <Input
+                      type="time"
+                      name="HoraReserva"
+                      id="HoraReserva"
+                      required
+                      onChange={HandlerChange}
+                      min="12:00"
+                      max="21:00"
+                    />
+                  </div>
                 </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="Celular" className=" ">
                     Celular <span className="text-red-600">(*)</span>
